@@ -1,0 +1,26 @@
+[keys]
+open_for_first_time = true
+global_setting = ["<__SHUTDOWN_NOW__>"]
+[WindowsConfig]
+global_theme = 0
+tool_tip_duration = 3000 # 默认持续3000ms
+confirm_shut_down = true
+[WindowsConfig.key_word]
+"OFFICE" = [255, 208, 77, 255]
+"监控" = [255, 153, 0, 255]
+"当前目录" = [251, 166, 36, 255]
+"关于" = [216, 137, 242, 128]  # 异步并行程序
+"CPU" = [62, 129, 241, 255]  # 异步并行程序
+"内存" = [62, 129, 241, 255]  # 异步并行程序
+"GPU" = [145, 199, 51, 255]  # 异步并行程序
+"将" = [207, 142, 109, 255]
+"和" = [207, 142, 109, 255]
+"后" = [207, 142, 109, 255]
+"重启" = [85, 149, 91, 128] # 异步并行等待程序 等待期间进行停机恢复准备 等待时间结束后阻塞主线程执行
+"关机" = [255, 0, 76, 128]  # 异步并行等待程序 等待期间进行停机恢复准备 等待时间结束后阻塞主线程执行
+"#选择的文件" = [251, 166, 36, 255]
+[WindowsConfig.shutdown]
+default_shutdown_time = [0, 0, 60]
+default_reboot_time = [0, 0, 60]
+[WindowsConfig.cpu_monitor]
+monite_obj_num = 5

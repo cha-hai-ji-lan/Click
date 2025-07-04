@@ -1,0 +1,4 @@
+my_path = "D:\\Object_\\Python_\\Pyobject_\\Click_pro\\ClickSever\\target\\debug\\ClickSever.exe"
+my_father_path = "D:\\Object_\\Python_\\Pyobject_\\Click_pro\\ClickSever\\target\\debug\\"
+[initiate]
+object_path = ["D:\\AppGallery\\Click_\\咔嗒\\main.exe", "D:\\AppGallery\\Click_\\咔嗒\\unins000.exe"]

@@ -1,0 +1,21 @@
+[package]
+name = "ClickSever"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+winreg = "0.55.0"
+toml = "0.5"
+serde = { version = "1.0.219", features = ["derive"] }
+
+# 增加以下字段指定子系统
+[[bin]]
+name = "ClickSever"
+path = "src/main.rs"
+required-features = []
+
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "link-arg=/SUBSYSTEM:WINDOWS"]
+
+[target.x86_64-pc-windows-gnu]
+rustflags = ["-C", "link-arg=-mwindows"]
