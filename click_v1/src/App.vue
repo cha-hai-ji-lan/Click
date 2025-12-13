@@ -3,7 +3,9 @@
     <div data-tauri-drag-region class="titlebar">
       <div data-tauri-drag-region class="left-button"></div>
       <div data-tauri-drag-region class="mid-button">
-        <h3>Click 0.1.2</h3>
+        <div class="mid-version">
+          <h3>Click 0.1.2</h3>
+        </div>
         <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
           p-id="4805" width="200" height="200">
           <path
@@ -21,20 +23,20 @@
           </svg>
         </div>
         <div class="titlebar-button " @click="() => { title_bar_click('switch-size') }">
-          <svg v-if="switchScreenSize" t="1765104152369" class="icon max-size-icon" viewBox="0 0 1024 1024"
+          <svg v-show="switchScreenSize === true" t="1765104152369" class="icon max-size-icon" viewBox="0 0 1024 1024"
             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8951" width="200" height="200">
             <path
               d="M384 128c23.564433 0 42.666667 19.102234 42.666667 42.666667s-19.102234 42.666667-42.666667 42.666666l-110.327523-0.00113 161.830428 161.831559c16.66317 16.66204 16.66317 43.677104 0 60.339143-16.66204 16.66317-43.677104 16.66317-60.339143 0L213.333333 273.673607v110.326393c0 23.564433-19.102234 42.666667-42.666666 42.666667s-42.666667-19.102234-42.666667-42.666667v-170.666667c0-47.127735 38.205598-85.333333 85.333333-85.333333h170.666667z m-8.836238 460.497095c16.66204-16.66317 43.677104-16.66317 60.339143 0 16.66317 16.66204 16.66317 43.677104 0 60.339143L273.672477 810.666667h110.327523c23.328212 0 42.284645 18.722472 42.661015 41.961395l0.005652 0.705271c0 23.564433-19.102234 42.666667-42.666667 42.666667h-170.666667c-47.127735 0-85.333333-38.205598-85.333333-85.333333v-170.666667c0-23.564433 19.102234-42.666667 42.666667-42.666667s42.666667 19.102234 42.666666 42.666667v110.325263zM810.666667 128c47.127735 0 85.333333 38.205598 85.333333 85.333333v170.666667c0 23.564433-19.102234 42.666667-42.666667 42.666667s-42.666667-19.102234-42.666666-42.666667v-110.327523L648.836238 435.502905c-16.66204 16.66317-43.677104 16.66317-60.339143 0-16.66317-16.66204-16.66317-43.677104 0-60.339143l161.828168-161.830429H640c-23.564433 0-42.666667-19.102234-42.666667-42.666666s19.102234-42.666667 42.666667-42.666667h170.666667zM588.497095 588.497095c16.66204-16.66317 43.677104-16.66317 60.339143 0L810.666667 750.326393V640c0-23.328212 18.722472-42.284645 41.961395-42.661015l0.705271-0.005652c23.564433 0 42.666667 19.102234 42.666667 42.666667v170.666667c0 47.127735-38.205598 85.333333-85.333333 85.333333h-170.666667c-23.564433 0-42.666667-19.102234-42.666667-42.666667s19.102234-42.666667 42.666667-42.666666h110.326393L588.497095 648.836238c-16.495894-16.495894-16.660909-43.137978-0.495046-59.836185z"
               p-id="8952" :fill="mainColor.iconColor"></path>
           </svg>
-          <svg v-else t="1765104453226" class="icon max-size-icon" viewBox="0 0 1024 1024" version="1.1"
-            xmlns="http://www.w3.org/2000/svg" p-id="11909" width="200" height="200">
+          <svg v-show="switchScreenSize === false" t="1765104453226" class="icon max-size-icon" viewBox="0 0 1024 1024"
+            version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11909" width="200" height="200">
             <path
               d="M631.06 687.1v182.01c0 21.91-17.76 39.67-39.67 39.67s-39.67-17.76-39.67-39.67v-277.7c0-21.91 17.76-39.67 39.67-39.67h277.7c21.91 0 39.67 17.76 39.67 39.67s-17.76 39.67-39.67 39.67H687.08l261.31 261.24c15.49 15.48 15.48 40.6-0.02 56.07-15.48 15.46-40.56 15.45-56.03-0.02L631.06 687.1zM432.71 472.32h-277.7c-21.91 0-39.67-17.76-39.67-39.67s17.76-39.67 39.67-39.67h181.93L75.61 131.72c-15.48-15.48-15.48-40.57 0-56.05l0.04-0.04c15.48-15.48 40.58-15.48 56.05 0l261.26 261.33V154.95c0-21.91 17.76-39.67 39.67-39.67s39.67 17.76 39.67 39.67v277.7c0 21.87-17.71 39.62-39.59 39.67z"
               p-id="11910" :fill="mainColor.iconColor"></path>
           </svg>
         </div>
-        <div class="titlebar-button " @click="() => { title_bar_click('close-screen') }">
+        <div class="titlebar-button" @click="() => { title_bar_click('close-screen') }">
           <svg t="1765102437899" class="icon close-icon" viewBox="0 0 1024 1024" version="1.1"
             xmlns="http://www.w3.org/2000/svg" p-id="1674" width="200" height="200">
             <path
@@ -49,6 +51,25 @@
     </div>
 
     <main class="container">
+      <div v-show="comVisibility.LeftContain" class="left-contain"
+        :class="{ 'close-left-contain': comVisibility['LeftContain-close'] }">
+        <LeftContain v-model:comVisibility="comVisibility"></LeftContain>
+      </div>
+      <div class="mid-contain">
+        <div class="left-call-icon" @click="() => { open_sidebar('left-contain') }">
+          <svg t="1765631009180" class="icon " :class="{ 'left-called-icon1': !comVisibility['LeftContain-close'], 'left-called-icon2': comVisibility['LeftContain-close'] }"
+            viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2824" width="200"
+            height="200">
+            <path
+              d="M368.576 116.672a16 16 0 0 0-22.656 0l-45.248 45.248a16 16 0 0 0 0 22.656l327.936 327.936-327.936 327.936a16 16 0 0 0 0 22.592l45.248 45.248a16 16 0 0 0 22.656 0l384.512-384.448a16 16 0 0 0 0-22.656L368.576 116.672z"
+              p-id="2825" :fill="mainColor.iconColor"></path>
+          </svg>
+        </div>
+
+      </div>
+      <div class="right-contain">
+
+      </div>
 
       <!-- <form class="row" @submit.prevent="greet"> -->
       <!-- <input id="greet-input" v-model="name" placeholder="Enter a name..." />
@@ -61,13 +82,18 @@
 <script setup lang="ts">
 
 // TODO: JPG 动图显示
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
 import { ColorCtr } from './util/Colors'
+import LeftContain from "./components/LeftContain.vue";
 // import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
+const comVisibility = reactive({
+  "LeftContain": false,
+  "LeftContain-close": true  // 保障关闭侧边栏按钮可以正常运转
+})
 
 onMounted(() => {
   mainColor.value.set_color_palette()
@@ -90,11 +116,13 @@ const set_focus_color_palette = () => {
   // 标题栏颜色
   document.documentElement.style.setProperty("--title-bar-lg-1", `rgba(${mainColor.value.titleBarColorRGBA})`)
   document.documentElement.style.setProperty("--title-bar-lg-2", `rgba(${mainColor.value.backGroundColorRGBA})`)
-  document.documentElement.style.setProperty("--title-icon-hover", `rgba(${mainColor.value.iconHoverColorRGBA})`)
-  document.documentElement.style.setProperty("--title-icon-hover-shadow", `rgba(${mainColor.value.foreGroundColorRGBA})`)
   // 主区域颜色
   document.documentElement.style.setProperty("--main-border", `rgba(${mainColor.value.borderColorRGBA})`)  // 边框色
   document.documentElement.style.setProperty("--main-back-ground", `rgba(${mainColor.value.midGroundColorRGBA})`)  // 背景色
+  document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.value.foreGroundColorRGBA})`)
+  document.documentElement.style.setProperty("--icon-hover-shadow", `rgba(${mainColor.value.iconHoverColorRGBA})`)
+  document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.value.iconActiveColorRGBA})`)
+  document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
 
 }
 const title_bar_click = (mode: string) => {
@@ -104,11 +132,34 @@ const title_bar_click = (mode: string) => {
       appWindow.minimize()
       break;
     case 'switch-size':
-      switchScreenSize.value = !switchScreenSize.value
+      switchScreenSize.value = !switchScreenSize.value;
       appWindow.toggleMaximize();
       break;
     default:
       appWindow.close();
+      break;
+  }
+
+}
+
+const open_sidebar = (operObj: string) => {
+  switch (operObj) {
+    case 'left-contain':
+      if (comVisibility.LeftContain) {
+        comVisibility["LeftContain-close"] = true
+        setTimeout(() => {
+          comVisibility.LeftContain = !comVisibility.LeftContain;
+        }, 750)
+
+      }
+      else {
+        comVisibility["LeftContain-close"] = false
+        comVisibility.LeftContain = !comVisibility.LeftContain;
+
+      }
+      break;
+
+    default:
       break;
   }
 
@@ -155,9 +206,35 @@ const title_bar_click = (mode: string) => {
 
 }
 
-.mid-button h3 {
-  font: bold 2vh Arial, sans-serif;
+.mid-version {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20vw;
+  height: 4vh;
+  min-height: 15px;
+  max-height: 30px;
+  border-radius: 1vh;
+  border-left: 0.1vh solid var(--main-border);
+  border-right: 0.1vh solid var(--main-border);
   margin-right: 1vw;
+}
+
+.mid-version:hover {
+  border-left: 0.1vh solid var(--title-min-icon-shadow);
+  border-right: 0.1vh solid var(--title-min-icon-shadow);
+  filter: drop-shadow(0 0 1em var(--title-min-icon-hover-shadow));
+}
+
+.mid-version:active {
+  border-left: 0.1vh solid var(--title-min-icon-hover-shadow);
+  border-right: 0.1vh solid var(--title-min-icon-hover-shadow);
+  filter: blur(1px);
+}
+
+.mid-version h3 {
+  font: bold 2vh Arial, sans-serif;
+
   user-select: none;
   /* 用户无法选择 */
   -webkit-user-select: none;
@@ -198,16 +275,22 @@ const title_bar_click = (mode: string) => {
 }
 
 .titlebar-button .min-size-icon:hover {
+  animation: zoom-in-icon 0.75s forwards;
+  animation-timing-function: ease;
   background: radial-gradient(circle at center, var(--title-min-icon-shadow) 45%, rgba(0, 0, 0, 0) 75%);
   filter: drop-shadow(0 0 0.75em var(--title-min-icon-hover-shadow));
 }
 
 .titlebar-button .max-size-icon:hover {
+  animation: zoom-out-icon 0.75s forwards;
+  animation-timing-function: ease;
   background: radial-gradient(circle at center, var(--title-max-icon-shadow) 45%, rgba(0, 0, 0, 0) 75%);
   filter: drop-shadow(0 0 0.75em var(--title-max-icon-hover-shadow));
 }
 
 .titlebar-button .close-icon:hover {
+  animation: roll-icon 0.5s forwards;
+  animation-timing-function: ease;
   background: radial-gradient(circle at center, var(--title-close-icon-shadow) 45%, rgba(0, 0, 0, 0) 75%);
   filter: drop-shadow(0 0 0.75em var(--title-close-icon-hover-shadow));
 }
@@ -268,16 +351,232 @@ const title_bar_click = (mode: string) => {
   transition: 0.5s;
   display: flex;
   flex: 1;
+  /* position: relative; */
+  flex-direction: row;
   margin: 0 1vw 1vw 1vw;
   border-radius: 2vh;
   border: 1px solid var(--main-border);
   background: var(--main-back-ground);
+}
+
+.left-contain,
+.mid-contain,
+.right-contain {
+  display: flex;
+  position: relative;
+}
+
+.left-contain {
+  margin: 1% 0 1% 1%;
+  min-width: 0px;
+  max-width: 300px;
+  min-height: 120px;
+  max-height: 900px;
+  animation: left-expand 0.75s forwards;
+  animation-timing-function: ease;
+}
+
+.close-left-contain {
+  animation: left-rexpand 0.75s forwards;
+  animation-timing-function: ease;
+}
+
+.mid-contain {
+  width: 100%;
+  height: 100%;
+}
+
+.left-call-icon {
+  display: flex;
+  position: relative;
+  background: var(--icon-hover);
+  border-right: 1px solid var(--main-border);
+  border-radius: 0 2vh 2vh 0;
+  width: 2vh;
+  top: 50%;
+  height: 6vh;
+  min-height: 10px;
+  max-height: 50px;
+  min-width: 10px;
+  max-width: 30px;
+  /* 左上角定位到中心 */
+  translate: 0 -50%;
+  /* 自己大小反向定位50% */
+  justify-content: center;
+  align-items: center;
+  will-change: background, filter;
+  transition: 0.75s
+}
+
+.left-call-icon:hover {
+  filter: drop-shadow(0 0 0.75em var(--icon-hover-shadow));
+  /* filter: blur(1px); 高斯模糊 --做毛玻璃 */
+}
+
+.left-call-icon:active {
+  background: var(--icon-hover-shadow);
+  filter: drop-shadow(0 0 0.75em var(--icon-active-shadow));
+  /* filter: blur(1px); 高斯模糊 --做毛玻璃 */
+}
+
+.left-call-icon:before {
+  content: "";
+  position: absolute;
+  /* top: 50%; */
+  left: 0vw;
+  width: 0.15vw;
+  max-width: 2px;
+  height: 3vh;
+  border-radius: 0 5vh 5vh 0;
+  background-color: var(--main-border);
+  /* transform: translateY(50%); */
 
 
+}
+
+.left-call-icon:hover:before {
+  animation: expand 0.75s forwards;
+  animation-timing-function: linear;
+}
+
+.left-call-icon:active:before {
+  background: radial-gradient(circle at center, var(--title-min-icon-active-shadow), var(--title-min-icon-hover-shadow), var(--title-min-icon-shadow))
+}
+
+.left-called-icon1 {
+  animation: roll-0-180 0.75s forwards;
+  animation-timing-function: linear;
+}
+.left-called-icon2 {
+  animation: roll-180-0 0.75s forwards;
+  animation-timing-function: linear;
+}
+
+.right-contain {
+  top: 0;
+  left: 100%;
+}
+
+/* ==============================================动画实现============================================== */
+@keyframes expand {
+  0% {
+
+    transform: scaleY(2);
+  }
+
+  25% {
+    transform: scaleY(4);
+  }
+
+  50% {
+    transform: scaleY(8);
+  }
+
+  75% {
+    transform: scaleY(16);
+  }
+
+  100% {
+    transform: scaleY(28);
+  }
+
+}
+
+@keyframes roll-icon {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes zoom-out-icon {
+  0% {
+    transform: scale(1.1);
+  }
+
+  25% {
+    transform: scale(1.25);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  75% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes zoom-in-icon {
+  0% {
+    transform: scale(0.9);
+  }
+
+  25% {
+    transform: scale(0.75);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  75% {
+    transform: scale(0.75);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes left-expand {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 30%;
+  }
+}
+
+@keyframes left-rexpand {
+  0% {
+    width: 30%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes roll-0-180 {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@keyframes roll-180-0 {
+  0% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
 }
 </style>
 <style>
 html {
+  color: var(--font-color);
   background: transparent;
   width: 100%;
   height: 100%;

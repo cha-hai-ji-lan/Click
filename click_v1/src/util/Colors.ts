@@ -44,6 +44,8 @@ export function ColorCtr() {
     const borderColor = ref<HexColor>("#FFFFFF")                        // 边框色
     const iconColor = ref<HexColor>("#FFFFFF")                          // 按钮颜色
     const iconHoverColor = ref<HexColor>("#FFFFFF")                     // 按钮悬停颜色
+    const iconActiveColor = ref<HexColor>("#FFFFFF")                    // 按钮活动颜色
+    const fontColor = ref<HexColor>("#FFFFFF")                          // 一般文字颜色
 
     const titleBarColorRGB = ref<RGBColor>([255, 255, 255])
     const toolBarColorRGB = ref<RGBColor>([255, 255, 255])
@@ -53,6 +55,8 @@ export function ColorCtr() {
     const borderColorRGB = ref<RGBColor>([255, 255, 255])
     const iconColorRGB = ref<RGBColor>([255, 255, 255])
     const iconHoverColorRGB = ref<RGBColor>([255, 255, 255])
+    const iconActiveColorRGB = ref<RGBColor>([255, 255, 255])
+    const fontColorRGB = ref<RGBColor>([255, 255, 255])
 
     const titleBarColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const toolBarColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
@@ -62,6 +66,8 @@ export function ColorCtr() {
     const borderColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const iconColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const iconHoverColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
+    const iconActiveColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
+    const fontColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
 
     const colorSign = ref<ColorSwitch>("Default")
 
@@ -95,7 +101,9 @@ export function ColorCtr() {
                 backGroundColor.value = "#fbfbf4"
                 borderColor.value = "#e2f0f0"
                 iconColor.value = "#45494a"
-                iconHoverColor.value = "#e0e0db"
+                iconHoverColor.value = "#f5f57f"
+                iconActiveColor.value = "#f0f02c"
+                fontColor.value = "#42494a"
                 // RGB
                 titleBarColorRGB.value = [249, 248, 226]
                 toolBarColorRGB.value = [236, 236, 231]
@@ -104,7 +112,9 @@ export function ColorCtr() {
                 backGroundColorRGB.value = [251, 251, 244]
                 borderColorRGB.value = [35, 169, 242]
                 iconColorRGB.value = [69, 73, 74]
-                iconHoverColorRGB.value = [224, 224, 219]
+                iconHoverColorRGB.value = [245, 245, 127]
+                iconActiveColorRGB.value = [240, 240, 44]
+                fontColorRGB.value = [66, 73, 74]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [236, 236, 231, 1]
@@ -113,7 +123,9 @@ export function ColorCtr() {
                 backGroundColorRGBA.value = [251, 251, 244, 1]
                 borderColorRGBA.value = [35, 169, 242, 1]
                 iconColorRGBA.value = [69, 73, 74, 1]
-                iconHoverColorRGBA.value = [224, 224, 219, 1]
+                iconHoverColorRGBA.value = [245, 245, 127, 1]
+                iconActiveColorRGBA.value = [240, 240, 44, 1]
+                fontColorRGBA.value = [66, 73, 74, 1]
                 break;
             case "Night":
                 titleBarColor.value = "#3c3f41"     //  
@@ -147,8 +159,9 @@ export function ColorCtr() {
                 foreGroundColor.value = "#fffdf0"    //  NIPPON OW033-4 珍珠白 
                 midGroundColor.value = "#e2e3e9"   //  RAL 9006 白铝色
                 backGroundColor.value = "#fbfbf4"   //  NIPPON OW038-4 象牙白
-                iconColor.value = "#313538"
+                iconColor.value = "#45494a"
                 iconHoverColor.value = "#e0e0db"
+                iconActiveColor.value = "#42494a"
                 // RGB
                 titleBarColorRGB.value = [249, 248, 226]
                 toolBarColorRGB.value = [236, 236, 231]
@@ -156,8 +169,10 @@ export function ColorCtr() {
                 midGroundColorRGB.value = [226, 240, 240]
                 backGroundColorRGB.value = [251, 251, 244]
                 borderColorRGB.value = [35, 169, 242]
-                iconColorRGB.value = [49, 53, 56]
-                iconHoverColorRGB.value = [224, 224, 219]
+                iconColorRGB.value = [69, 73, 74]
+                iconHoverColorRGB.value = [245, 245, 127]
+                iconActiveColorRGB.value = [240, 240, 44]
+                fontColorRGB.value = [66, 73, 74]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [236, 236, 231, 1]
@@ -166,7 +181,9 @@ export function ColorCtr() {
                 backGroundColorRGBA.value = [251, 251, 244, 1]
                 borderColorRGBA.value = [35, 169, 242, 1]
                 iconColorRGBA.value = [69, 73, 74, 1]
-                iconHoverColorRGBA.value = [224, 224, 219, 1]
+                iconHoverColorRGBA.value = [245, 245, 127, 1]
+                iconActiveColorRGBA.value = [240, 240, 44, 1]
+                fontColorRGBA.value = [66, 73, 74, 1]
                 break;
         }
     }
@@ -209,6 +226,8 @@ export function ColorCtr() {
         borderColor,
         iconColor,
         iconHoverColor,
+        iconActiveColor,
+        fontColor,
 
         titleBarColorRGB,
         toolBarColorRGB,
@@ -217,6 +236,9 @@ export function ColorCtr() {
         backGroundColorRGB,
         borderColorRGB,
         iconColorRGB,
+        iconHoverColorRGB,
+        iconActiveColorRGB,
+        fontColorRGB,
 
         titleBarColorRGBA,
         toolBarColorRGBA,
@@ -226,6 +248,8 @@ export function ColorCtr() {
         borderColorRGBA,
         iconColorRGBA,
         iconHoverColorRGBA,
+        iconActiveColorRGBA,
+        fontColorRGBA,
 
         colorSign,
 
