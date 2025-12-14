@@ -1,6 +1,6 @@
 <template>
     <div v-show="comVisibility.LeftContain" class="main-left">
-
+        
     </div>
 </template>
 <script setup lang="ts">
@@ -22,11 +22,11 @@ const emit = defineEmits<{
     width: 100%;
     height: 100%;
     min-width: 0px;
-    max-width: 300px;
+    max-width: 25vw;
     min-height: 100px;
     max-height: 900px;
     border-radius: 2vh;
     border-right: 1px solid var(--main-border);
-    background: var(--icon-hover);
+    background:linear-gradient(to left, var(--icon-hover), var(--main-back-ground));
 }
 </style>

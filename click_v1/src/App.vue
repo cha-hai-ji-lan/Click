@@ -6,8 +6,8 @@
         <div class="mid-version">
           <h3>Click 0.1.2</h3>
         </div>
-        <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          p-id="4805" width="200" height="200">
+        <svg @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }" t="1765561345418" class="icon"
+          viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4805" width="200" height="200">
           <path
             d="M0 524.992q0 166.016 95.488 298.496t247.488 185.504q6.016 0.992 10.016 0.992t6.496-1.504 4-3.008 2.016-4.992 0.512-4.992v-100.512q-36.992 4-66.016-0.512t-45.504-14.016-28.992-23.488-16.992-25.504-8.992-24-5.504-14.496q-8.992-15.008-27.008-27.488t-27.008-20-2.016-14.496q50.016-26.016 112.992 66.016 34.016 51.008 119.008 30.016 10.016-40.992 40-70.016Q293.984 736 237.984 670.976t-56-158.016q0-87.008 55.008-151.008-22.016-64.992 6.016-136.992 28.992-2.016 64.992 11.488t50.496 23.008 25.504 17.504q56.992-16 128.512-16t129.504 16q12.992-8.992 28.992-19.008t48.992-21.504 60.992-9.504q27.008 71.008 7.008 135.008 56 64 56 151.008 0 92.992-56.992 158.496t-172 85.504q43.008 43.008 43.008 104v128.992q0 0.992 0.992 3.008 0 6.016 0.512 8.992t4.512 6.016 12 3.008q152.992-52 250.496-185.504t97.504-300.512q0-104-40.512-199.008t-108.992-163.488-163.488-108.992T512.032 12.96 313.024 53.472 149.536 162.464t-108.992 163.488-40.512 199.008z"
             p-id="4806" :fill="mainColor.iconColor"></path>
@@ -51,13 +51,19 @@
     </div>
 
     <main class="container">
-      <div v-show="comVisibility.LeftContain" class="left-contain"
-        :class="{ 'close-left-contain': comVisibility['LeftContain-close'] }">
+      <div v-show="comVisibility.LeftContain" class="left-contain" ref="leftContainer"
+        :class="{ 'close-left-contain': comVisibility['LeftContain-close'] }" @mousedown="startResize">
+
         <LeftContain v-model:comVisibility="comVisibility"></LeftContain>
+
       </div>
+      <!-- <div v-show="comVisibility.LeftContain" 
+       class="resize-handle" 
+       ></div> -->
       <div class="mid-contain">
         <div class="left-call-icon" @click="() => { open_sidebar('left-contain') }">
-          <svg t="1765631009180" class="icon " :class="{ 'left-called-icon1': !comVisibility['LeftContain-close'], 'left-called-icon2': comVisibility['LeftContain-close'] }"
+          <svg t="1765631009180" class="icon "
+            :class="{ 'left-called-icon1': !comVisibility['LeftContain-close'], 'left-called-icon2': comVisibility['LeftContain-close'] }"
             viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2824" width="200"
             height="200">
             <path
@@ -86,7 +92,7 @@ import { onMounted, reactive, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
 import { ColorCtr } from './util/Colors'
 import LeftContain from "./components/LeftContain.vue";
-// import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
+import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
@@ -94,10 +100,15 @@ const comVisibility = reactive({
   "LeftContain": false,
   "LeftContain-close": true  // 保障关闭侧边栏按钮可以正常运转
 })
+const leftContainer = ref<HTMLElement | null>(null)
+let isResizing = false
+let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
+
 
 onMounted(() => {
   mainColor.value.set_color_palette()
-  set_focus_color_palette()
+  set_focus_color_palette()  // 设置调色板
+  set_special_style()  // 设置特殊样式
 })
 
 const set_focus_color_palette = () => {
@@ -125,6 +136,11 @@ const set_focus_color_palette = () => {
   document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
 
 }
+
+const set_special_style = () => {
+  document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
+
+}
 const title_bar_click = (mode: string) => {
 
   switch (mode) {
@@ -146,10 +162,14 @@ const open_sidebar = (operObj: string) => {
   switch (operObj) {
     case 'left-contain':
       if (comVisibility.LeftContain) {
-        comVisibility["LeftContain-close"] = true
+        if (!leftContainer.value) return
+        leftContainer.value.style.width = ''  // 移除width 方便动画播放
+        setTimeout(() => {
+          comVisibility["LeftContain-close"] = true
+        }, 50)
         setTimeout(() => {
           comVisibility.LeftContain = !comVisibility.LeftContain;
-        }, 750)
+        }, 800)
 
       }
       else {
@@ -163,6 +183,42 @@ const open_sidebar = (operObj: string) => {
       break;
   }
 
+}
+
+const opeanLinkling = async (url: String) => {
+  try {
+    await invoke('open_url', { url });
+  } catch (err) {
+    console.error('无法打开链接:', err);
+  }
+}
+
+const startResize = (e: MouseEvent) => {
+  isResizing = true
+  document.addEventListener('mousemove', resize)
+  document.addEventListener('mouseup', stopResize)
+}
+
+const resize = (e: MouseEvent) => {
+  if (!isResizing || !leftContainer.value) return
+
+  const containerRect = leftContainer.value?.getBoundingClientRect()
+
+  if (!containerRect) return
+  leftContainWidth = e.clientX * 1.2371134 // 1.2371134是修正系数
+
+  // const newWidth = (e.clientX - containerRect.left) + 15
+  // const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100
+  // 限制最小和最大宽度
+  // const clampedWidth = Math.min(Math.max(newWidth, 10), 300)
+  leftContainer.value.style.cssText += `width: ${leftContainWidth}px !important;`
+  document.documentElement.style.setProperty("--left-contain-width", `${leftContainWidth}px`)  // 侧边栏宽度
+}
+
+const stopResize = () => {
+  isResizing = false
+  document.removeEventListener('mousemove', resize)
+  document.removeEventListener('mouseup', stopResize)
 }
 </script>
 <style scoped>
@@ -353,7 +409,7 @@ const open_sidebar = (operObj: string) => {
   flex: 1;
   /* position: relative; */
   flex-direction: row;
-  margin: 0 1vw 1vw 1vw;
+  margin: 0 5px 5px 5px;
   border-radius: 2vh;
   border: 1px solid var(--main-border);
   background: var(--main-back-ground);
@@ -369,7 +425,7 @@ const open_sidebar = (operObj: string) => {
 .left-contain {
   margin: 1% 0 1% 1%;
   min-width: 0px;
-  max-width: 300px;
+  max-width: 25vw;
   min-height: 120px;
   max-height: 900px;
   animation: left-expand 0.75s forwards;
@@ -379,6 +435,17 @@ const open_sidebar = (operObj: string) => {
 .close-left-contain {
   animation: left-rexpand 0.75s forwards;
   animation-timing-function: ease;
+}
+
+.resize-handle {
+  width: 5px;
+  background: var(--main-border);
+  cursor: col-resize;
+  transition: background 0.3s;
+}
+
+.resize-handle:hover {
+  background: var(--icon-hover-shadow);
 }
 
 .mid-contain {
@@ -447,6 +514,7 @@ const open_sidebar = (operObj: string) => {
   animation: roll-0-180 0.75s forwards;
   animation-timing-function: linear;
 }
+
 .left-called-icon2 {
   animation: roll-180-0 0.75s forwards;
   animation-timing-function: linear;
@@ -486,6 +554,7 @@ const open_sidebar = (operObj: string) => {
   0% {
     transform: rotate(0);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -537,20 +606,29 @@ const open_sidebar = (operObj: string) => {
 
 @keyframes left-expand {
   0% {
+    opacity: 0;
+    /* opacity: calc(); 
+    这段Vue代码中的opacity: calc();是一个CSS样式声明，用于设置元素的透明度。
+    calc()函数允许通过计算来动态确定不透明度值，可以结合变量、数学运算符(+、-、*、/)来实现响应式或动态的透明度效果。
+    例如：opacity: calc(1 - var(--scroll-progress));可以根据滚动进度动态调整元素透明度。
+    */
     width: 0;
   }
 
   100% {
-    width: 30%;
+    opacity: 1;
+    width: var(--left-contain-width);
   }
 }
 
 @keyframes left-rexpand {
   0% {
-    width: 30%;
+    opacity: 1;
+    width: var(--left-contain-width);
   }
 
   100% {
+    opacity: 0;
     width: 0;
   }
 }
@@ -564,6 +642,7 @@ const open_sidebar = (operObj: string) => {
     transform: rotate(180deg);
   }
 }
+
 @keyframes roll-180-0 {
   0% {
     transform: rotate(180deg);
@@ -582,6 +661,17 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+a {
+  text-decoration: none;
+  /* 移除下划线 */
+  color: inherit;
+  /* 继承父元素的颜色 */
+  background-color: transparent;
+  /* 背景透明 */
+  border: none;
+  /* 移除边框 */
 }
 
 body {
