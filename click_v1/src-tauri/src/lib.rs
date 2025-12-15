@@ -1,4 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+mod utils;
+
 use std::process::Command;
 use std::thread;
 

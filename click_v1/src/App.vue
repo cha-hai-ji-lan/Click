@@ -1,7 +1,11 @@
 <template>
   <div class="main">
     <div data-tauri-drag-region class="titlebar">
-      <div data-tauri-drag-region class="left-button"></div>
+      <div data-tauri-drag-region class="left-button">
+        <div class="main-icon-box">
+          <img class="main-icon" src="./assets/ico.svg" alt="">
+        </div>
+      </div>
       <div data-tauri-drag-region class="mid-button">
         <div class="mid-version">
           <h3>Click 0.1.2</h3>
@@ -261,6 +265,11 @@ const stopResize = () => {
   /* 上下 居中 */
 
 }
+.left-button{
+  justify-content: left;
+  /* 左右 居中 */
+  align-items: center;
+}
 
 .mid-version {
   display: flex;
@@ -289,7 +298,7 @@ const stopResize = () => {
 }
 
 .mid-version h3 {
-  font: bold 2vh Arial, sans-serif;
+  font: bold 1.5vh Arial, sans-serif;
 
   user-select: none;
   /* 用户无法选择 */
@@ -391,7 +400,26 @@ const stopResize = () => {
   background-color: var(--main-border);
   /* transform: translateY(50%); */
 }
-
+.main-icon-box {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 4vh;
+  width: 4vh;
+  min-height: 15px;
+  max-height: 30px;
+  min-width: 15px;
+  max-width: 30px;
+  margin-left: 0.5vw;
+}
+.main-icon {
+  height: 4vh;
+  width: 4vh;
+  min-height: 15px;
+  max-height: 30px;
+  min-width: 15px;
+  max-width: 30px;
+}
 
 .icon {
   height: 3vh;
