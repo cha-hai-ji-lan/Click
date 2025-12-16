@@ -1,12 +1,16 @@
-use std::fs; // 用于文件操作
-use std::io; // 用于错误处理
+use std::fs;
+use std::fs::{DirEntry, Metadata};
+// 用于文件操作
+use std::io;
+use std::path::{Path, PathBuf};
+// 用于错误处理
 use std::time; // 用于获取文件创建时间
 
 #[derive(Debug)]
 pub struct FolderObject {
     pub name: String,
     pub path: String,
-    pub created_time: time::SystemTime,
+    pub modified_time: time::SystemTime,
     pub father_name: String,
 }
 ///
@@ -17,7 +21,7 @@ pub struct FileObject {
     pub name: String,
     pub path: String,
     pub size: u64,
-    pub created_time: time::SystemTime,
+    pub modified_time: time::SystemTime,
     pub extension_name: String,
     pub father_name: String,
 }
@@ -26,13 +30,13 @@ impl FolderObject {
     pub fn new(
         name: String,
         path: String,
-        created_time: time::SystemTime,
+        modified_time: time::SystemTime,
         father_name: String,
     ) -> Self {
         FolderObject {
             name,
             path,
-            created_time,
+            modified_time,
             father_name,
         }
     }
@@ -43,7 +47,7 @@ impl FileObject {
         name: String,
         path: String,
         size: u64,
-        created_time: time::SystemTime,
+        modified_time: time::SystemTime,
         extension_name: String,
         father_name: String,
     ) -> Self {
@@ -51,11 +55,12 @@ impl FileObject {
             name,
             path,
             size,
-            created_time,
+            modified_time,
             extension_name,
             father_name,
         }
     }
+    #[allow(dead_code)]
     pub fn rename_file(old_path: &str, new_path: &str) -> io::Result<()> {
         fs::rename(old_path, new_path)
     }
@@ -68,140 +73,166 @@ pub enum FileSystemObject {
     Combined(Vec<FileObject>, Vec<FolderObject>),
 }
 
-fn list_files_by_time(
-    dir_path: &str,
-    mod_option: Option<i32>,
-) -> Result<FileSystemObject, io::Error> {
+/// # 按时间顺序读取目录下文件与目录
+///
+/// **默认**：时间从旧到新
+#[allow(dead_code)]
+pub fn list_dir_by_time_com(dir_path: Box<Path>, old_to_new:Option<bool>) -> Result<FileSystemObject, io::Error> {
+    let old_to_new = old_to_new.unwrap_or(false);
+    let parent_name = match dir_path.file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+
     let mut files_with_time: Vec<FileObject> = Vec::new();
-    let mut folder_with_time: Vec<FolderObject> = Vec::new();
-    let param = mod_option.unwrap_or(1);
-    match param {
-        1 => {
-            // 解析文件条目
-            for entry in fs::read_dir(dir_path)? {
-                let entry = entry?;
-                let path = entry.path(); // 获取文件路径
-                // 只处理文件（可选：也可以包含目录）
-                if path.is_file() {
-                    let file_name = path.file_stem().unwrap().to_string_lossy().to_string(); // 获取文件名
-                    let file_path = path.to_string_lossy().to_string(); // 获取文件路径
-                    let metadata = fs::metadata(&path)?; // 获取文件元数据 文件大小、文件类型、创建时间、
-                    let file_size = metadata.len(); // 获取修改时间
-                    let file_modified_time = metadata.modified()?; // 获取修改时间
-                    let file_extension_name =
-                        path.extension().unwrap().to_string_lossy().to_string();
-                    let father_dir_name = path
-                        .parent()
-                        .unwrap()
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string();
+    let mut folders_with_time: Vec<FolderObject> = Vec::new();
 
-                    files_with_time.push(FileObject::new(
-                        file_name,
-                        file_path,
-                        file_size,
-                        file_modified_time,
-                        file_extension_name,
-                        father_dir_name,
-                    ));
-                }
-            }
-            // 按修改时间排序（从旧到新）
-            files_with_time.sort_by_key(|file| file.created_time);
-            Ok(FileSystemObject::File(files_with_time))
-        }
-        2 => {
-            // 解析目录条目
-            for entry in fs::read_dir(dir_path)? {
-                let entry = entry?;
-                let path = entry.path(); // 获取文件路径
-                // 只处理文件（可选：也可以包含目录）
-                if !path.is_file() {
-                    let dir_path = path.to_string_lossy().to_string(); // 获取目录路径
-                    let dir_name = path.file_name().unwrap().to_string_lossy().to_string(); // 获取目录名
-                    let metadata = fs::metadata(&path)?; // 获取目录元数据
-                    let dir_modified_time = metadata.modified()?; // 获取修改时间
-                    let father_dir_name = path
-                        .parent()
-                        .unwrap()
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string();
+    for entry in fs::read_dir(dir_path)? {
+        let entry = entry?;
+        let path = entry.path();
+        let metadata = entry.metadata()?;
+        let name = match path.file_name() {
+            Some(n) => n.to_string_lossy().to_string(),
+            None => "NULL_NAME".to_string(),
+        };
+        let modified_time = metadata.modified()?;
 
-                    folder_with_time.push(FolderObject::new(
-                        dir_name,
-                        dir_path,
-                        dir_modified_time,
-                        father_dir_name,
-                    ));
-                }
-            }
-
-            // 按修改时间排序（从旧到新）
-            folder_with_time.sort_by_key(|folder| folder.created_time);
-            Ok(FileSystemObject::Folder(folder_with_time))
-        }
-        _ => {
-            // 解析文件和目录条目
-            for entry in fs::read_dir(dir_path)? {
-                let entry = entry?;
-                let path = entry.path(); // 获取文件路径
-                if path.is_file() {
-                    let file_name = path.file_stem().unwrap().to_string_lossy().to_string(); // 获取文件名
-                    let file_path = path.to_string_lossy().to_string(); // 获取文件路径
-                    let metadata = fs::metadata(&path)?; // 获取文件元数据 文件大小、文件类型、创建时间、
-                    let file_size = metadata.len(); // 获取修改时间
-                    let file_modified_time = metadata.modified()?; // 获取修改时间
-                    let file_extension_name =
-                        path.extension().unwrap().to_string_lossy().to_string();
-                    let father_dir_name = path
-                        .parent()
-                        .unwrap()
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string();
-
-                    files_with_time.push(FileObject::new(
-                        file_name,
-                        file_path,
-                        file_size,
-                        file_modified_time,
-                        file_extension_name,
-                        father_dir_name, ));
-                } else {
-                    // 处理目录
-                    let dir_path = path.to_string_lossy().to_string(); // 获取目录路径
-                    let dir_name = path.file_name().unwrap().to_string_lossy().to_string(); // 获取目录名
-                    let metadata = fs::metadata(&path)?; // 获取目录元数据
-                    let dir_modified_time = metadata.modified()?; // 获取修改时间
-                    let father_dir_name = path
-                        .parent()
-                        .unwrap()
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string();
-
-                    folder_with_time.push(FolderObject::new(
-                        dir_name,
-                        dir_path,
-                        dir_modified_time,
-                        father_dir_name,
-                    ));
-                }
-            }
-
-            // 按修改时间排序（从旧到新）
-            files_with_time.sort_by_key(|file| file.created_time);
-            folder_with_time.sort_by_key(|folder| folder.created_time);
-            Ok(FileSystemObject::Combined(
-                files_with_time,
-                folder_with_time,
-            ))
+        if path.is_file() {
+            let size = metadata.len();
+            let extension_name = match path.extension() {
+                Some(ext) => ext.to_string_lossy().to_string(),
+                None => "NULL_EXT".to_string(),
+            };
+            files_with_time.push(FileObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                size,
+                modified_time,
+                extension_name,
+                parent_name.clone(),
+            ));
+        } else {
+            folders_with_time.push(FolderObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                modified_time,
+                parent_name.clone(),
+            ));
         }
     }
+
+    // 按修改时间排序（从旧到新）
+    files_with_time.sort_by_key(|f| f.modified_time);
+    folders_with_time.sort_by_key(|f| f.modified_time);
+    if old_to_new {
+        Ok(FileSystemObject::Combined(files_with_time, folders_with_time))
+
+    } else {
+        files_with_time.reverse();
+        folders_with_time.reverse();
+        Ok(FileSystemObject::Combined(files_with_time, folders_with_time))
+    }
+
+}
+
+/// # 按时间顺序读取目录下文件
+///
+/// **默认**：时间从旧到新
+#[allow(dead_code)]
+pub fn list_dir_by_time_file(dir_path: Box<Path>, old_to_new:Option<bool>) -> Result<FileSystemObject, io::Error> {
+    let old_to_new = old_to_new.unwrap_or(false);
+    let parent_name = match dir_path.file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+
+    let mut files_with_time: Vec<FileObject> = Vec::new();
+
+    for entry in fs::read_dir(dir_path)? {
+        let entry = entry?;
+        let path = entry.path();
+
+
+        if path.is_file() {
+            let metadata = entry.metadata()?;
+            let name = match path.file_name() {
+                Some(n) => n.to_string_lossy().to_string(),
+                None => "NULL_NAME".to_string(),
+            };
+            let modified_time = metadata.modified()?;
+            let size = metadata.len();
+            let extension_name = match path.extension() {
+                Some(ext) => ext.to_string_lossy().to_string(),
+                None => "NULL_EXT".to_string(),
+            };
+            files_with_time.push(FileObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                size,
+                modified_time,
+                extension_name,
+                parent_name.clone(),
+            ));
+        }
+    }
+
+    // 按修改时间排序（从旧到新）
+    files_with_time.sort_by_key(|f| f.modified_time);
+    if old_to_new {
+        Ok(FileSystemObject::File(files_with_time))
+
+    } else {
+        files_with_time.reverse();
+        Ok(FileSystemObject::File(files_with_time))
+    }
+
+
+}
+
+/// # 按时间顺序读取目录下目录
+///
+/// **默认**：时间从旧到新
+#[allow(dead_code)]
+pub fn list_dir_by_time_folder(dir_path: Box<Path>, old_to_new:Option<bool>) -> Result<FileSystemObject, io::Error> {
+    let old_to_new = old_to_new.unwrap_or(false);
+
+    let parent_name = match dir_path.file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+
+    let mut folders_with_time: Vec<FolderObject> = Vec::new();
+
+    for entry in fs::read_dir(dir_path)? {
+        let entry = entry?;
+        let path = entry.path();
+
+
+        if !path.is_file() {
+            let metadata = entry.metadata()?;
+            let name = match path.file_name() {
+                Some(n) => n.to_string_lossy().to_string(),
+                None => "NULL_NAME".to_string(),
+            };
+            let modified_time = metadata.modified()?;
+
+            folders_with_time.push(FolderObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                modified_time,
+                parent_name.clone(),
+            ));
+        } else {
+
+        }
+    }
+    folders_with_time.sort_by_key(|f| f.modified_time);
+    if old_to_new {
+        Ok(FileSystemObject::Folder(folders_with_time))
+    } else {
+        folders_with_time.reverse();
+        Ok(FileSystemObject::Folder(folders_with_time))
+    }
+
+
 }
