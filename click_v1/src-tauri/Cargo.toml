@@ -1,8 +1,8 @@
 [package]
 name = "click_v1"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Click APP"
+authors = ["ChaHaiJiLan"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -30,4 +30,5 @@ windows = {version = "0.62.2", features = [
     "Win32_UI_Shell", # 提供对 Windows Shell 功能的访问，包括文件操作、对话框和桌面环境交互
     "Win32_System_Ole", # 支持 Object Linking and Embedding (OLE) 技术，用于对象嵌入和链接操作
     "Win32_System_Variant", # 处理 VARIANT 数据类型的模块，用于存储不同类型的数据值
-]}
+] }
+winapi = { version = "0.3.9", features = ["libloaderapi", "winnt", "minwindef"] }

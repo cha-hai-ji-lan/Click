@@ -1,0 +1,8 @@
+[package]
+name = "rs-support-py"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+pyo3 = { version = "0.27.2", features = ["extension-module"]}
+lazy_static = "1.5.0"

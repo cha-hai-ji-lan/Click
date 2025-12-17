@@ -10,12 +10,23 @@
         <div class="mid-version">
           <h3>Click 0.1.2</h3>
         </div>
-        <svg @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }" t="1765561345418" class="icon"
-          viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4805" width="200" height="200">
-          <path
-            d="M0 524.992q0 166.016 95.488 298.496t247.488 185.504q6.016 0.992 10.016 0.992t6.496-1.504 4-3.008 2.016-4.992 0.512-4.992v-100.512q-36.992 4-66.016-0.512t-45.504-14.016-28.992-23.488-16.992-25.504-8.992-24-5.504-14.496q-8.992-15.008-27.008-27.488t-27.008-20-2.016-14.496q50.016-26.016 112.992 66.016 34.016 51.008 119.008 30.016 10.016-40.992 40-70.016Q293.984 736 237.984 670.976t-56-158.016q0-87.008 55.008-151.008-22.016-64.992 6.016-136.992 28.992-2.016 64.992 11.488t50.496 23.008 25.504 17.504q56.992-16 128.512-16t129.504 16q12.992-8.992 28.992-19.008t48.992-21.504 60.992-9.504q27.008 71.008 7.008 135.008 56 64 56 151.008 0 92.992-56.992 158.496t-172 85.504q43.008 43.008 43.008 104v128.992q0 0.992 0.992 3.008 0 6.016 0.512 8.992t4.512 6.016 12 3.008q152.992-52 250.496-185.504t97.504-300.512q0-104-40.512-199.008t-108.992-163.488-163.488-108.992T512.032 12.96 313.024 53.472 149.536 162.464t-108.992 163.488-40.512 199.008z"
-            p-id="4806" :fill="mainColor.iconColor"></path>
-        </svg>
+        <div class="titlebar-button" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+          <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="4805" width="200" height="200">
+            <path
+              d="M0 524.992q0 166.016 95.488 298.496t247.488 185.504q6.016 0.992 10.016 0.992t6.496-1.504 4-3.008 2.016-4.992 0.512-4.992v-100.512q-36.992 4-66.016-0.512t-45.504-14.016-28.992-23.488-16.992-25.504-8.992-24-5.504-14.496q-8.992-15.008-27.008-27.488t-27.008-20-2.016-14.496q50.016-26.016 112.992 66.016 34.016 51.008 119.008 30.016 10.016-40.992 40-70.016Q293.984 736 237.984 670.976t-56-158.016q0-87.008 55.008-151.008-22.016-64.992 6.016-136.992 28.992-2.016 64.992 11.488t50.496 23.008 25.504 17.504q56.992-16 128.512-16t129.504 16q12.992-8.992 28.992-19.008t48.992-21.504 60.992-9.504q27.008 71.008 7.008 135.008 56 64 56 151.008 0 92.992-56.992 158.496t-172 85.504q43.008 43.008 43.008 104v128.992q0 0.992 0.992 3.008 0 6.016 0.512 8.992t4.512 6.016 12 3.008q152.992-52 250.496-185.504t97.504-300.512q0-104-40.512-199.008t-108.992-163.488-163.488-108.992T512.032 12.96 313.024 53.472 149.536 162.464t-108.992 163.488-40.512 199.008z"
+              p-id="4806" :fill="mainColor.iconColor"></path>
+          </svg>
+        </div>
+        <div class="titlebar-button split-icon" @click="() => { pin_screen() }">
+          <svg t="1765954787870" class="icon" :class="{ 'active-pin': isPin }" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="1814" width="200" height="200">
+            <path
+              d="M381.298 418.828h-157.703l-37.575 38.272 155.61 158.377-278.212 345.128 356.040-265.838 154.71 157.41 38.813-39.51 2.407-157.972 238.838-313.29 71.685 73.013 34.695-35.28-310.185-315.743-34.672 35.257 77.287 79.402-311.737 240.773z"
+              p-id="1815" :fill="mainColor.iconColor"></path>
+          </svg>
+        </div>
+
       </div>
       <div data-tauri-drag-region class="right-button">
         <div class="titlebar-button" @click="() => { title_bar_click('min-size') }">
@@ -26,8 +37,8 @@
               p-id="6115" :fill="mainColor.iconColor"></path>
           </svg>
         </div>
-        <div class="titlebar-button " @click="() => { title_bar_click('switch-size') }">
-          <svg v-show="switchScreenSize === true" t="1765104152369" class="icon max-size-icon" viewBox="0 0 1024 1024"
+        <div class="titlebar-button split-icon" @click="() => { title_bar_click('switch-size') }">
+          <svg v-show="switchScreenSize === true" t="1765104152369" class="icon max-size-icon " viewBox="0 0 1024 1024"
             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8951" width="200" height="200">
             <path
               d="M384 128c23.564433 0 42.666667 19.102234 42.666667 42.666667s-19.102234 42.666667-42.666667 42.666666l-110.327523-0.00113 161.830428 161.831559c16.66317 16.66204 16.66317 43.677104 0 60.339143-16.66204 16.66317-43.677104 16.66317-60.339143 0L213.333333 273.673607v110.326393c0 23.564433-19.102234 42.666667-42.666666 42.666667s-42.666667-19.102234-42.666667-42.666667v-170.666667c0-47.127735 38.205598-85.333333 85.333333-85.333333h170.666667z m-8.836238 460.497095c16.66204-16.66317 43.677104-16.66317 60.339143 0 16.66317 16.66204 16.66317 43.677104 0 60.339143L273.672477 810.666667h110.327523c23.328212 0 42.284645 18.722472 42.661015 41.961395l0.005652 0.705271c0 23.564433-19.102234 42.666667-42.666667 42.666667h-170.666667c-47.127735 0-85.333333-38.205598-85.333333-85.333333v-170.666667c0-23.564433 19.102234-42.666667 42.666667-42.666667s42.666667 19.102234 42.666666 42.666667v110.325263zM810.666667 128c47.127735 0 85.333333 38.205598 85.333333 85.333333v170.666667c0 23.564433-19.102234 42.666667-42.666667 42.666667s-42.666667-19.102234-42.666666-42.666667v-110.327523L648.836238 435.502905c-16.66204 16.66317-43.677104 16.66317-60.339143 0-16.66317-16.66204-16.66317-43.677104 0-60.339143l161.828168-161.830429H640c-23.564433 0-42.666667-19.102234-42.666667-42.666666s19.102234-42.666667 42.666667-42.666667h170.666667zM588.497095 588.497095c16.66204-16.66317 43.677104-16.66317 60.339143 0L810.666667 750.326393V640c0-23.328212 18.722472-42.284645 41.961395-42.661015l0.705271-0.005652c23.564433 0 42.666667 19.102234 42.666667 42.666667v170.666667c0 47.127735-38.205598 85.333333-85.333333 85.333333h-170.666667c-23.564433 0-42.666667-19.102234-42.666667-42.666667s19.102234-42.666667 42.666667-42.666666h110.326393L588.497095 648.836238c-16.495894-16.495894-16.660909-43.137978-0.495046-59.836185z"
@@ -40,7 +51,7 @@
               p-id="11910" :fill="mainColor.iconColor"></path>
           </svg>
         </div>
-        <div class="titlebar-button" @click="() => { title_bar_click('close-screen') }">
+        <div class="titlebar-button split-icon" @click="() => { title_bar_click('close-screen') }">
           <svg t="1765102437899" class="icon close-icon" viewBox="0 0 1024 1024" version="1.1"
             xmlns="http://www.w3.org/2000/svg" p-id="1674" width="200" height="200">
             <path
@@ -55,19 +66,16 @@
     </div>
 
     <main class="container">
-      <div v-show="comVisibility.LeftContain" class="left-contain" ref="leftContainer"
-        :class="{ 'close-left-contain': comVisibility['LeftContain-close'] }" @mousedown="startResize">
+      <div v-show="comVisibility.LeftContain['LeftContain-open']" class="left-contain" ref="leftContainer"
+        :class="{ 'close-left-contain': comVisibility.LeftContain['LeftContain-close'] }" @mousedown="startResize">
 
         <LeftContain v-model:comVisibility="comVisibility"></LeftContain>
 
       </div>
-      <!-- <div v-show="comVisibility.LeftContain" 
-       class="resize-handle" 
-       ></div> -->
       <div class="mid-contain">
         <div class="left-call-icon" @click="() => { open_sidebar('left-contain') }">
           <svg t="1765631009180" class="icon "
-            :class="{ 'left-called-icon1': !comVisibility['LeftContain-close'], 'left-called-icon2': comVisibility['LeftContain-close'] }"
+            :class="{ 'left-called-icon1': !comVisibility.LeftContain['LeftContain-close'], 'left-called-icon2': comVisibility.LeftContain['LeftContain-close'] }"
             viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2824" width="200"
             height="200">
             <path
@@ -100,11 +108,25 @@ import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于�
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
+const isPin = ref(false)
 const comVisibility = reactive({
-  "LeftContain": false,
-  "LeftContain-close": true  // 保障关闭侧边栏按钮可以正常运转
+  "LeftContain": {
+    "LeftContain-data": {
+      "item": [
+        {
+          "name": "文件处理",
+          "index": 0,
+          "is-focus":false
+        }
+      ]
+    },
+    "LeftContain-open": false,
+    "LeftContain-close": true  // 保障关闭侧边栏按钮可以正常运转
+  }
+
 })
-const leftContainer = ref<HTMLElement | null>(null)
+const routingWhoIsFocus = ref<String | null>(null)  // 当前路由 谁 获得焦点
+const leftContainer = ref<HTMLElement | null>(null)  // 左侧容器DOM元素
 let isResizing = false
 let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
 
@@ -165,20 +187,20 @@ const title_bar_click = (mode: string) => {
 const open_sidebar = (operObj: string) => {
   switch (operObj) {
     case 'left-contain':
-      if (comVisibility.LeftContain) {
+      if (comVisibility.LeftContain["LeftContain-open"]) {
         if (!leftContainer.value) return
         leftContainer.value.style.width = ''  // 移除width 方便动画播放
         setTimeout(() => {
-          comVisibility["LeftContain-close"] = true
+          comVisibility.LeftContain["LeftContain-close"] = true
         }, 50)
         setTimeout(() => {
-          comVisibility.LeftContain = !comVisibility.LeftContain;
+          comVisibility.LeftContain["LeftContain-open"] = !comVisibility.LeftContain["LeftContain-open"];
         }, 800)
 
       }
       else {
-        comVisibility["LeftContain-close"] = false
-        comVisibility.LeftContain = !comVisibility.LeftContain;
+        comVisibility.LeftContain["LeftContain-close"] = false
+        comVisibility.LeftContain["LeftContain-open"] = !comVisibility.LeftContain["LeftContain-open"];
 
       }
       break;
@@ -197,6 +219,10 @@ const opeanLinkling = async (url: String) => {
   }
 }
 
+const pin_screen = () => {
+  isPin.value = !isPin.value
+}
+
 const startResize = (e: MouseEvent) => {
   isResizing = true
   document.addEventListener('mousemove', resize)
@@ -210,11 +236,6 @@ const resize = (e: MouseEvent) => {
 
   if (!containerRect) return
   leftContainWidth = e.clientX * 1.2371134 // 1.2371134是修正系数
-
-  // const newWidth = (e.clientX - containerRect.left) + 15
-  // const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100
-  // 限制最小和最大宽度
-  // const clampedWidth = Math.min(Math.max(newWidth, 10), 300)
   leftContainer.value.style.cssText += `width: ${leftContainWidth}px !important;`
   document.documentElement.style.setProperty("--left-contain-width", `${leftContainWidth}px`)  // 侧边栏宽度
 }
@@ -237,6 +258,7 @@ const stopResize = () => {
   background-color: var(--back-ground);
 }
 
+/* ------------------------------------------------------标题栏样式区--------------------------------------------------------- */
 .titlebar {
   display: flex;
   height: 6vh;
@@ -248,6 +270,11 @@ const stopResize = () => {
   /* 上下 居中 */
 
   background: linear-gradient(to bottom, var(--title-bar-lg-1), var(--title-bar-lg-2))
+}
+
+.active-pin {
+  animation: active-pin 0.25s forwards;
+  animation-timing-function: linear;
 }
 
 .left-button,
@@ -265,7 +292,8 @@ const stopResize = () => {
   /* 上下 居中 */
 
 }
-.left-button{
+
+.left-button {
   justify-content: left;
   /* 左右 居中 */
   align-items: center;
@@ -375,7 +403,7 @@ const stopResize = () => {
   filter: drop-shadow(0 0 0.75em var(--title-close-icon-active-shadow));
 }
 
-.titlebar-button:nth-child(2):after {
+.split-icon:after {
   content: "";
   position: absolute;
   /* top: 50%; */
@@ -388,20 +416,8 @@ const stopResize = () => {
   /* transform: translateY(50%); */
 }
 
-.titlebar-button:nth-child(3):after {
-  content: "";
-  position: absolute;
-  /* top: 50%; */
-  left: -0.5vw;
-  width: 0.2vw;
-  max-width: 2px;
-  height: 3vh;
-  max-height: 20px;
-  background-color: var(--main-border);
-  /* transform: translateY(50%); */
-}
 .main-icon-box {
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 4vh;
@@ -412,6 +428,7 @@ const stopResize = () => {
   max-width: 30px;
   margin-left: 0.5vw;
 }
+
 .main-icon {
   height: 4vh;
   width: 4vh;
@@ -421,6 +438,11 @@ const stopResize = () => {
   max-width: 30px;
 }
 
+.main-icon:active {
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
+}
+
 .icon {
   height: 3vh;
   width: 3vh;
@@ -428,6 +450,11 @@ const stopResize = () => {
   max-height: 25px;
   min-width: 15px;
   max-width: 30px;
+}
+
+.icon:active {
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
 }
 
 /* -------------------------------------主区域样式----------------------------------------- */
@@ -554,6 +581,31 @@ const stopResize = () => {
 }
 
 /* ==============================================动画实现============================================== */
+@keyframes active-pin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes active-icon {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+
 @keyframes expand {
   0% {
 

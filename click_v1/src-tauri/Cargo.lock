@@ -467,6 +467,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-opener",
  "tauri-plugin-shell",
+ "winapi",
  "windows 0.62.2",
 ]
 

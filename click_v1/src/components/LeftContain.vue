@@ -1,6 +1,8 @@
 <template>
-    <div v-show="comVisibility.LeftContain" class="main-left">
-        
+    <div v-show="comVisibility.LeftContain['LeftContain-open']" class="main-left">
+        <div v-for="(value, key) in comVisibility.LeftContain" :key="key" class="single-item">
+
+        </div>
     </div>
 </template>
 <script setup lang="ts">
