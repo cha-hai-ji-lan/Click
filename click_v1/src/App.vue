@@ -117,6 +117,11 @@ const comVisibility = reactive({
           "name": "文件处理",
           "index": 0,
           "is-focus":false
+        },
+        {
+          "name": "可控关机",
+          "index": 0,
+          "is-focus":false
         }
       ]
     },
