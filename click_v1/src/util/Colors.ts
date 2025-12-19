@@ -1,4 +1,4 @@
-import { type HexColor, RGBColor, RGBAColor, ColorSwitch } from '@/class/ColoeIndex'
+import { type HexColor, RGBColor, RGBAColor, ColorSwitch } from '@/class/ColorIndex'
 import { ref } from 'vue'
     ;
 export function ColorCtr() {

@@ -3,10 +3,14 @@
         <div class="sub-left-contain">
             <div v-for="(item) in comVisibility.LeftContain['LeftContain-data']['item']" :key="item['index']"
                 class="single-item">
-                <div class="single-contain">
-                    <div class="name">{{ item["name"] }}</div>
-                </div>
-                
+                <RouterLink :to="item.router" class="single-contain">
+                        <div class="icon menu-icon">
+                            <component :is="getIconComponent(item.icon)" :mainColor="mainColor" />
+                        </div>
+                        <div class="name">{{ item["name"] }}</div>
+                </RouterLink>
+
+
 
             </div>
         </div>
@@ -14,6 +18,9 @@
     </div>
 </template>
 <script setup lang="ts">
+import { RouterLink } from "vue-router"
+import { iconComponents } from "../util/PluginObjects"
+import { IconComponentsType } from "../class/IconIndex"
 import { watch, ref, onMounted, onUnmounted } from "vue"
 const props = defineProps({
     comVisibility: {
@@ -27,6 +34,10 @@ const props = defineProps({
     open_sidebar_left: { //  暂未使用
         type: Function,
         default: () => { console.error("未获得父组件 侧栏控制权") }
+    },
+    mainColor: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -39,25 +50,25 @@ let resizeObserver: ResizeObserver | null = null;
 
 onMounted(() => {
     setTimeout(
-        () =>{
+        () => {
             if (props.leftContainer) {
-        // 初始化宽度
-        containerWidth.value = props.leftContainer.getBoundingClientRect().width;
+                // 初始化宽度
+                containerWidth.value = props.leftContainer.getBoundingClientRect().width;
 
-        // 创建ResizeObserver实例
-        resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                containerWidth.value = entry.contentRect.width;
+                // 创建ResizeObserver实例
+                resizeObserver = new ResizeObserver(entries => {
+                    for (let entry of entries) {
+                        containerWidth.value = entry.contentRect.width;
+                    }
+                });
+
+                // 开始观察元素
+                resizeObserver.observe(props.leftContainer);
+                console.log("开始观察元素")
             }
-        });
-
-        // 开始观察元素
-        resizeObserver.observe(props.leftContainer);
-        console.log("开始观察元素")
-    }
         }, 300
     )
-    
+
 });
 
 watch(containerWidth, (newValue) => {
@@ -65,7 +76,7 @@ watch(containerWidth, (newValue) => {
     if (newValue <= 75) {
         // 当宽度小于等于75时，根据宽度动态调整blur和letter-spacing
         let blurValue = Math.max(0, Math.min(10, (75 - newValue) * 6 / 75));
-        let letterSpacing = Math.max(-20, Math.min(0, -(75 - newValue) *  12 / 75));
+        let letterSpacing = Math.max(-20, Math.min(0, -(75 - newValue) * 12 / 75));
         console.log(blurValue)
         document.documentElement.style.setProperty("--font-blur", `${blurValue}px`)  // 动态栏的字模糊滤镜
         document.documentElement.style.setProperty("--letter-spacing", `${letterSpacing}px`)  // 动态栏的字字间距
@@ -87,6 +98,11 @@ onUnmounted(() => {
 const emit = defineEmits<{
     (e: 'update:comVisibility', value: Object): void
 }>()
+
+// 定义获取图标的函数
+const getIconComponent = (iconName: string) => {
+    return (iconComponents.value as IconComponentsType)[iconName]
+}
 
 </script>
 <style scoped>
@@ -130,15 +146,17 @@ const emit = defineEmits<{
     margin-top: 1vh;
     min-height: 20px;
     max-height: 100px;
-    height:5vh;
+    height: 5vh;
     width: 90%;
     transition: 0.1s;
 
 }
+
 .single-item:nth-child(1) {
     border-top-right-radius: 2.5vmin;
     border-top-left-radius: 2.5vmin;
 }
+
 .single-item:last-child {
     border-bottom-right-radius: 2.5vmin;
     border-bottom-left-radius: 2.5vmin;
@@ -151,20 +169,22 @@ const emit = defineEmits<{
     width: 100%;
     height: 100%;
     border-radius: 1vmin;
-    box-shadow: inset 0px  0px 3px 2px var(--tool-bar-color);
+    box-shadow: inset 0px 0px 3px 2px var(--tool-bar-color);
 }
+
 .single-item:nth-child(1) .single-contain {
     border-top-right-radius: 2.5vmin;
     border-top-left-radius: 2.5vmin;
 
 }
+
 .single-item:last-child .single-contain {
     border-bottom-right-radius: 2.5vmin;
     border-bottom-left-radius: 2.5vmin;
 }
 
 .name {
-    
+
     user-select: none;
     /* 用户无法选择 */
     -webkit-user-select: none;
@@ -178,9 +198,13 @@ const emit = defineEmits<{
 .single-contain:hover {
     box-shadow: 3px 7px 7px var(--tool-bar-color);
 }
+
 .single-item:active {
     box-shadow: 2px 4px 4px var(--main-border);
     transform: scale(0.95);
 }
 
+.menu-icon {
+    margin-right: 2vw;
+}
 </style>
