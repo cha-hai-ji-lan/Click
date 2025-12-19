@@ -69,7 +69,8 @@
       <div v-show="comVisibility.LeftContain['LeftContain-open']" class="left-contain" ref="leftContainer"
         :class="{ 'close-left-contain': comVisibility.LeftContain['LeftContain-close'] }" @mousedown="startResize">
 
-        <LeftContain v-model:comVisibility="comVisibility"></LeftContain>
+        <LeftContain v-model:comVisibility="comVisibility" :leftContainer="leftContainer"
+          :open_sidebar_left="() => { open_sidebar('left-contain') }"></LeftContain>
 
       </div>
       <div class="mid-contain">
@@ -116,17 +117,17 @@ const comVisibility = reactive({
         {
           "name": "文件处理",
           "index": 0,
-          "is-focus":false
+          "is-focus": false
         },
         {
           "name": "可控关机",
           "index": 0,
-          "is-focus":false
+          "is-focus": false
         }
       ]
     },
     "LeftContain-open": false,
-    "LeftContain-close": true  // 保障关闭侧边栏按钮可以正常运转
+    "LeftContain-close": true, // 保障关闭侧边栏按钮可以正常运转
   }
 
 })
@@ -161,15 +162,23 @@ const set_focus_color_palette = () => {
   // 主区域颜色
   document.documentElement.style.setProperty("--main-border", `rgba(${mainColor.value.borderColorRGBA})`)  // 边框色
   document.documentElement.style.setProperty("--main-back-ground", `rgba(${mainColor.value.midGroundColorRGBA})`)  // 背景色
+  document.documentElement.style.setProperty("--tool-bar-color", `rgba(${mainColor.value.toolBarColorRGBA})`)  // 背景色
   document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.value.foreGroundColorRGBA})`)
   document.documentElement.style.setProperty("--icon-hover-shadow", `rgba(${mainColor.value.iconHoverColorRGBA})`)
   document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.value.iconActiveColorRGBA})`)
   document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
+  document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.value.buttonColorRGBA})`)  // 按钮颜色
+
+
+  // 左侧边框颜色
+
 
 }
 
 const set_special_style = () => {
   document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
+  document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
+  document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
 
 }
 const title_bar_click = (mode: string) => {
@@ -224,11 +233,13 @@ const opeanLinkling = async (url: String) => {
   }
 }
 
-const pin_screen = () => {
+const pin_screen = async () => {
   isPin.value = !isPin.value
+  console.log("屏幕钉住了", isPin.value)
+  await appWindow.setAlwaysOnTop(isPin.value);
 }
 
-const startResize = (e: MouseEvent) => {
+const startResize = (_: MouseEvent) => {
   isResizing = true
   document.addEventListener('mousemove', resize)
   document.addEventListener('mouseup', stopResize)
@@ -242,13 +253,25 @@ const resize = (e: MouseEvent) => {
   if (!containerRect) return
   leftContainWidth = e.clientX * 1.2371134 // 1.2371134是修正系数
   leftContainer.value.style.cssText += `width: ${leftContainWidth}px !important;`
-  document.documentElement.style.setProperty("--left-contain-width", `${leftContainWidth}px`)  // 侧边栏宽度
+  document.documentElement.style.setProperty("--left-contain-width", `${leftContainWidth}px`)  // 侧边栏宽度  用于动画属性 因为动画属性优先级过高
 }
 
 const stopResize = () => {
   isResizing = false
   document.removeEventListener('mousemove', resize)
   document.removeEventListener('mouseup', stopResize)
+  if (leftContainer.value) {
+    if (leftContainer.value.getBoundingClientRect().width <= 50) {
+      open_sidebar("left-contain")
+      setTimeout(() => {
+        document.documentElement.style.setProperty("--left-contain-width", `200px`)  // 侧边栏宽度  用于动画属性 因为动画属性优先级过高
+        document.documentElement.style.setProperty("--letter-spacing", `0px`)  // 动态栏的字字间距
+        document.documentElement.style.setProperty("--font-blur", `0px`)
+
+      }, 800)
+    }
+  }
+
 }
 </script>
 <style scoped>
@@ -702,6 +725,7 @@ const stopResize = () => {
 
   100% {
     opacity: 1;
+
     width: var(--left-contain-width);
   }
 }
@@ -713,6 +737,7 @@ const stopResize = () => {
   }
 
   100% {
+
     opacity: 0;
     width: 0;
   }
