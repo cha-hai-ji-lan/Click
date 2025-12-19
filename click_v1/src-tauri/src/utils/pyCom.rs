@@ -1,27 +1,49 @@
-use std::ffi::CString;
-use winapi::um::libloaderapi::{LoadLibraryA, GetProcAddress};
-use winapi::shared::minwindef::HMODULE;
+use windows::{
+    core::*,
+    Win32::{
+        System::Com::*,
+        UI::Shell::*,
+    },
+};
+use windows::Win32::System::Variant::VARIANT;
 
-fn call_dll_function() {
+fn get_active_explorer_path() -> Result<Option<String>> {
     unsafe {
-        // 加载 DLL
-        let dll_name = CString::new("your_library.dll").unwrap();
-        let handle: HMODULE = LoadLibraryA(dll_name.as_ptr());
+        let _ = CoInitialize(None);
 
-        if handle.is_null() {
-            panic!("Failed to load DLL");
+        let shell_windows: IShellWindows = match CoCreateInstance(&ShellWindows, None, CLSCTX_ALL) {
+            Ok(shell) => shell,
+            Err(_) => {
+                CoUninitialize();
+                return Ok(None);
+            }
+        };
+
+        let count = match shell_windows.Count() {
+            Ok(c) => c,
+            Err(_) => {
+                CoUninitialize();
+                return Ok(None);
+            }
+        };
+
+        // 查找活动的Explorer窗口
+        for i in 0..count {
+            if let Ok(window) = shell_windows.Item(&VARIANT::from(i)) {
+                if let Ok(folder_view) = window.cast::<IShellFolderViewDual>() { // 修改为 cast
+                    if let Ok(folder) = folder_view.Folder() {
+                        if let Ok(item) = folder.Items() {
+                            if let Ok(path) = item.Item(&VARIANT::from(0)) {
+                                CoUninitialize();
+                                return Ok(Some(path.Path()?.to_string()));
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        // 获取函数地址
-        let function_name = CString::new("function_name").unwrap();
-        let func_ptr = GetProcAddress(handle, function_name.as_ptr());
-
-        if func_ptr.is_null() {
-            panic!("Failed to get function address");
-        }
-
-        // 调用函数（需要根据函数签名转换为正确的函数指针类型）
-        // let func: fn(...) -> ReturnType = std::mem::transmute(func_ptr);
-        // let result = func(...);
+        CoUninitialize();
+        Ok(None)
     }
 }

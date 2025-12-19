@@ -24,11 +24,5 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-shell = "2"  # shell plugin 用于 访问系统shell。允许你的进程并管理文件和URL使用他们的默认应用程序。
 open = "5.3.3"  # open crate用于在某些应用程序中打开给定路径或 URL，遵循当前用户的桌面默认·浏览器配置
-windows = {version = "0.62.2", features = [
-    "Win32_Foundation", # 提供基础的 Windows 数据类型、常量和基本函数，是许多其他 Windows API 的基础
-    "Win32_System_Com",  # 支持 Component Object Model (COM) 相关功能，用于组件间通信和对象管理
-    "Win32_UI_Shell", # 提供对 Windows Shell 功能的访问，包括文件操作、对话框和桌面环境交互
-    "Win32_System_Ole", # 支持 Object Linking and Embedding (OLE) 技术，用于对象嵌入和链接操作
-    "Win32_System_Variant", # 处理 VARIANT 数据类型的模块，用于存储不同类型的数据值
-] }
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_System_Com", "Win32_UI_Shell", "Win32_System_Ole", "Win32_System_Variant", "Win32_UI_WindowsAndMessaging"] }
 winapi = { version = "0.3.9", features = ["libloaderapi", "winnt", "minwindef"] }
