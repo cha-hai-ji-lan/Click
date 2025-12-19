@@ -64,8 +64,8 @@ watch(containerWidth, (newValue) => {
     // console.log(newValue)
     if (newValue <= 75) {
         // 当宽度小于等于75时，根据宽度动态调整blur和letter-spacing
-        let blurValue = Math.max(0, Math.min(8, (75 - newValue) * 5 / 75));
-        let letterSpacing = Math.max(-15, Math.min(0, -(75 - newValue) *  10 / 75));
+        let blurValue = Math.max(0, Math.min(10, (75 - newValue) * 6 / 75));
+        let letterSpacing = Math.max(-20, Math.min(0, -(75 - newValue) *  12 / 75));
         console.log(blurValue)
         document.documentElement.style.setProperty("--font-blur", `${blurValue}px`)  // 动态栏的字模糊滤镜
         document.documentElement.style.setProperty("--letter-spacing", `${letterSpacing}px`)  // 动态栏的字字间距
@@ -132,9 +132,18 @@ const emit = defineEmits<{
     max-height: 100px;
     height:5vh;
     width: 90%;
-    transition: all;
+    transition: 0.1s;
 
 }
+.single-item:nth-child(1) {
+    border-top-right-radius: 2.5vmin;
+    border-top-left-radius: 2.5vmin;
+}
+.single-item:last-child {
+    border-bottom-right-radius: 2.5vmin;
+    border-bottom-left-radius: 2.5vmin;
+}
+
 .single-contain {
     display: flex;
     justify-content: center;
@@ -143,6 +152,15 @@ const emit = defineEmits<{
     height: 100%;
     border-radius: 1vmin;
     box-shadow: inset 0px  0px 3px 2px var(--tool-bar-color);
+}
+.single-item:nth-child(1) .single-contain {
+    border-top-right-radius: 2.5vmin;
+    border-top-left-radius: 2.5vmin;
+
+}
+.single-item:last-child .single-contain {
+    border-bottom-right-radius: 2.5vmin;
+    border-bottom-left-radius: 2.5vmin;
 }
 
 .name {
@@ -162,6 +180,7 @@ const emit = defineEmits<{
 }
 .single-item:active {
     box-shadow: 2px 4px 4px var(--main-border);
+    transform: scale(0.95);
 }
 
 </style>
