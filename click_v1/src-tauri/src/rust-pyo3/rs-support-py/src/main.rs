@@ -1,20 +1,11 @@
 use std::fs;
 use std::io::Error;
 use std::path::Path;
-
-/// 递归遍历目录下所有路径（广度优先版本）
-///
-/// 对于较深的目录结构可能存在性能问题，但适用于大多数用途
-///
-/// # 参数
-/// * `dir_path` - 要遍历的目录路径
-///
-/// # 返回值
-/// * `Ok(Vec<String>)` - 包含所有文件和目录路径的向量
-/// * `Err(Error)` - 遇到错误时返回错误信息
+#[allow(dead_code)]
 pub fn traverse_directory_all(dir_path: Box<&Path>) -> Result<Vec<String>, Error> {
     let mut paths: Vec<String> = Vec::new();
-    let mut queue: std::collections::VecDeque<std::path::PathBuf> = std::collections::VecDeque::new();
+    let mut queue: std::collections::VecDeque<std::path::PathBuf> =
+        std::collections::VecDeque::new();
 
     // 初始化队列
     queue.push_back(dir_path.to_path_buf());
@@ -29,7 +20,7 @@ pub fn traverse_directory_all(dir_path: Box<&Path>) -> Result<Vec<String>, Error
 
             // 将路径添加到结果列表
             if let Some(path_str) = path.to_str() {
-                paths.push(path_str.to_string());
+                paths.push(path_str.to_string().replace("\\", "/"));
             }
 
             // 如果是目录，则加入队列以便后续遍历
@@ -41,45 +32,6 @@ pub fn traverse_directory_all(dir_path: Box<&Path>) -> Result<Vec<String>, Error
 
     Ok(paths)
 }
-
-/// 递归遍历目录下所有路径（深度优先版本）
-///
-/// 对于较深的目录结构可能有栈溢出风险，但对于一般用途足够高效
-///
-/// # 参数
-/// * `dir_path` - 要遍历的目录路径
-///
-/// # 返回值
-/// * `Ok(Vec<String>)` - 包含所有文件和目录路径的向量
-/// * `Err(Error)` - 遇到错误时返回错误信息
-pub fn traverse_directory_all_dfs(dir_path: Box<Path>) -> Result<Vec<String>, Error> {
-    let mut paths: Vec<String> = Vec::new();
-
-    fn traverse_recursive(path: &Path, paths: &mut Vec<String>) -> Result<(), Error> {
-        let read_dir = fs::read_dir(path)?;
-
-        for entry in read_dir {
-            let entry = entry?;
-            let entry_path = entry.path();
-
-            // 将路径添加到结果列表
-            if let Some(path_str) = entry_path.to_str() {
-                paths.push(path_str.to_string());
-            }
-
-            // 如果是目录，则递归遍历
-            if entry_path.is_dir() {
-                traverse_recursive(&entry_path, paths)?;
-            }
-        }
-
-        Ok(())
-    }
-
-    traverse_recursive(&dir_path, &mut paths)?;
-    Ok(paths)
-}
-
 fn main() {
     let dir_path = Box::new(Path::new(r"D:\Desktop\实验程序\实验程序"));
     let paths = traverse_directory_all(dir_path);
