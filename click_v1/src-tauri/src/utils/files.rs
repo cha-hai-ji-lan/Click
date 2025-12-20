@@ -483,7 +483,11 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn replace_name(path: Box<&Path>, old_name_sign: &str, new_name_sign: &str) -> Result<(), Error> {
+pub fn replace_name(
+    path: Box<&Path>,
+    old_name_sign: &str,
+    new_name_sign: &str,
+) -> Result<(), Error> {
     let old_path = *path;
     let old_path_name = old_path.file_name().unwrap().to_str().unwrap().to_string();
 
@@ -499,10 +503,7 @@ pub fn replace_name(path: Box<&Path>, old_name_sign: &str, new_name_sign: &str) 
     let parent_dir = match old_path.parent() {
         Some(parent) => parent,
         None => {
-            return Err(Error::new(
-                io::ErrorKind::InvalidInput,
-                "无法确定父目录",
-            ));
+            return Err(Error::new(io::ErrorKind::InvalidInput, "无法确定父目录"));
         }
     };
     let new_name = old_path_name.replace(old_name_sign, new_name_sign);
@@ -511,10 +512,7 @@ pub fn replace_name(path: Box<&Path>, old_name_sign: &str, new_name_sign: &str) 
 
     // 检查新路径是否已存在
     if new_path.exists() {
-        return Err(Error::new(
-            io::ErrorKind::AlreadyExists,
-            "目标文件名已存在",
-        ));
+        return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
     }
 
     // 执行重命名操作

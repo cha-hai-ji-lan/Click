@@ -1,12 +1,8 @@
+use windows::Win32::System::Variant::VARIANT;
 use windows::{
     core::*,
-    Win32::{
-        Foundation::*,
-        System::Com::*,
-        UI::Shell::*,
-    },
+    Win32::{Foundation::*, System::Com::*, UI::Shell::*},
 };
-use windows::Win32::System::Variant::VARIANT;
 
 fn get_active_explorer_path() -> Result<Option<String>> {
     unsafe {
@@ -31,7 +27,8 @@ fn get_active_explorer_path() -> Result<Option<String>> {
         // 查找活动的Explorer窗口
         for i in 0..count {
             if let Ok(window) = shell_windows.Item(&VARIANT::from(i)) {
-                if let Ok(folder_view) = window.cast::<IShellFolderViewDual>() { // 修改为 cast
+                if let Ok(folder_view) = window.cast::<IShellFolderViewDual>() {
+                    // 修改为 cast
                     if let Ok(folder) = folder_view.Folder() {
                         if let Ok(item) = folder.Items() {
                             if let Ok(path) = item.Item(&VARIANT::from(0)) {

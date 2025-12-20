@@ -72,12 +72,10 @@ onMounted(() => {
 });
 
 watch(containerWidth, (newValue) => {
-    // console.log(newValue)
     if (newValue <= 75) {
         // 当宽度小于等于75时，根据宽度动态调整blur和letter-spacing
         let blurValue = Math.max(0, Math.min(10, (75 - newValue) * 6 / 75));
         let letterSpacing = Math.max(-20, Math.min(0, -(75 - newValue) * 12 / 75));
-        console.log(blurValue)
         document.documentElement.style.setProperty("--font-blur", `${blurValue}px`)  // 动态栏的字模糊滤镜
         document.documentElement.style.setProperty("--letter-spacing", `${letterSpacing}px`)  // 动态栏的字字间距
     } else {
@@ -207,4 +205,40 @@ const getIconComponent = (iconName: string) => {
 .menu-icon {
     margin-right: 2vw;
 }
+
+.icon {
+  height: 3vh;
+  width: 3vh;
+  min-height: 10px;
+  max-height: 25px;
+  min-width: 15px;
+  max-width: 30px;
+}
+
+.icon:active {
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
+}
+
+/* ----------------------------------------动画区----------------------------------------------- */
+
+
+@keyframes active-icon {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+</style>
+
+<style>
+
 </style>

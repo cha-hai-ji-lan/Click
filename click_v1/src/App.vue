@@ -148,6 +148,8 @@ const set_focus_color_palette = () => {
   document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.value.iconActiveColorRGBA})`)
   document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
   document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.value.buttonColorRGBA})`)  // 按钮颜色
+  document.documentElement.style.setProperty("--unite-but-color", `rgba(${mainColor.value.iconColorRGBA})`)
+
 
 
   // 左侧边框颜色
@@ -159,6 +161,7 @@ const set_special_style = () => {
   document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
   document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
   document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
+  document.documentElement.style.setProperty("--grid-size", `20px`)  // 动态栏的字字间距
 
 }
 const title_bar_click = (mode: string) => {
@@ -451,6 +454,20 @@ const stopResize = () => {
   animation-timing-function: linear;
 }
 
+.icon {
+  height: 3vh;
+  width: 3vh;
+  min-height: 10px;
+  max-height: 25px;
+  min-width: 15px;
+  max-width: 30px;
+}
+
+.icon:active {
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
+}
+
 /* -------------------------------------主区域样式----------------------------------------- */
 .container {
   transition: 0.5s;
@@ -731,6 +748,7 @@ const stopResize = () => {
 </style>
 <style>
 html {
+  font-family: "楷体", 'Courier New', Courier, monospace;
   color: var(--font-color);
   background: transparent;
   width: 100%;
@@ -756,18 +774,5 @@ body {
   margin: 0;
   padding: 0;
 }
- /* -----------------------------------------------特殊公用样式----------------------------------------------- */
-.icon {
-  height: 3vh;
-  width: 3vh;
-  min-height: 10px;
-  max-height: 25px;
-  min-width: 15px;
-  max-width: 30px;
-}
 
-.icon:active {
-  animation: active-icon 0.25s forwards;
-  animation-timing-function: linear;
-}
 </style>

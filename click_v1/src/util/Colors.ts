@@ -107,7 +107,7 @@ export function ColorCtr() {
                 iconHoverColor.value = "#f5f57f"
                 iconActiveColor.value = "#f0f02c"
                 fontColor.value = "#42494a"
-                buttonColor.value = "#fefffcff"
+                buttonColor.value = "#ededed"
                 // RGB
                 titleBarColorRGB.value = [249, 248, 226]
                 toolBarColorRGB.value = [205, 205, 204]
@@ -119,7 +119,7 @@ export function ColorCtr() {
                 iconHoverColorRGB.value = [245, 245, 127]
                 iconActiveColorRGB.value = [240, 240, 44]
                 fontColorRGB.value = [66, 73, 74]
-                buttonColorRGB.value = [254, 255, 252]
+                buttonColorRGB.value = [235, 235, 235]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [205, 205, 204, 1]
@@ -131,7 +131,7 @@ export function ColorCtr() {
                 iconHoverColorRGBA.value = [245, 245, 127, 1]
                 iconActiveColorRGBA.value = [240, 240, 44, 1]
                 fontColorRGBA.value = [66, 73, 74, 1]
-                buttonColorRGBA.value = [254, 255, 252, 1]
+                buttonColorRGBA.value = [235, 235, 235, 1]
                 break;
             case "Night":
                 titleBarColor.value = "#3c3f41"     //  
@@ -180,7 +180,7 @@ export function ColorCtr() {
                 iconHoverColorRGB.value = [245, 245, 127]
                 iconActiveColorRGB.value = [240, 240, 44]
                 fontColorRGB.value = [66, 73, 74]
-                buttonColorRGB.value =[254, 255, 252]
+                buttonColorRGB.value =[235, 235, 235]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [205, 205, 204, 1]
@@ -192,7 +192,7 @@ export function ColorCtr() {
                 iconHoverColorRGBA.value = [245, 245, 127, 1]
                 iconActiveColorRGBA.value = [240, 240, 44, 1]
                 fontColorRGBA.value = [66, 73, 74, 1]
-                buttonColorRGBA.value = [254, 255, 252, 1]
+                buttonColorRGBA.value = [235, 235, 235, 1]
                 break;
         }
     }
