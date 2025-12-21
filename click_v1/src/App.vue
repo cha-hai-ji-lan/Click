@@ -161,7 +161,7 @@ const set_special_style = () => {
   document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
   document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
   document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
-  document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 动态栏的字字间距
+  document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 模拟纸面网格大小
 
 }
 const title_bar_click = (mode: string) => {
@@ -438,6 +438,15 @@ const stopResize = () => {
   min-width: 15px;
   max-width: 30px;
   margin-left: 0.5vw;
+
+  user-select: none;
+  /* 用户无法选择 */
+  -webkit-user-select: none;
+  /* Safari兼容性 */
+  -moz-user-select: none;
+  /* Firefox兼容性 */
+  -ms-user-select: none;
+  /* IE兼容性 */
 }
 
 .main-icon {

@@ -16,7 +16,6 @@
                <transition-group name="path-item" tag="div">
 
                     <div class="index-path coming-animation"
-                         :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }"
                          v-for="item in active_path" :key="item[1]">
                          <div class="choose">
                               <input type="checkbox" :value="item" :checked="isSelected(item)"
@@ -39,7 +38,7 @@
                </div>
                <div class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
-                         <div v-show="active_path && active_path.length > 0" class="replace-name"
+                         <div v-if="active_path && active_path.length > 0" class="replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
                               <div class="item-title">修改名字</div>
                               <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
@@ -47,7 +46,12 @@
                               <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
                               </div>
                          </div>
+                         <div v-else class="place-holder" >
+                              <span>PS: 没有什么路径可操控，我没啥可干的</span>
+                         </div>
                     </transition>
+               </div>
+               <div class="oper-1">
                </div>
 
           </div>
@@ -236,7 +240,18 @@ h3 {
      justify-content: start;
      align-items: center;
      flex-direction: row;
+     position: relative;
 }
+.title::after{
+     content: '';
+     position: absolute;
+     bottom: 2px;
+     left: 0;
+     width: 100%;
+     height: 2px;
+     background: linear-gradient(to right, var(--main-border) 60%, var(--font-color) 62.5%,var(--button-color) 65%,var(--back-ground) 67.5%, var(--main-back-ground) 70%);
+}
+
 
 .tag-icon {
      width: 4vh;
@@ -273,6 +288,7 @@ h3 {
      display: grid;
      grid-template-columns: 5% 20% 75%;
      position: relative;
+     font-size: 2vmin;
 }
 
 .index-path:nth-child(1)::before {
@@ -391,7 +407,7 @@ h3 {
 .oper {
      display: flex;
      width: 100%;
-     flex:1;
+     /* flex:1; */
      border-radius: 1vmin;
      justify-content: start;
      align-items: center;
@@ -404,6 +420,8 @@ h3 {
           linear-gradient(to bottom, var(--button-color) 1px, transparent 1px);
      background-size: var(--grid-size) var(--grid-size);
      overflow: auto;
+     animation: show-paper 0.5s ease-in-out forwards;
+     
 }
 
 .h3-head {
@@ -445,6 +463,17 @@ h3 {
      width: 100%;
      height: 4vh;
      grid-template-columns: 15% 35% 35% 15%;
+}
+
+.place-holder {
+     width: 100%;
+     height: 4vh;
+     font-size: medium;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: var(--font-color);
+
 }
 
 .item-title {
@@ -574,5 +603,14 @@ h3 {
           transform: scale(1);
      }
 
+}
+@keyframes show-paper {
+     0%{
+          height: 0%;
+     }
+     100%{
+          height: 78%;
+     }
+     
 }
 </style>
