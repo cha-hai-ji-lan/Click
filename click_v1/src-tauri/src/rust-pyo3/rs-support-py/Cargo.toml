@@ -7,6 +7,8 @@ edition = "2024"
 pyo3 = { version = "0.27.2", features = ["extension-module"]}
 windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_System_Com", "Win32_UI_Shell", "Win32_System_Ole", "Win32_System_Variant", "Win32_UI_WindowsAndMessaging"] }
 winapi = { version = "0.3.9", features = ["processthreadsapi", "handleapi", "winnt"] }
-rand = "0.10.0-rc.5"
+image = {version = "0.25.9", features = ["webp", "jpeg", "png", "tiff", "gif", "bmp", "ico"]}
+icns = {version = "0.3.1"}
+# 缺少格式 "pnm", "hdr", "tga", "dds", "exr", "raw", "openexr", "jpeg-xl", "heif", "webp", "magick", "magick-sys", "magick-sys-v2", "magick-sys-v3"
 nvml-wrapper = "0.11.0"
 sysinfo = "0.37.2"

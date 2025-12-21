@@ -3,7 +3,8 @@
         <div class="sub-left-contain">
             <div v-for="(item) in comVisibility.LeftContain['LeftContain-data']['item']" :key="item['index']"
                 class="single-item">
-                <RouterLink :to="item.router" class="single-contain">
+                <RouterLink :to="item.router" class="single-contain">  
+                    <!-- 注意给路由提供图标颜色 -->
                         <div class="icon menu-icon">
                             <component :is="getIconComponent(item.icon)" :mainColor="mainColor" />
                         </div>

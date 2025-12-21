@@ -1,150 +1,21 @@
-use std::io::Error;
-use std::process::Command;
-use std::time::Duration;
-use nvml_wrapper::Nvml;
-use sysinfo::{ProcessesToUpdate, System};
-use winapi::um::processthreadsapi::{OpenProcess, TerminateProcess};
-use winapi::um::handleapi::CloseHandle;
-use winapi::um::winnt::PROCESS_TERMINATE;
+use image::{self, GenericImageView, ImageFormat};
+use std::path::Path;
 
-#[derive(Debug)]
-struct CpuInfo {
-    cpu_pid: u32,
-    cpu_name: String,
-    cpu_usage: f32,
-    cpu_memory_usage: u64,
-}
-fn gpu_info() -> Result<(String, String, String, String), Error> {
-        let output = Command::new("nvidia-smi")
-            .arg("--query-gpu=index,name,utilization.gpu,utilization.memory")
-            .arg("--format=csv")
-            .output()
-            .expect("Failed to execute command");
+fn resize_png_image(input_path: &str, output_path: &str, width: u32, height: u32) -> Result<(), Box<dyn std::error::Error>> {
+    // 打开图片
+    let img = image::open(input_path)?;
 
-        if output.status.success() {
-            let result = String::from_utf8_lossy(&output.stdout);
-            let result = result.to_string();
-            let nvidia_gpu_info = result.split("\r\n").collect::<Vec<_>>();
-            let nvidia_gpu_info = &nvidia_gpu_info[1].split(",").collect::<Vec<_>>();
-            Ok(
-                (nvidia_gpu_info[0].to_string(),  //  GPU索引
-                 nvidia_gpu_info[1][16..nvidia_gpu_info[1].len()].to_string(),  // GPU名称
-                 nvidia_gpu_info[2][1..nvidia_gpu_info[2].len() - 2].to_string(),  // GPU使用率
-                 nvidia_gpu_info[3][1..nvidia_gpu_info[3].len() - 2].to_string())  // GPU内存使用率
-            )
-        } else {
-            Ok((String::from("0"), String::from(""),
-                String::from("0.0"), String::from("0.0")))
-        }
+    // 调整尺寸 - 使用不同的过滤算法
+    let resized = img.resize(width, height, image::imageops::FilterType::Lanczos3);
+
+    // 保存为PNG格式
+    resized.save_with_format(output_path, ImageFormat::Png)?;
+
+    Ok(())
 }
 
-
-/// CPU进程数获取
-/// 返回当前全部进程数
-fn get_cpu_handle() ->Result<usize,  Error> {
-    // 创建一个系统句柄
-    let mut handle = System::new_all();
-    // 刷新一次所有信息
-    handle.refresh_all();
-    Ok(handle.processes().len())
-}
-
-///  CPU资源占用量获取
-///
-fn cpu_info() -> Result<Vec<(String, String, String, String)>, Error> {
-        // 手动释放 GIL 锁
-        // 保证 线程运行时不会影响Python主线程GUI
-        let mut system = System::new_all();
-        system.refresh_all();
-        std::thread::sleep(Duration::from_secs(1)); // 等待1秒以获取使用率变化
-        system.refresh_all(); // 第二次刷新
-        let mut cpu_data_tup: Vec<(String, String, String, String)> = vec![];
-
-        for (pid, process) in system.processes() {
-            cpu_data_tup.push((
-                pid.to_string(),
-                process.name().to_str().unwrap().to_string(),
-                process.cpu_usage().to_string(),
-                (process.memory() as f32 / 1024.0).to_string(),
-            ));
-        }
-        cpu_data_tup.sort_by(|a, b| b
-            .2
-            .partial_cmp(&a.2)
-            .unwrap_or(std::cmp::Ordering::Equal));
-
-        Ok(cpu_data_tup)
-}
-
-fn cpu_memory_info() -> Result<Vec<(String, String, String, String)>,  Error> {
-        let mut system = System::new_all();
-        system.refresh_all();
-        std::thread::sleep(Duration::from_secs(1)); // 等待1秒以获取使用率变化
-        system.refresh_all(); // 第二次刷新
-        let mut cpu_data: Vec<CpuInfo> = vec![];
-        let mut cpu_data_tup: Vec<(String, String, String, String)> = vec![];
-
-        for (pid, process) in system.processes() {
-            cpu_data_tup.push((
-                pid.to_string(),
-                process.name().to_str().unwrap().to_string(),
-                process.cpu_usage().to_string(),
-                process.memory().to_string(),
-            ));
-        }
-        cpu_data_tup.sort_by(|a, b| b
-            .3
-            .partial_cmp(&a.3)
-            .unwrap_or(std::cmp::Ordering::Equal));
-
-        Ok(cpu_data_tup)
-}
-
-fn nvidia_gpu_info() -> () {
-    let nvml = Nvml::init().unwrap();
-    let device = nvml.device_by_index(0).unwrap(); // 首张 GPU
-    let processes = device.running_graphics_processes().unwrap();
-    for proc in processes {
-        println!("PID: {},进程名称:{}, GPU实例ID: {:?} 计算实例ID: {:?}  显存: {:?}",
-                 proc.pid, get_process_name(proc.pid), proc.gpu_instance_id,
-                 proc.compute_instance_id, proc.used_gpu_memory);
-    };
-}
-
-fn get_process_name(pid: u32) -> String {
-    let mut sys = System::new();
-    sys.refresh_processes(ProcessesToUpdate::All, false); // 刷新进程信息
-
-    // 将 PID 转换为 sysinfo 的 Pid 类型
-    let sysinfo_pid = sysinfo::Pid::from(pid as usize);
-
-
-    sys.process(sysinfo_pid)
-        .map(|process| process
-            .name()
-            .to_str()
-            .unwrap()
-            .to_string())
-        .unwrap_or_else(|| String::from("未知进程"))
-}
-
-fn kill_process(pid: u32) -> Result<String, Error> {
-    unsafe {
-        let handle = OpenProcess(PROCESS_TERMINATE, 0, pid);
-        if handle.is_null() {
-            return Ok("无法打开进程".to_string());
-        }
-
-        if TerminateProcess(handle, 1) == 0 {
-            return Ok("无法终止进程".to_string());
-        }
-
-        CloseHandle(handle);
-        Ok(String::from(pid.to_string() + "进程已终止"))
-    }
-}
-fn main() {
-    // let dir_path = Box::new(Path::new(r"D:\Desktop\实验程序\实验程序"));
-    // let paths = traverse_directory_all(dir_path);
-    println!("123");
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    resize_png_image("input.png", "output.png", 800, 600)?;
+    println!("图片尺寸调整完成");
+    Ok(())
 }

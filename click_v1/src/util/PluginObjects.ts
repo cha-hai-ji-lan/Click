@@ -1,6 +1,6 @@
 import { reactive, shallowRef, markRaw} from "vue";
 import IconFile from '../icon/IconFile.vue'
-import IconShutdown from '../icon/IconShutdown.vue'
+import IconShutdown from '../icon/IconShutDown.vue'
 export const comVisibility = reactive({
       "LeftContain": {
         "LeftContain-data": {
