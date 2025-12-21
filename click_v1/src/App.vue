@@ -161,7 +161,7 @@ const set_special_style = () => {
   document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
   document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
   document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
-  document.documentElement.style.setProperty("--grid-size", `20px`)  // 动态栏的字字间距
+  document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 动态栏的字字间距
 
 }
 const title_bar_click = (mode: string) => {

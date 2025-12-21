@@ -204,6 +204,7 @@ const SubmitRepluceName = (tag: String) => {
 h3 {
      width: 100%;
      margin: 1vh 0;
+     font-size: 3.5vmin;
      text-align: center;
      user-select: none;
      /* 用户无法选择 */
@@ -222,6 +223,8 @@ h3 {
      align-items: center;
      flex-direction: column;
      transition: all;
+     margin-right: 1vw;
+     margin-bottom: 1vw;
 
 }
 
@@ -260,7 +263,7 @@ h3 {
 .explorer-act-path {
      margin-top: 2vh;
      width: 100%;
-     height: 30%;
+     height: 22%;
      overflow-y: auto;
 
 
@@ -354,6 +357,7 @@ h3 {
      white-space: nowrap;
      border-right: 2px solid var(--title-min-icon-hover-shadow);
      border-left: 2px solid var(--title-min-icon-shadow);
+     -webkit-box-orient: vertical;
 }
 
 .path {
@@ -367,6 +371,7 @@ h3 {
      overflow: hidden;
      text-overflow: ellipsis;
      white-space: nowrap;
+     -webkit-box-orient: vertical;
 
 }
 
@@ -386,8 +391,9 @@ h3 {
 .oper {
      display: flex;
      width: 100%;
+     flex:1;
      border-radius: 1vmin;
-     justify-content: center;
+     justify-content: start;
      align-items: center;
      flex-direction: column;
      border: 1px solid var(--unite-but-color);
@@ -397,6 +403,7 @@ h3 {
           linear-gradient(to right, var(--button-color) 1px, transparent 1px),
           linear-gradient(to bottom, var(--button-color) 1px, transparent 1px);
      background-size: var(--grid-size) var(--grid-size);
+     overflow: auto;
 }
 
 .h3-head {
@@ -416,11 +423,12 @@ h3 {
 }
 
 .oper-1 {
-     margin: 1.5vh 0;
+     margin: 0.75vh 0;
      text-align: center;
      display: flex;
      height: 4vh;
      width: 100%;
+     font-size: 2.5vmin;
      /* border-radius: 1vmin; */
      justify-content: center;
      align-items: center;
@@ -451,33 +459,63 @@ h3 {
      /* Firefox兼容性 */
      -ms-user-select: none;
      /* IE兼容性 */
-
+     border-bottom: 1px dashed var(--unite-but-color);
 }
 
 .input-box {
      font-family: "楷体", 'Courier New', Courier, monospace;
      text-align: center;
      border-radius: 1vmin;
+     border-top: 1px dashed var(--unite-but-color);
+     border-bottom: 2px solid var(--unite-but-color);
+     border-left: 1px dashed var(--unite-but-color);
+     border-right: 1px dashed var(--unite-but-color);
+
+
+     
+
 }
 
 .submit-replace-name {
      border-radius: 1vmax;
      border: 1px solid var(--main-border);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     user-select: none;
+     /* 用户无法选择 */
+     -webkit-user-select: none;
+     /* Safari兼容性 */
+     -moz-user-select: none;
+     /* Firefox兼容性 */
+     -ms-user-select: none;
+     /* IE兼容性 */
+     transition: 0.25s;
 }
+
+.submit-replace-name:hover{
+     box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
+     filter: drop-shadow(0 0 1em var(--title-min-icon-hover-shadow));
+     
+}
+.submit-replace-name:active{
+     background:var(--title-min-icon-shadow);
+     box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
+     animation: active-icon 0.25s forwards;
+     animation-timing-function: linear;
+}
+
 
 .coming-animation {
      animation: show-submit-replace-name 0.5s ease-in-out forwards;
 }
 
-.hide-submit-replace-name {
-     animation: hide-submit-replace-name 0.5s ease-in-out forwards;
-}
 
 /* ----------------------------------------动画区----------------------------------------------- */
 
 /* 替换名称区域的过渡动画 */
 .replace-name-transition-leave-active {
-     transition: all 0.3s ease;
+     transition: all 0.5s ease;
 }
 
 .replace-name-transition-leave-from {
