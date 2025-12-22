@@ -53,13 +53,15 @@ fn replace_all_name(
     match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
         Ok(all_paths) => {
             for path in all_paths {
-                if let Err(e) = replace_name(
-                    Box::new(Path::new(path.as_str())),
-                    &old_name_sign,
-                    &new_name_sign,
-                ) {
-                    eprintln!("Failed to rename {:?}: {}", path, e);
-                }
+               match replace_name(Box::new(Path::new(path.as_str())),
+                   &old_name_sign,
+                   &new_name_sign,
+               ) {
+                   Ok(_) => {}
+                   Err(e) => {
+                       eprintln!("Error: {}", e);
+                   }
+               }
             }
             Ok(())
         }

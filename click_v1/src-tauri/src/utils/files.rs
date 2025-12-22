@@ -380,10 +380,10 @@ pub fn get_active_explorer_path() -> Result<ExplorerOperate, Error> {
 pub fn traverse_directory_all(dir_path: Box<&Path>) -> Result<Vec<String>, Error> {
     let mut paths: Vec<String> = Vec::new();
     let mut queue: std::collections::VecDeque<std::path::PathBuf> =
-        std::collections::VecDeque::new();
+        std::collections::VecDeque::new();  // 使用VecDeque作为队列
 
     // 初始化队列
-    queue.push_back(dir_path.to_path_buf());
+    queue.push_back(dir_path.to_path_buf());  // 将目录路径加入队列
 
     // 广度优先遍历，避免深层递归导致栈溢出
     while let Some(current_path) = queue.pop_front() {
@@ -452,7 +452,7 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     // 检查原路径是否存在
     if !old_path.exists() {
         return Err(Error::new(
-            std::io::ErrorKind::NotFound,
+            io::ErrorKind::NotFound,
             "指定的文件或目录不存在",
         ));
     }
@@ -462,7 +462,7 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
         Some(parent) => parent,
         None => {
             return Err(Error::new(
-                std::io::ErrorKind::InvalidInput,
+                io::ErrorKind::InvalidInput,
                 "无法确定父目录",
             ));
         }
@@ -473,7 +473,7 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     // 检查新路径是否已存在
     if new_path.exists() {
         return Err(Error::new(
-            std::io::ErrorKind::AlreadyExists,
+            io::ErrorKind::AlreadyExists,
             "目标文件名已存在",
         ));
     }

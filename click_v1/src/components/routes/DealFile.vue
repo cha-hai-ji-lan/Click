@@ -1,15 +1,15 @@
 <template>
      <div class="main-contain">
           <div class="title">
-               <div class="tag-icon" @click="() => { openFileDialog() }">
-                    <svg t="1766153567513" class="icon" viewBox="0 0 1024 1024" version="1.1"
+               <div class="tag-icon " @click="() => { openFileDialog() }">
+                    <svg t="1766153567513" class="icon " viewBox="0 0 1024 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7556" width="200" height="200">
                          <path d="M910.096853 360.579647v-61.707521c0-52.999376-42.030493-112.28336-98.281728-112.28336H528.430288l-11.681508-22.048347c-11.685603-22.352441-34.588894-36.229158-59.807189-36.229158H154.570848c-50.436591 0-91.447294 42.168717-91.447294 94.010079v575.540275c0 51.814741 41.010703 93.969123 91.447294 93.969124h711.539892c50.436591 0 91.447294-42.154383 91.447294-93.969124V444.614011c-0.001024-30.633625-20.252452-63.054954-47.461181-84.034364z m-98.281728-117.546131c19.540851 0 41.838002 29.75206 41.838002 55.83861v39.040748c-0.956309-0.038908-1.913642-0.097269-2.865855-0.097269H608.55341l-50.21748-94.782089h253.479195z m89.297134 554.828099c0 20.684531-15.709473 37.524373-35.002543 37.524374h-711.538868c-19.292047 0-35.002544-16.839842-35.002544-37.524374V222.32134c0-20.712176 15.709473-37.565329 35.002544-37.565329h302.370743c4.134449 0 7.882893 2.274049 9.867182 6.07676l99.825748 188.420497a28.252068 28.252068 0 0 0 24.94287 15.007087h259.209881c20.229926 0 50.326011 30.12373 50.326011 50.353656v353.247604z"
                               p-id="7557">
                          </path>
                     </svg>
                </div>
-               <div class="tag-icon" @click="() => { click('choose-path-pool') }">
+               <div class="tag-icon wire" @click="() => { click('choose-path-pool') }">
                     <svg t="1766335459475" class="icon" viewBox="0 0 1121 1024" version="1.1"
                          xmlns="http://www.w3.org/2000/svg" p-id="7571" width="200" height="200">
                          <path d="M1039.255327 23.915108a14.494005 14.494005 0 0 0-10.870503-23.915108H13.079777A13.044604 13.044604 0 0 0 3.658674 22.103358L362.385296 384.091131V797.170272l108.705038 108.705037a36.235012 36.235012 0 0 0 22.828057 10.508154 53.990168 53.990168 0 0 0 57.61367-52.540768v-4.348202a36.235012 36.235012 0 0 0-10.870504-26.813909l-78.629977-77.180576-3.623501-406.919189L200.052441 101.458035a9.058753 9.058753 0 0 1 6.159952-15.943406l644.62087-4.710551a9.421103 9.421103 0 0 1 6.884652 15.581055l-250.383935 253.645086-2.536451 625.053964a48.917267 48.917267 0 1 0 97.834534 0v-594.254203z"
@@ -37,7 +37,7 @@
           </div>
           <div class="oper">
                <div class="h3-head">
-                    <h3>操作</h3>
+                    <h3>操作</h3> <span>答疑</span>
                </div>
                <div class="oper-1">
                     <div class="item-title">批处理操作</div>
@@ -46,7 +46,7 @@
                     <transition name="replace-name-transition" mode="out-in">
                          <div v-if="active_path && active_path.length > 0" class="replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
-                              <div class="item-title">修改名字</div>
+                              <div class="item-title">修改名字 字段</div>
                               <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
                               <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段">
                               <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
@@ -58,6 +58,20 @@
                     </transition>
                </div>
                <div class="oper-1">
+                    <transition name="replace-name-transition" mode="out-in">
+                         <div v-if="active_path && active_path.length > 0" class="replace-name"
+                              :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
+                              <div class="item-title">改名 排序</div>
+                              <Temp v-model="selectedValue" :options="selectOptions" placeholder="排序方式"></Temp>
+                              <!-- <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
+                              <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段"> -->
+                              <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
+                              </div>
+                         </div>
+                         <div v-else class="place-holder">
+                              <span>🔎 当前无可观察路径...</span>
+                         </div>
+                    </transition>
                </div>
 
           </div>
@@ -66,27 +80,82 @@
      <div v-show="FloatingWindow['choose-path-pool']" class="choose-path-pool"
           :class="{ 'choose-path-pool-close': FloatingWindow['choose-path-pool-close'] }" ref="floatingWindowElement">
           <div class="drag-head-contain" @mousedown="startDrag">
-               <svg t="1766338639348" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg" p-id="9788" width="200" height="200">
-                    <path d="M476.5 924V100c0-19.8 16.2-36 36-36s36 16.2 36 36v824c0 19.8-16.2 36-36 36s-36-16.2-36-36z"
-                         p-id="9789"></path>
-                    <path d="M100.5 476h824c19.8 0 36 16.2 36 36s-16.2 36-36 36h-824c-19.8 0-36-16.2-36-36s16.2-36 36-36zM690.1 797.6L538.4 949.3c-14.3 14.3-37.4 14.3-51.7 0L334.2 796.8c-14.3-14.3-14.6-37.9 0-52 14.1-13.5 36.5-13.4 50.4 0.5l117.6 117.6c5.8 5.8 15.1 5.8 20.8 0l115.6-115.6c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.3zM333.7 226.4L485.4 74.7c14.3-14.3 37.4-14.3 51.7 0l152.5 152.5c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5L521.6 161.1c-5.8-5.8-15.1-5.8-20.8 0L385.1 276.7c-14.3 14.3-37.9 14.6-52 0-13.4-14.1-13.3-36.5 0.6-50.3z"
-                         p-id="9790"></path>
-                    <path d="M226.7 690.1L75.1 538.4c-14.3-14.3-14.3-37.4 0-51.7l152.5-152.5c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.4L161.5 502.2c-5.8 5.8-5.8 15.1 0 20.8l115.6 115.6c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5zM798.1 333.7l151.7 151.7c14.3 14.3 14.3 37.4 0 51.7L797.3 689.6c-14.3 14.3-37.9 14.6-52 0-13.5-14.1-13.4-36.5 0.5-50.4l117.6-117.6c5.8-5.8 5.8-15.1 0-20.8L747.8 385.1c-14.3-14.3-14.6-37.9 0-52 14.1-13.4 36.5-13.3 50.3 0.6z"
-                         p-id="9791"></path>
-               </svg>
+               <div class="tag-icon">
+                    <svg t="1766338639348" class="icon " viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="9788" width="200" height="200">
+                         <path d="M476.5 924V100c0-19.8 16.2-36 36-36s36 16.2 36 36v824c0 19.8-16.2 36-36 36s-36-16.2-36-36z"
+                              p-id="9789"></path>
+                         <path d="M100.5 476h824c19.8 0 36 16.2 36 36s-16.2 36-36 36h-824c-19.8 0-36-16.2-36-36s16.2-36 36-36zM690.1 797.6L538.4 949.3c-14.3 14.3-37.4 14.3-51.7 0L334.2 796.8c-14.3-14.3-14.6-37.9 0-52 14.1-13.5 36.5-13.4 50.4 0.5l117.6 117.6c5.8 5.8 15.1 5.8 20.8 0l115.6-115.6c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.3zM333.7 226.4L485.4 74.7c14.3-14.3 37.4-14.3 51.7 0l152.5 152.5c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5L521.6 161.1c-5.8-5.8-15.1-5.8-20.8 0L385.1 276.7c-14.3 14.3-37.9 14.6-52 0-13.4-14.1-13.3-36.5 0.6-50.3z"
+                              p-id="9790"></path>
+                         <path d="M226.7 690.1L75.1 538.4c-14.3-14.3-14.3-37.4 0-51.7l152.5-152.5c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.4L161.5 502.2c-5.8 5.8-5.8 15.1 0 20.8l115.6 115.6c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5zM798.1 333.7l151.7 151.7c14.3 14.3 14.3 37.4 0 51.7L797.3 689.6c-14.3 14.3-37.9 14.6-52 0-13.5-14.1-13.4-36.5 0.5-50.4l117.6-117.6c5.8-5.8 5.8-15.1 0-20.8L747.8 385.1c-14.3-14.3-14.6-37.9 0-52 14.1-13.4 36.5-13.3 50.3 0.6z"
+                              p-id="9791"></path>
+                    </svg>
+               </div>
+               <div class="tag-icon wire" @click="() => { click('close-path-item-all') }">
+                    <svg t="1766420001028" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="6984" width="200" height="200">
+                         <path d="M630.784 831.488c12.288 0 20.48-8.192 20.48-16.384l28.672-450.56c0-12.288-8.192-20.48-16.384-20.48-12.288 0-20.48 8.192-20.48 16.384l-28.672 450.56C614.4 823.296 622.592 831.488 630.784 831.488z"
+                              p-id="6985"></path>
+                         <path d="M409.6 831.488c12.288 0 20.48-8.192 16.384-20.48l-28.672-450.56c0-12.288-8.192-20.48-20.48-16.384C368.64 344.064 360.448 352.256 360.448 360.448l28.672 450.56C389.12 823.296 397.312 831.488 409.6 831.488z"
+                              p-id="6986"></path>
+                         <path d="M520.192 831.488c12.288 0 20.48-8.192 20.48-20.48l0-450.56c0-12.288-8.192-20.48-20.48-20.48-12.288 0-20.48 8.192-20.48 20.48l0 450.56C499.712 823.296 507.904 831.488 520.192 831.488z"
+                              p-id="6987"></path>
+                         <path d="M839.68 229.376l-188.416 0L651.264 151.552c0-20.48-16.384-36.864-36.864-36.864l-188.416 0c-20.48 0-36.864 16.384-36.864 36.864l0 73.728L200.704 225.28C188.416 229.376 180.224 237.568 180.224 245.76c0 12.288 8.192 20.48 20.48 20.48l36.864 0 36.864 602.112c4.096 40.96 32.768 73.728 73.728 73.728l339.968 0c40.96 0 69.632-32.768 73.728-73.728l36.864-602.112 36.864 0C851.968 266.24 860.16 258.048 860.16 245.76 860.16 237.568 851.968 229.376 839.68 229.376zM425.984 151.552 614.4 151.552l0 73.728-188.416 0L425.984 151.552zM729.088 868.352c-4.096 20.48-16.384 36.864-36.864 36.864L352.256 905.216c-20.48 0-32.768-16.384-36.864-36.864L274.432 266.24l491.52 0L729.088 868.352z"
+                              p-id="6988"></path>
+                    </svg>
+               </div>
+               <div class="tag-icon wire" @click="() => { openFileDialog() }">
+                    <svg t="1766153567513" class="small-icon " viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="7556" width="200" height="200">
+                         <path d="M910.096853 360.579647v-61.707521c0-52.999376-42.030493-112.28336-98.281728-112.28336H528.430288l-11.681508-22.048347c-11.685603-22.352441-34.588894-36.229158-59.807189-36.229158H154.570848c-50.436591 0-91.447294 42.168717-91.447294 94.010079v575.540275c0 51.814741 41.010703 93.969123 91.447294 93.969124h711.539892c50.436591 0 91.447294-42.154383 91.447294-93.969124V444.614011c-0.001024-30.633625-20.252452-63.054954-47.461181-84.034364z m-98.281728-117.546131c19.540851 0 41.838002 29.75206 41.838002 55.83861v39.040748c-0.956309-0.038908-1.913642-0.097269-2.865855-0.097269H608.55341l-50.21748-94.782089h253.479195z m89.297134 554.828099c0 20.684531-15.709473 37.524373-35.002543 37.524374h-711.538868c-19.292047 0-35.002544-16.839842-35.002544-37.524374V222.32134c0-20.712176 15.709473-37.565329 35.002544-37.565329h302.370743c4.134449 0 7.882893 2.274049 9.867182 6.07676l99.825748 188.420497a28.252068 28.252068 0 0 0 24.94287 15.007087h259.209881c20.229926 0 50.326011 30.12373 50.326011 50.353656v353.247604z"
+                              p-id="7557">
+                         </path>
+                    </svg>
+               </div>
 
-               <svg t="1766338714320" class="icon float-close-icon" @click="() => { click('choose-path-pool') }"
-                    viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10844" width="200"
-                    height="200">
-                    <path d="M199.36 572.768a31.904 31.904 0 0 0 22.624-9.376l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.352-308.352a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 0 0 22.656 54.624z"
-                         p-id="10845"></path>
-                    <path d="M538.784 457.376a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 1 0 45.248 45.248l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.32-308.352z"
-                         p-id="10846"></path>
-               </svg>
+               <div class="tag-icon float-close-icon">
+                    <svg t="1766338714320" class="icon " @click="() => { click('choose-path-pool') }"
+                         viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10844"
+                         width="200" height="200">
+                         <path d="M199.36 572.768a31.904 31.904 0 0 0 22.624-9.376l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.352-308.352a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 0 0 22.656 54.624z"
+                              p-id="10845"></path>
+                         <path d="M538.784 457.376a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 1 0 45.248 45.248l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.32-308.352z"
+                              p-id="10846"></path>
+                    </svg>
+               </div>
+
           </div>
           <div class="drag-contain">
-               <div>当前选中的路径</div>
+               <div v-if="userSelectedShortPath && userSelectedShortPath.length === 0">
+                    <span>🔎 当前无注视路径</span>
+               </div>
+               <div v-else v-for="(path_item, index) in userSelectedShortPath" :key="index" class="user-choose-item">
+                    <span @click="() => { click('close-path-item', index) }">
+                         <svg t="1766420001028" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
+                              xmlns="http://www.w3.org/2000/svg" p-id="6984" width="200" height="200">
+                              <path d="M630.784 831.488c12.288 0 20.48-8.192 20.48-16.384l28.672-450.56c0-12.288-8.192-20.48-16.384-20.48-12.288 0-20.48 8.192-20.48 16.384l-28.672 450.56C614.4 823.296 622.592 831.488 630.784 831.488z"
+                                   p-id="6985"></path>
+                              <path d="M409.6 831.488c12.288 0 20.48-8.192 16.384-20.48l-28.672-450.56c0-12.288-8.192-20.48-20.48-16.384C368.64 344.064 360.448 352.256 360.448 360.448l28.672 450.56C389.12 823.296 397.312 831.488 409.6 831.488z"
+                                   p-id="6986"></path>
+                              <path d="M520.192 831.488c12.288 0 20.48-8.192 20.48-20.48l0-450.56c0-12.288-8.192-20.48-20.48-20.48-12.288 0-20.48 8.192-20.48 20.48l0 450.56C499.712 823.296 507.904 831.488 520.192 831.488z"
+                                   p-id="6987"></path>
+                              <path d="M839.68 229.376l-188.416 0L651.264 151.552c0-20.48-16.384-36.864-36.864-36.864l-188.416 0c-20.48 0-36.864 16.384-36.864 36.864l0 73.728L200.704 225.28C188.416 229.376 180.224 237.568 180.224 245.76c0 12.288 8.192 20.48 20.48 20.48l36.864 0 36.864 602.112c4.096 40.96 32.768 73.728 73.728 73.728l339.968 0c40.96 0 69.632-32.768 73.728-73.728l36.864-602.112 36.864 0C851.968 266.24 860.16 258.048 860.16 245.76 860.16 237.568 851.968 229.376 839.68 229.376zM425.984 151.552 614.4 151.552l0 73.728-188.416 0L425.984 151.552zM729.088 868.352c-4.096 20.48-16.384 36.864-36.864 36.864L352.256 905.216c-20.48 0-32.768-16.384-36.864-36.864L274.432 266.24l491.52 0L729.088 868.352z"
+                                   p-id="6988"></path>
+                         </svg>
+                    </span>
+                    <span>
+                         <svg t="1766153567513" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
+                              xmlns="http://www.w3.org/2000/svg" p-id="7556" width="200" height="200">
+                              <path d="M910.096853 360.579647v-61.707521c0-52.999376-42.030493-112.28336-98.281728-112.28336H528.430288l-11.681508-22.048347c-11.685603-22.352441-34.588894-36.229158-59.807189-36.229158H154.570848c-50.436591 0-91.447294 42.168717-91.447294 94.010079v575.540275c0 51.814741 41.010703 93.969123 91.447294 93.969124h711.539892c50.436591 0 91.447294-42.154383 91.447294-93.969124V444.614011c-0.001024-30.633625-20.252452-63.054954-47.461181-84.034364z m-98.281728-117.546131c19.540851 0 41.838002 29.75206 41.838002 55.83861v39.040748c-0.956309-0.038908-1.913642-0.097269-2.865855-0.097269H608.55341l-50.21748-94.782089h253.479195z m89.297134 554.828099c0 20.684531-15.709473 37.524373-35.002543 37.524374h-711.538868c-19.292047 0-35.002544-16.839842-35.002544-37.524374V222.32134c0-20.712176 15.709473-37.565329 35.002544-37.565329h302.370743c4.134449 0 7.882893 2.274049 9.867182 6.07676l99.825748 188.420497a28.252068 28.252068 0 0 0 24.94287 15.007087h259.209881c20.229926 0 50.326011 30.12373 50.326011 50.353656v353.247604z"
+                                   p-id="7557">
+                              </path>
+                         </svg>
+                    </span>
+                    <span>{{ path_item }}</span>
+
+
+               </div>
+
           </div>
      </div>
 </template>
@@ -111,10 +180,24 @@ const FloatingWindow = reactive({
      "choose-path-pool": false,
      "choose-path-pool-close": false
 })
+const userSelectedPath = ref<string[] | null>()
+const userSelectedShortPath = ref<string[] | null>()
 
 const isDragging = ref(false);
 const dragOffset = ref({ x: 0, y: 0 });
 const floatingWindowElement = ref<HTMLElement | null>(null);
+
+
+import Temp from './Temp.vue'
+
+const selectedValue = ref('')
+
+const selectOptions = [
+     { value: 'option1', label: '选项一' },
+     { value: 'option2', label: '选项二' },
+     { value: 'option3', label: '选项三' },
+     { value: 'option4', label: '选项四' }
+]
 
 
 
@@ -191,20 +274,28 @@ const openFileDialog = async () => {
           default_path = selectedPaths.value[0][0]
      }
      try {
-          const selected = await open({
+          userSelectedPath.value = await open({
                multiple: true,
+               // directory: true,
                filters: [{
                     name: 'All Files',
                     extensions: ['*']
                }],
                defaultPath: default_path
           });
+          userSelectedShortPath.value = []
 
-          if (selected === null) {
+          if (userSelectedPath.value === null) {
                console.log('用户取消了选择');
           } else {
-               console.log('选中的文件:', selected);
-               // 在这里可以处理选中的文件，比如将其添加到 active_path 中
+               if (userSelectedShortPath.value?.length === 0) {
+                    userSelectedPath.value.forEach((single_path) => {
+                         userSelectedShortPath.value?.push(getShortPath(single_path))
+                    })
+                    console.log('选中的文件:', userSelectedPath.value);
+                    // 在这里可以处理选中的文件，比如将其添加到 active_path 中
+               }
+
           }
      } catch (error) {
           console.error('打开文件对话框时出错:', error);
@@ -212,7 +303,7 @@ const openFileDialog = async () => {
 };
 
 
-const click = (whichOne: string) => {
+const click = (whichOne: string, index: number = 0) => {
      switch (whichOne) {
           case 'choose-path-pool':
                if (FloatingWindow["choose-path-pool"] === false) {
@@ -222,13 +313,23 @@ const click = (whichOne: string) => {
                     }
                } else {
                     FloatingWindow["choose-path-pool-close"] = true;
-               setTimeout(() => {
-                    FloatingWindow["choose-path-pool"] = false;
-                    FloatingWindow["choose-path-pool-close"] = false;
-               }, 500)
+                    setTimeout(() => {
+                         FloatingWindow["choose-path-pool"] = false;
+                         FloatingWindow["choose-path-pool-close"] = false;
+                    }, 500)
                }
-
-
+               break;
+          case 'close-path-item':
+               if (userSelectedPath.value) {
+                    userSelectedPath.value.splice(index, 1);
+                    if (userSelectedShortPath.value) {
+                         userSelectedShortPath.value.splice(index, 1);
+                    }
+               }
+               break;
+          case 'close-path-item-all':
+               userSelectedPath.value = []
+               userSelectedShortPath.value = []
                break;
           default:
                break;
@@ -239,11 +340,8 @@ const SubmitRepluceName = (tag: String) => {
      switch (tag) {
           case 'replace-name':
                if (inputRefReplaceOldName.value !== "") {
-                    selectedPaths.value.forEach((item, _) => {
-                         if (item[0] !== "") {
-                              console.log(item[0])
-                              console.log(inputRefReplaceOldName.value)
-                              console.log(inputRefReplaceNewName.value)
+                    if (selectedPaths.value.length !== 0) {
+                         selectedPaths.value.forEach((item, _) => {
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then(() => {
                                         console.log("成功替换文件名");
@@ -251,8 +349,20 @@ const SubmitRepluceName = (tag: String) => {
                                    .catch((err) => {
                                         console.error("无法处理文件:", err);
                                    });
-                         }
-                    });
+                         });
+                    } else if (userSelectedPath.value?.length !== 0) {  // 添加对跳跃文件夹下的文件进行重命名
+                         userSelectedPath.value?.forEach((item, _) => {
+                              invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
+                                   .then(() => {
+                                        console.log("成功替换文件名");
+                                   })
+                                   .catch((err) => {
+                                        console.error("无法处理文件:", err);
+                                   });
+                         });
+
+                    }
+
 
                } else {
                     alert("请输入要替换的字段")
@@ -264,6 +374,20 @@ const SubmitRepluceName = (tag: String) => {
                break;
      }
 
+}
+
+// 新增函数：提取路径的最后两个目录部分
+const getShortPath = (fullPath: string): string => {
+     // 移除末尾的反斜杠（如果有）
+     const cleanPath = fullPath.replace(/[\/\\]$/, '');
+     // 按照分隔符分割路径
+     const parts = cleanPath.split(/[/\\]/);
+     // 获取最后两个部分
+     if (parts.length >= 2) {
+          return parts.slice(-2).join('\\'); // 使用反斜杠连接
+     } else {
+          return cleanPath;
+     }
 }
 
 
@@ -365,6 +489,7 @@ h3 {
      width: 4vh;
      height: 4vh;
      display: flex;
+     position: relative;
      justify-content: start;
      align-items: center;
 }
@@ -379,9 +504,39 @@ h3 {
      fill: var(--icon-color)
 }
 
+.small-icon {
+     margin: 0 0.5vmin;
+     height: 2.5vmin;
+     width: 2.5vmin;
+     min-height: 2px;
+     max-height: 15px;
+     min-width: 2px;
+     max-width: 15px;
+     fill: var(--icon-color)
+}
+
 .icon:active {
      animation: active-icon 0.25s forwards;
      animation-timing-function: linear;
+}
+
+.small-icon:active {
+     animation: active-icon 0.25s forwards;
+     animation-timing-function: linear;
+}
+
+.wire::after {
+     content: "";
+     position: absolute;
+     /* top: 50%; */
+     left: -0.5vmin;
+     width: 0.2vmin;
+     border-radius: 0.1vmin;
+     max-width: 2px;
+     height: 2vmin;
+     max-height: 20px;
+     background-color: var(--main-border);
+     /* transform: translateY(50%); */
 }
 
 .explorer-act-path {
@@ -534,8 +689,12 @@ h3 {
 }
 
 .h3-head {
+     display: flex;
+     justify-content: center;
+     align-items: center;
      width: 100%;
      position: relative;
+
 
 }
 
@@ -568,6 +727,7 @@ h3 {
 }
 
 .replace-name {
+     font-size: 2vmin;
      display: grid;
      width: 100%;
      height: 4vh;
@@ -660,7 +820,7 @@ h3 {
      top: 1vh;
      left: 1vw;
      height: 80vmin;
-     width: 40vmin;
+     width: 45vmin;
      transform: translateZ(0);
      will-change: transform;
      user-select: none;
@@ -692,11 +852,15 @@ h3 {
 }
 
 .float-close-icon {
-     float: right;
+     margin-left: auto;
      margin-right: 2vmin;
 }
 
 .drag-head-contain {
+     display: flex;
+     justify-self: start;
+     align-items: start;
+     flex-direction: row;
      height: 10%;
      width: 100%;
 }
@@ -708,7 +872,20 @@ h3 {
      border-radius: 1vmin;
 }
 
+.user-choose-item {
+     display: flex;
+     justify-self: center;
+     height: 2.5vmin;
+     font-size: 2vmin;
+     width: 100%;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     -webkit-box-orient: vertical;
+     border-bottom: 1px dashed var(--unite-but-color);
 
+
+}
 
 /* ----------------------------------------动画区----------------------------------------------- */
 
