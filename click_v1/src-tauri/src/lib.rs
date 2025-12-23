@@ -2,13 +2,27 @@
 mod utils;
 use std::path::Path;
 use std::process::Command;
+use std::ptr::null_mut;
 use std::thread;
+use open::commands;
+use serde_json::Value; // 引入 serde_json 库
 use utils::files::{
     get_active_explorer_path,
     replace_name,
     traverse_directory_all, // 引入 traverse_directory_all 函数 广度优先遍历路径
+    change_name, // 引入 change_name 函数 用于改变文件名字
+    DataProcessor
 };
+#[tauri::command]
+fn test_command(data: Vec<Value>) -> Result<String, String> {
+    let mut name_obj = DataProcessor::new(data, 0);
+    for _ in 0..100 {
+        let name_parts = name_obj.next();
 
+        println!("{name_parts}")
+    }
+    Ok("处理完成".to_string())
+}
 #[tauri::command]
 fn run_exe(path: String) {
     // 使用系统命令启动 EXE 文件，并在新线程中执行
@@ -51,17 +65,18 @@ fn replace_all_name(
 ) -> Result<(), String> {
     // 调用 traverse_directory_all 获取目录下所有路径
     match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
-        Ok(all_paths) => {
+        Ok(mut all_paths) => {
+            all_paths.reverse();  // 倒序 保证不先修改父级目录的名称
             for path in all_paths {
-               match replace_name(Box::new(Path::new(path.as_str())),
-                   &old_name_sign,
-                   &new_name_sign,
-               ) {
-                   Ok(_) => {}
-                   Err(e) => {
-                       eprintln!("Error: {}", e);
-                   }
-               }
+                match replace_name(Box::new(Path::new(path.as_str())),
+                                   &old_name_sign,
+                                   &new_name_sign,
+                ) {
+                    Ok(_) => {}
+                    Err(e) => {
+                        eprintln!("Error: {}", e);
+                    }
+                }
             }
             Ok(())
         }
@@ -79,7 +94,8 @@ pub fn run() {
             run_exe,
             open_url,
             active_explorer_path,
-            replace_all_name
+            replace_all_name,
+            test_command
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

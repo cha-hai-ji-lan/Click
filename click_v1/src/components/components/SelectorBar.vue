@@ -91,7 +91,7 @@
   }
   
   .select-wrapper:hover {
-    border-color: #007bff;
+    border-color: var(--active-attention-color);
   }
   
   .select-selected {
@@ -137,7 +137,7 @@
   }
   
   .select-option.selected {
-    background-color: #007bff;
+    background-color: var(--active-attention-color);
     color: white;
   }
   </style>

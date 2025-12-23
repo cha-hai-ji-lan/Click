@@ -183,7 +183,6 @@ const getIconComponent = (iconName: string) => {
 }
 
 .name {
-
     user-select: none;
     /* 用户无法选择 */
     -webkit-user-select: none;

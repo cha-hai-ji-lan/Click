@@ -1,8 +1,10 @@
 use std::fs;
+use std::fs::File;
 // 用于文件操作
+use serde_json::Value;
 use std::io;
-use std::path::Path;
-// 用于错误处理
+use std::path::Path; // 引入 serde_json 库
+                     // 用于错误处理
 use std::io::{Error, ErrorKind::ConnectionRefused};
 use std::time; // 用于获取文件创建时间
 use windows::{
@@ -16,6 +18,88 @@ use windows::{
     },
 };
 
+/// 更名迭代器
+pub struct DataProcessor {
+    pub data: Vec<Value>,
+    pub counter: i32,
+}
+
+impl DataProcessor {
+    pub fn new(data: Vec<Value>, counter: i32) -> Self {
+        DataProcessor {
+            data,
+            counter,
+        }
+    }
+
+    pub fn next(&mut self) -> String {
+        let result: String = self.data.iter().map(|part| {
+            match part {
+                Value::String(s) => s.clone(),
+                Value::Array(n) => {
+                    n.iter().map(|item| {
+                        match item {
+                            Value::String(s) => {
+                                let mut ori_str = s.clone();
+                                ori_str.pop(); // 去除末尾1为了加上自增过的字符
+
+                                let c = match s.chars().last() {
+                                    Some(ch) => ch,
+                                    None => return "A".to_string(), // 处理空字符串情况
+                                };
+
+                                // 添加额外的'z'字符（基于全局计数器）
+                                let extra_z_count = self.counter / 52;
+                                for _ in 0..extra_z_count {
+                                    ori_str.push('z');
+                                }
+                                
+                                let up_num = self.counter % 52;
+
+                                // 计算基于字符位置的增量，而不是全局计数器
+                                let base_ascii = c as u8;
+                                let new_ascii;
+
+                                // 处理跨越大小写边界的逻辑
+                                if base_ascii < 90 && base_ascii + up_num as u8 > 90 { // 大写字母 A-Z
+                                    new_ascii = 97 + (base_ascii + up_num as u8 - 91);
+                                    // 读冲出去了 ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+                                } else if base_ascii < 122 && base_ascii + up_num as u8 > 122 { // 小写字母 a-z
+                                    new_ascii = 65 + (base_ascii + up_num as u8 - 123);
+                                    // 读冲出去了 ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+                                    ori_str.push('z');
+                                } else {
+                                    // 非字母字符的处理
+                                    new_ascii = (base_ascii as i32 + up_num) as u8;
+                                }
+                                
+
+
+                                ori_str.push(new_ascii as char);
+
+                                ori_str
+                            }
+
+                            Value::Number(n) => {
+                                let number = n.to_string().parse::<i32>().unwrap();
+                                let result = (number + self.counter).to_string();
+                                result
+                            },
+                            _ => "".to_string(),
+                        }
+                    }).collect()
+                }
+                _ => "".to_string(),
+            }
+        }).collect();
+        self.counter += 1;  // 递增计数器 全局加 1
+        result
+    }
+}
+
+
+/// 管理 COM 对象
 pub struct ComGuard {
     initialized: bool,
 }
@@ -111,15 +195,37 @@ pub enum FileSystemObject {
     Combined(Vec<FileObject>, Vec<FolderObject>),
 }
 
+impl ExplorerOperate {
+    #[allow(dead_code)]
+    pub fn new() -> Self {
+        ExplorerOperate {
+            path_stream: vec![],
+        }
+    }
+    #[allow(dead_code)]
+    pub fn stream_from(path_stream: Vec<(String, String)>) -> Self {
+        ExplorerOperate { path_stream }
+    }
+
+    pub(crate) fn show(&self) {
+        for (path, name) in &self.path_stream {
+            println!("{} {}", path, name);
+        }
+    }
+
+    pub(crate) fn to_vec(&self) -> Vec<(String, String)> {
+        self.path_stream.clone()
+    }
+}
+
 /// # 按时间顺序读取目录下文件与目录
 ///
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
 pub fn list_dir_by_time_com(
-    dir_path: Box<Path>,
-    old_to_new: Option<bool>,
+    dir_path: Box<&Path>,
+    old_to_new: bool,
 ) -> Result<FileSystemObject, Error> {
-    let old_to_new = old_to_new.unwrap_or(false);
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
         None => String::from("NULL_NAME"),
@@ -128,7 +234,7 @@ pub fn list_dir_by_time_com(
     let mut files_with_time: Vec<FileObject> = Vec::new();
     let mut folders_with_time: Vec<FolderObject> = Vec::new();
 
-    for entry in fs::read_dir(dir_path)? {
+    for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
         let path = entry.path();
         let metadata = entry.metadata()?;
@@ -185,10 +291,9 @@ pub fn list_dir_by_time_com(
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
 pub fn list_dir_by_time_file(
-    dir_path: Box<Path>,
-    old_to_new: Option<bool>,
+    dir_path: Box<&Path>,
+    old_to_new: bool,
 ) -> Result<FileSystemObject, Error> {
-    let old_to_new = old_to_new.unwrap_or(false);
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
         None => String::from("NULL_NAME"),
@@ -196,7 +301,7 @@ pub fn list_dir_by_time_file(
 
     let mut files_with_time: Vec<FileObject> = Vec::new();
 
-    for entry in fs::read_dir(dir_path)? {
+    for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
         let path = entry.path();
 
@@ -238,11 +343,9 @@ pub fn list_dir_by_time_file(
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
 pub fn list_dir_by_time_folder(
-    dir_path: Box<Path>,
-    old_to_new: Option<bool>,
+    dir_path: Box<&Path>,
+    old_to_new: bool,
 ) -> Result<FileSystemObject, Error> {
-    let old_to_new = old_to_new.unwrap_or(false);
-
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
         None => String::from("NULL_NAME"),
@@ -250,7 +353,7 @@ pub fn list_dir_by_time_folder(
 
     let mut folders_with_time: Vec<FolderObject> = Vec::new();
 
-    for entry in fs::read_dir(dir_path)? {
+    for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
         let path = entry.path();
 
@@ -277,29 +380,6 @@ pub fn list_dir_by_time_folder(
     } else {
         folders_with_time.reverse();
         Ok(FileSystemObject::Folder(folders_with_time))
-    }
-}
-
-impl ExplorerOperate {
-    #[allow(dead_code)]
-    pub fn new() -> Self {
-        ExplorerOperate {
-            path_stream: vec![],
-        }
-    }
-    #[allow(dead_code)]
-    pub fn stream_from(path_stream: Vec<(String, String)>) -> Self {
-        ExplorerOperate { path_stream }
-    }
-
-    pub(crate) fn show(&self) {
-        for (path, name) in &self.path_stream {
-            println!("{} {}", path, name);
-        }
-    }
-
-    pub(crate) fn to_vec(&self) -> Vec<(String, String)> {
-        self.path_stream.clone()
     }
 }
 
@@ -380,10 +460,10 @@ pub fn get_active_explorer_path() -> Result<ExplorerOperate, Error> {
 pub fn traverse_directory_all(dir_path: Box<&Path>) -> Result<Vec<String>, Error> {
     let mut paths: Vec<String> = Vec::new();
     let mut queue: std::collections::VecDeque<std::path::PathBuf> =
-        std::collections::VecDeque::new();  // 使用VecDeque作为队列
+        std::collections::VecDeque::new(); // 使用VecDeque作为队列
 
     // 初始化队列
-    queue.push_back(dir_path.to_path_buf());  // 将目录路径加入队列
+    queue.push_back(dir_path.to_path_buf()); // 将目录路径加入队列
 
     // 广度优先遍历，避免深层递归导致栈溢出
     while let Some(current_path) = queue.pop_front() {
@@ -447,6 +527,10 @@ pub fn traverse_directory_all_dfs(dir_path: Box<Path>) -> Result<Vec<String>, Er
     Ok(paths)
 }
 
+/// 修改文件名
+///   * `path` - 要修改的文件路径
+///   * `new_name` - 新的文件名
+///   * `返回值` - 修改结果
 pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     let old_path = *path;
     // 检查原路径是否存在
@@ -461,10 +545,7 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     let parent_dir = match old_path.parent() {
         Some(parent) => parent,
         None => {
-            return Err(Error::new(
-                io::ErrorKind::InvalidInput,
-                "无法确定父目录",
-            ));
+            return Err(Error::new(io::ErrorKind::InvalidInput, "无法确定父目录"));
         }
     };
     // 构建新的完整路径
@@ -472,10 +553,7 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
 
     // 检查新路径是否已存在
     if new_path.exists() {
-        return Err(Error::new(
-            io::ErrorKind::AlreadyExists,
-            "目标文件名已存在",
-        ));
+        return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
     }
 
     // 执行重命名操作
@@ -483,6 +561,11 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     Ok(())
 }
 
+/// 替换文件名
+///   * `path` - 要修改的文件路径
+///   * `old_name_sign` - 要替换的旧文件名标识符
+///   * `new_name_sign` - 要替换的新文件名标识符
+///   * `返回值` - 替换结果
 pub fn replace_name(
     path: Box<&Path>,
     old_name_sign: &str,
@@ -507,6 +590,10 @@ pub fn replace_name(
         }
     };
     let new_name = old_path_name.replace(old_name_sign, new_name_sign);
+
+    if new_name == old_path_name {
+        return Ok(());
+    }
     // 构建新的完整路径
     let new_path = parent_dir.join(&new_name);
 
@@ -517,5 +604,87 @@ pub fn replace_name(
 
     // 执行重命名操作
     fs::rename(old_path, &new_path)?;
+    Ok(())
+}
+
+/// 根据修改时间来排序替换文件名
+/// * `rule` - 排序规则
+/// * `path` - 要修改的文件路径
+/// * `mode_option` - 排序模式
+/// * `返回值` - 排序结果
+///
+/// `mode_option`
+/// > 1101. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件排序
+/// > 1102. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件夹排序
+/// > 1103. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  混合排序
+/// > 1201. 升序  时间由旧到新 从路径池中排序         无递归排序  文件排序
+/// > 1202. 升序  时间由旧到新 从路径池中排序         无递归排序  文件夹排序
+/// > 1203. 升序  时间由旧到新 从路径池中排序         无递归排序  混合排序
+/// > 1211. 升序  时间由旧到新 从路径池中排序         递归排序    文件排序
+/// > 1212. 升序  时间由旧到新 从路径池中排序         递归排序    文件夹排序
+/// > 1213. 升序  时间由旧到新 从路径池中排序         递归排序    混合排序
+/// > 2101. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件排序
+/// > 2102. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件夹排序
+/// > 2103. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   混合排序
+/// > 2201. 降序 时间由新到旧  从路径池中排序         无递归排序   文件排序
+/// > 2202. 降序 时间由新到旧  从路径池中排序         无递归排序   文件夹排序
+/// > 2203. 降序 时间由新到旧  从路径池中排序         无递归排序   混合排序
+/// > 2211. 降序 时间由新到旧  从路径池中排序         递归排序     文件排序
+/// > 2212. 降序 时间由新到旧  从路径池中排序         递归排序     文件夹排序
+/// > 2213. 降序 时间由新到旧  从路径池中排序         递归排序     混合排序
+
+pub fn replace_name_by_modify_time(
+    rule: Vec<Value>,
+    path: Box<Path>,
+    mode_option: i32,
+) -> Result<(), Error> {
+    match mode_option {
+        1101 => {}
+        1102 => {}
+        1103 => {}
+        1201 => {}
+        1202 => {}
+        1203 => {}
+        1211 => {}
+        1212 => {}
+        1213 => {}
+        2101 => {}
+        2102 => {}
+        2103 => {}
+        2201 => {}
+        2202 => {}
+        2203 => {}
+        2211 => {}
+        2212 => {}
+        2213 => {}
+        _ => {}
+    }
+    Ok(())
+}
+fn replace_name_by_modify_time_1101(rule: Vec<Value>, path: Box<&Path>) -> Result<(), Error> {
+    let mut name = "".to_string();
+    for part in rule.clone() {
+        name += &part.to_string();
+    }
+    if let Ok(dir_list) = list_dir_by_time_file(path, true) {
+        match dir_list {
+            FileSystemObject::File(files) => {
+                for a_file in files {
+                    match change_name(Box::new(Path::new(&a_file.path)), name.clone()) {
+                        Ok(_) => {}
+                        Err(e) => {
+                            println!("文件{}修改失败: {}", a_file.name, e);
+                        }
+                    };
+                }
+            }
+            FileSystemObject::Folder(_) => {
+                println!("当前操作只处理文件，但获取到了文件夹");
+            }
+            FileSystemObject::Combined(files, folders) => {
+                println!("当前操作只处理文件，但获取到了文件夹 与 文件");
+            }
+        }
+    };
     Ok(())
 }

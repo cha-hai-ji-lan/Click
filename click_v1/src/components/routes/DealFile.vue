@@ -37,7 +37,23 @@
           </div>
           <div class="oper">
                <div class="h3-head">
-                    <h3>操作</h3> <span>答疑</span>
+                    <div class="icon-left-margin">
+                         <svg t="1766485462276" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                              xmlns="http://www.w3.org/2000/svg" p-id="8143" width="200" height="200">
+                              <path d="M896.1 115H128c-35.3 0-63.9 28.6-64 63.9V689c-0.1 35.3 28.5 64 63.8 64H896.1c35.3 0 63.9-28.6 63.9-63.9V179c0-35.3-28.6-64-63.9-64z m-25.6 546.1H153.7V202h716.8v459.1zM64.1 840.2c0 35.3 28.6 63.9 63.9 64h768.2c35.3 0 63.9-28.6 63.9-63.9v-56.5H64l0.1 56.4z m409.1-13.1h77.7c9.6 0 17.1 7.6 17.1 16.8-0.1 9.3-7.7 16.9-17 16.8h-77.8c-9.3 0.2-17-7.3-17.2-16.6v-0.2c0-9.2 7.6-16.8 17.2-16.8z"
+                                   p-id="8144"></path>
+                         </svg>
+                    </div>
+                    <h3>操作</h3>
+                    <span class="icon-right-margin">
+                         <svg t="1766480075133" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                              xmlns="http://www.w3.org/2000/svg" p-id="6827" width="200" height="200">
+                              <path d="M512.004454 1023.999898c-140.696348 0-276.682338-58.777077-373.142279-161.380964C41.071046 758.58146-7.875719 622.493071 1.033002 479.441544 17.00726 222.62463 222.62463 17.00726 479.441544 1.033002c143.051527-8.908721 279.139916 40.038044 383.17739 137.829173C965.120422 235.322117 1023.999898 371.308107 1023.999898 512.004454c0 168.446501-82.943262 326.141097-221.796426 421.884246a32.050915 32.050915 0 0 1-44.543604-8.191928 32.050915 32.050915 0 0 1 8.191927-44.543603A448.170091 448.170091 0 0 0 960.000467 512.004454c0-124.926888-50.175553-240.945056-141.208343-326.550693C727.759334 99.950522 608.669194 57.045303 483.33271 64.930033 258.771508 78.856309 78.856309 258.771508 64.930033 483.33271c-7.782331 125.336485 35.020488 244.426625 120.626127 335.459414 78.232904 83.250459 181.860781 132.299623 294.499779 140.184352v-46.898782c0-17.715042 14.335872-31.948516 31.948515-31.948516s31.948516 14.335872 31.948516 31.948516v79.973688A31.856356 31.856356 0 0 1 512.004454 1023.999898z"
+                                   p-id="6828"></path>
+                              <path d="M512.004454 832.001606c-17.715042 0-31.948516-14.335872-31.948515-31.948515v-50.073155c0-81.919271 45.669994-156.670606 119.192539-194.865465 56.524297-29.388538 90.520794-84.376849 88.677611-143.461124-2.457578-83.352858-79.154496-153.086638-170.904079-155.441816-50.380352-1.433587-99.327116 17.203047-133.835609 50.892347-30.514928 29.695736-47.308379 68.50499-47.308379 109.055029 0 17.715042-14.335872 31.948516-31.948516 31.948516-17.715042 0-31.948516-14.335872-31.948515-31.948516 0-58.060283 23.654189-113.048594 66.559407-154.929821 46.796384-45.567594 112.638998-70.75777 180.119997-69.016985 125.131686 3.071973 229.783555 100.658304 233.265124 217.393265 2.559977 83.864854-44.646003 161.380964-123.186104 202.135801-52.223535 27.238158-84.786445 80.076087-84.786445 138.13637v50.073155A31.876836 31.876836 0 0 1 512.004454 832.001606z"
+                                   p-id="6829"></path>
+                         </svg>
+                    </span>
                </div>
                <div class="oper-1">
                     <div class="item-title">批处理操作</div>
@@ -46,7 +62,20 @@
                     <transition name="replace-name-transition" mode="out-in">
                          <div v-if="active_path && active_path.length > 0" class="replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
-                              <div class="item-title">修改名字 字段</div>
+                              <div class="item-title">
+                                   <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
+                                        <path d="M512 145.92c201.728 0 366.08 164.352 366.08 366.08s-164.352 366.08-366.08 366.08S145.92 713.728 145.92 512 310.272 145.92 512 145.92M512 87.04c-234.496 0-424.96 190.464-424.96 424.96s189.952 424.96 424.96 424.96c234.496 0 424.96-190.464 424.96-424.96S746.496 87.04 512 87.04L512 87.04z"
+                                             p-id="7055"></path>
+                                        <path d="M578.56 721.92c-16.384 0-29.184-13.312-29.184-29.184l0-40.96c0-12.288 7.68-23.04 18.944-27.648 64-23.552 107.008-84.992 107.008-153.088 0-90.112-73.216-163.328-163.328-163.328-90.112 0-163.328 73.216-163.328 163.328 0 68.096 43.008 129.536 107.008 153.088 11.776 4.096 18.944 15.36 18.944 27.648l0 40.96c0 16.384-13.312 29.184-29.184 29.184-16.384 0-29.184-13.312-29.184-29.184L416.256 670.72c-76.288-36.352-126.464-114.688-126.464-200.192 0-122.368 99.328-221.696 221.696-221.696s221.696 99.328 221.696 221.696c0 85.504-50.176 163.328-126.464 200.192l0 21.504C607.744 708.608 594.432 721.92 578.56 721.92z"
+                                             p-id="7056"></path>
+                                        <path d="M578.56 742.912" p-id="7057"></path>
+                                        <path d="M445.952 742.912" p-id="7058"></path>
+                                        <path d="M559.104 818.688 465.408 818.688c-16.384 0-29.184-13.312-29.184-29.184s13.312-29.184 29.184-29.184l93.696 0c16.384 0 29.184 13.312 29.184 29.184S574.976 818.688 559.104 818.688z"
+                                             p-id="7059"></path>
+                                   </svg>
+                              </div>
+                              <div class="item-title">修改名字字段</div>
                               <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
                               <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段">
                               <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
@@ -59,13 +88,37 @@
                </div>
                <div class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
-                         <div v-if="active_path && active_path.length > 0" class="replace-name"
+                         <div v-if="active_path && active_path.length > 0" class="order-and-replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
-                              <div class="item-title">改名 排序</div>
-                              <Temp v-model="selectedValue" :options="selectOptions" placeholder="排序方式"></Temp>
+                              <div class="item-title">
+                                   <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
+                                        <path d="M512 145.92c201.728 0 366.08 164.352 366.08 366.08s-164.352 366.08-366.08 366.08S145.92 713.728 145.92 512 310.272 145.92 512 145.92M512 87.04c-234.496 0-424.96 190.464-424.96 424.96s189.952 424.96 424.96 424.96c234.496 0 424.96-190.464 424.96-424.96S746.496 87.04 512 87.04L512 87.04z"
+                                             p-id="7055"></path>
+                                        <path d="M578.56 721.92c-16.384 0-29.184-13.312-29.184-29.184l0-40.96c0-12.288 7.68-23.04 18.944-27.648 64-23.552 107.008-84.992 107.008-153.088 0-90.112-73.216-163.328-163.328-163.328-90.112 0-163.328 73.216-163.328 163.328 0 68.096 43.008 129.536 107.008 153.088 11.776 4.096 18.944 15.36 18.944 27.648l0 40.96c0 16.384-13.312 29.184-29.184 29.184-16.384 0-29.184-13.312-29.184-29.184L416.256 670.72c-76.288-36.352-126.464-114.688-126.464-200.192 0-122.368 99.328-221.696 221.696-221.696s221.696 99.328 221.696 221.696c0 85.504-50.176 163.328-126.464 200.192l0 21.504C607.744 708.608 594.432 721.92 578.56 721.92z"
+                                             p-id="7056"></path>
+                                        <path d="M578.56 742.912" p-id="7057"></path>
+                                        <path d="M445.952 742.912" p-id="7058"></path>
+                                        <path d="M559.104 818.688 465.408 818.688c-16.384 0-29.184-13.312-29.184-29.184s13.312-29.184 29.184-29.184l93.696 0c16.384 0 29.184 13.312 29.184 29.184S574.976 818.688 559.104 818.688z"
+                                             p-id="7059"></path>
+                                   </svg>
+                              </div>
+                              <div class="item-title">改名排序</div>
+                              <SelectorBar v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
+                              </SelectorBar>
+                              <input class="input-box" type="text" v-model="inputRefSortName"
+                                   placeholder="{起始标志}固定名称...">
                               <!-- <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
                               <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段"> -->
-                              <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
+                              <div class="item-title">
+                                   <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
+                                        <path d="M815.98 379.92c21.84-0.2 41.83-12.04 51.39-31.48l77.52-157.47c10.42-21.18 6.46-46.86-9.88-63.91L894.3 84.57c-18.3-19.09-46.97-22.94-69.62-9.4l-156.63 93.49c-16.94 10.12-27.47 28.67-27.47 48.41v70.13l-100.32 96.14c-30.02-32.81-56.01-61.27-69.8-76.49 10.82-91.02-6.52-157.53-51.59-197.79-63.69-56.86-158.93-40.02-196.93-30.12A37.72 37.72 0 0 0 194.92 106c-3.44 13.3 0.62 27.45 10.58 36.91l62.45 59.41c-1.18 16.28-8.15 31.38-19.89 42.97-10.64 10.5-24.11 17.02-38.66 18.86l-68.29-66.01c-10.3-9.94-25.07-13.21-38.63-8.54-13.49 4.66-23.08 16.34-25.05 30.45-6.29 45.12-13.59 156.76 54.53 218.73 40.81 37.14 99.25 48.39 173.87 33.53 2.06 2.16 4.34 4.57 6.79 7.14 13.14 13.81 29.93 31.45 43.35 44.9L114.99 765.29c-22.6 22.6-36.69 51.38-39.68 81.04-3.19 31.61 6.92 61.67 27.74 82.48 18.28 18.29 43.72 28.31 71.06 28.31 3.78 0 7.59-0.19 11.42-0.57 29.66-2.99 58.44-17.09 81.03-39.68l252.02-252.01c9.58 10.32 21.64 23.9 32.87 38.29-11.86 95.35 5.6 164.39 51.94 205.3 34.38 30.35 77.67 39.1 116.13 39.1 32.77 0 62.02-6.34 79.31-11.09 13.2-3.63 23.4-14.15 26.64-27.45 3.24-13.34-1.01-27.42-11.08-36.71l-60.43-55.97a61.251 61.251 0 0 1 18.28-42.72 61.258 61.258 0 0 1 38.8-17.45c17.16 17.36 45.84 46.04 61.23 59.6 9.95 8.77 23.99 11.7 36.59 7.56 12.69-4.12 22.38-14.75 25.28-27.72 21.94-97.55 10.13-167.95-35.08-209.25-58.66-53.6-151.71-37.85-196.52-25.9l-70.59-76.98 109.16-104.59 74.87 1.04zM358.8 435.47c-8.68-9.12-15.47-16.23-18.03-18.74-9.26-9.07-22.36-12.66-35.09-9.68-59.9 14.22-103.91 9.01-130.81-15.46-25.92-23.59-36.17-65.75-37.37-108.22l35.6 34.42a37.609 37.609 0 0 0 25.8 10.67c34.92 0.47 68.73-12.92 93.94-37.76 25.2-24.85 39.08-58.02 39.08-93.42v-5.95c0-10.33-4.3-20.34-11.75-27.39l-32.68-31.08c29.48-1.76 64.73 2.19 88.91 23.79 30.15 26.93 40.01 78.55 29.33 153.37-1.6 11.04 1.7 22.1 9.08 30.37 8.99 10.07 41.01 45.15 79.39 87.1l-12.5 11.98-20.44-20.44-60.21 60.21c-12.98-13.01-29.99-30.89-42.25-43.77zM221.47 871.78c-23.12 23.09-56.67 28.54-73.32 11.94-9.87-9.88-10.11-23.66-9.37-30.99 1.49-14.85 9.26-30.27 21.31-42.33l301.16-301.17 61.38 61.38-301.16 301.17z m445.07-256.21c9.97 10.83 25.43 14.91 39.29 10.37 10.73-3.44 106.26-32.64 150.22 7.51 23.92 21.85 27.62 61.79 23.68 101.23a3202.444 3202.444 0 0 1-30.7-30.87c-6.35-6.48-14.86-10.45-23.98-11.18-36.18-2.94-71.68 10.09-97.52 35.51a124.98 124.98 0 0 0-37.11 96.93l0.35 5.65c0.66 9.74 4.98 18.72 12.04 25.19l29.6 27.42c-28.91 1.85-63.07-1.73-86.8-22.68-38.51-34-37.34-105.29-29.57-159.16 1.4-9.82-1.17-20.05-7.11-28.12-15.2-20.54-32.45-39.95-45.22-53.62l49.13-49.13-35.15-35.15 8.2-7.86 80.65 87.96z m32.65-284.84l-166.6 159.62-5.77-5.77 160.11-153.44c11.09-10.59 17.44-25.46 17.44-40.78v-69.1l147.95-88.31 33.06 34.5-73.16 148.62-73.27-1.02c-15.21-0.32-29.05 5.38-39.76 15.68z"
+                                             p-id="9297"></path>
+                                   </svg>
+                              </div>
+                              <div class="submit-replace-name"
+                                   @click="() => { SubmitRepluceName('order-replace-name') }">修改
                               </div>
                          </div>
                          <div v-else class="place-holder">
@@ -164,6 +217,8 @@ import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于�
 import { open } from '@tauri-apps/plugin-dialog';
 import { type PathItem } from "../../class/PathIndex"
 import { ref, reactive, onMounted, onUnmounted } from "vue";
+import SelectorBar from '../components/SelectorBar.vue'
+import { parseStringToArray } from '../../util/DataTool'
 
 
 const active_path = ref<PathItem[] | null>(null)
@@ -175,6 +230,7 @@ const lastActivePathData = ref<string | null>(null);
 
 const inputRefReplaceOldName = ref("")
 const inputRefReplaceNewName = ref("")
+const inputRefSortName = ref("")
 
 const FloatingWindow = reactive({
      "choose-path-pool": false,
@@ -188,15 +244,12 @@ const dragOffset = ref({ x: 0, y: 0 });
 const floatingWindowElement = ref<HTMLElement | null>(null);
 
 
-import Temp from './Temp.vue'
-
 const selectedValue = ref('')
 
 const selectOptions = [
-     { value: 'option1', label: '选项一' },
-     { value: 'option2', label: '选项二' },
-     { value: 'option3', label: '选项三' },
-     { value: 'option4', label: '选项四' }
+     { value: 'by-time', label: '按修改时间排序' },
+     { value: 'by-size', label: '按大小排序' },
+     { value: 'picture-sort', label: '图片排序' },
 ]
 
 
@@ -347,6 +400,7 @@ const SubmitRepluceName = (tag: String) => {
                                         console.log("成功替换文件名");
                                    })
                                    .catch((err) => {
+                                        console.log(selectedPaths.value)
                                         console.error("无法处理文件:", err);
                                    });
                          });
@@ -369,6 +423,13 @@ const SubmitRepluceName = (tag: String) => {
                }
 
                break;
+
+          case 'order-replace-name':
+               const participle = parseStringToArray(inputRefSortName.value)
+               console.log(participle)
+               invoke("test_command", { data: participle })
+
+               break
 
           default:
                break;
@@ -486,8 +547,8 @@ h3 {
 
 
 .tag-icon {
-     width: 4vh;
-     height: 4vh;
+     width: 4vmin;
+     height: 4vmin;
      display: flex;
      position: relative;
      justify-content: start;
@@ -495,8 +556,8 @@ h3 {
 }
 
 .icon {
-     height: 3vh;
-     width: 3vh;
+     height: 3vmin;
+     width: 3vmin;
      min-height: 10px;
      max-height: 25px;
      min-width: 15px;
@@ -513,6 +574,14 @@ h3 {
      min-width: 2px;
      max-width: 15px;
      fill: var(--icon-color)
+}
+
+.icon-right-margin {
+     margin-right: 2.5vmin;
+}
+
+.icon-left-margin {
+     margin-left: 2.5vmin;
 }
 
 .icon:active {
@@ -585,8 +654,8 @@ h3 {
 /* 自定义复选框样式 */
 .choose input[type="checkbox"] {
      appearance: none;
-     width: 18px;
-     height: 18px;
+     width: 2vmin;
+     height: 2vmin;
      border: 2px solid #ccc;
      border-radius: 3px;
      position: relative;
@@ -599,7 +668,7 @@ h3 {
 
 /* 添加悬停效果 */
 .choose input[type="checkbox"]:hover {
-     border-color: #1e90ff;
+     border-color: var(--normal-attention-color);
      box-shadow: 0 0 4px rgba(30, 144, 255, 0.3);
 }
 
@@ -610,8 +679,8 @@ h3 {
 }
 
 .choose input[type="checkbox"]:checked {
-     background-color: #1e90ff;
-     border-color: #1e90ff;
+     background-color: var(--normal-attention-color);
+     border-color: var(--normal-attention-color);
 }
 
 .choose input[type="checkbox"]:checked::after {
@@ -712,7 +781,7 @@ h3 {
      margin: 0.75vh 0;
      text-align: center;
      display: flex;
-     height: 4vh;
+     height: 4vmin;
      width: 100%;
      font-size: 2.5vmin;
      /* border-radius: 1vmin; */
@@ -731,7 +800,15 @@ h3 {
      display: grid;
      width: 100%;
      height: 4vh;
-     grid-template-columns: 15% 35% 35% 15%;
+     grid-template-columns: 5% 15% 32.5% 32.5% 15%;
+}
+
+.order-and-replace-name {
+     font-size: 2vmin;
+     display: grid;
+     width: 100%;
+     height: 4vh;
+     grid-template-columns: 5% 15% 30% 30% 5% 15%;
 }
 
 .place-holder {
@@ -762,12 +839,15 @@ h3 {
 
 .input-box {
      font-family: "楷体", 'Courier New', Courier, monospace;
+     font-size: 2vmin;
      text-align: center;
-     border-radius: 1vmin;
+     height: 3.5vmin;
+     margin: auto 0;
      border-top: 1px dashed var(--unite-but-color);
-     border-bottom: 2px solid var(--unite-but-color);
+     border-bottom: 1px dashed var(--unite-but-color);
      border-left: 1px dashed var(--unite-but-color);
      border-right: 1px dashed var(--unite-but-color);
+
 
 
 
@@ -776,7 +856,9 @@ h3 {
 
 .submit-replace-name {
      border-radius: 1vmax;
-     border: 1px solid var(--main-border);
+     height: 4vmin;
+     border-left: 2px solid var(--active-attention-color);
+     border-right: 2px solid var(--active-attention-color);
      display: flex;
      justify-content: center;
      align-items: center;
@@ -808,6 +890,7 @@ h3 {
 .coming-animation {
      animation: show-submit-replace-name 0.5s ease-in-out forwards;
 }
+
 
 
 /* ----------------------------------------悬浮窗区----------------------------------------------- */

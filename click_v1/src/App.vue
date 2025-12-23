@@ -1,3 +1,4 @@
+<!-- TODO:: 重构 左侧栏唤醒按钮，移除全部 transform 尝试完善左侧栏的拉动效果 -->
 <template>
   <div class="main">
     <div data-tauri-drag-region class="titlebar">
@@ -76,7 +77,7 @@
       <div class="mid-contain">
         <div class="left-call-icon" @click="() => { open_sidebar('left-contain') }">
           <svg t="1765631009180" class="icon "
-            :class="{ 'left-called-icon1': !comVisibility.LeftContain['LeftContain-close'], 'left-called-icon2': comVisibility.LeftContain['LeftContain-close'] }"
+            :class="{ 'left-called-icon1': !comVisibility.LeftContain['LeftContain-close']}"
             viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2824" width="200"
             height="200">
             <path
@@ -163,6 +164,10 @@ const set_focus_color_palette = () => {
   document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
   document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.value.buttonColorRGBA})`)  // 按钮颜色
   document.documentElement.style.setProperty("--unite-but-color", `rgba(${mainColor.value.iconColorRGBA})`)
+
+  // 注视颜色
+  document.documentElement.style.setProperty("--normal-attention-color", `rgba(${mainColor.value.normalAttentionRGBA})`)
+  document.documentElement.style.setProperty("--active-attention-color", `rgba(${mainColor.value.activeAttentionRGBA})`)
 
 
 
@@ -592,7 +597,7 @@ const stopResize = () => {
 }
 
 .left-call-icon:hover:before {
-  animation: expand 0.75s forwards;
+  animation: expand 0.75s both;
   animation-timing-function: linear;
 }
 
@@ -601,12 +606,8 @@ const stopResize = () => {
 }
 
 .left-called-icon1 {
-  animation: roll-0-180 0.75s forwards;
-  animation-timing-function: linear;
-}
-
-.left-called-icon2 {
-  animation: roll-180-0 0.75s forwards;
+  animation-delay: 50ms;
+  animation: roll-0-180 0.75s both;
   animation-timing-function: linear;
 }
 
@@ -757,16 +758,6 @@ const stopResize = () => {
 
   100% {
     transform: rotate(180deg);
-  }
-}
-
-@keyframes roll-180-0 {
-  0% {
-    transform: rotate(180deg);
-  }
-
-  100% {
-    transform: rotate(0);
   }
 }
 </style>
