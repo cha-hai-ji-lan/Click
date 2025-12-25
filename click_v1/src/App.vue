@@ -4,7 +4,7 @@
     <div data-tauri-drag-region class="titlebar">
       <div data-tauri-drag-region class="left-button">
         <div class="main-icon-box">
-          <img class="main-icon" src="./assets/ico.svg" alt="">
+          <img class="main-icon" src="./assets/ico.svg" alt="卡塔">
         </div>
       </div>
       <div data-tauri-drag-region class="mid-button">
@@ -13,12 +13,15 @@
             p-id="5350" width="200" height="200">
             <path
               d="M1072.147851 406.226367c-6.331285-33.456782-26.762037-55.073399-52.047135-55.073399-0.323417 0-0.651455 0.003081-0.830105 0.009241l-4.655674 0c-73.124722 0-132.618162-59.491899-132.618162-132.618162 0-23.731152 11.447443-50.336101 11.546009-50.565574 13.104573-29.498767 3.023185-65.672257-23.427755-84.127081l-1.601687-1.127342-134.400039-74.661726-1.700252-0.745401c-8.753836-3.805547-18.334698-5.735272-28.479231-5.735272-20.789593 0-41.235746 8.344174-54.683758 22.306575-14.741683 15.216028-65.622973 58.649474-104.721083 58.649474-39.450789 0-90.633935-44.286652-105.438762-59.784516-13.518857-14.247316-34.128258-22.753199-55.127302-22.753199-9.945862 0-19.354234 1.861961-27.958682 5.531982l-1.746455 0.74078-139.141957 76.431283-1.643269 1.139662c-26.537186 18.437884-36.675557 54.579032-23.584845 84.062398 0.115506 0.264895 11.579891 26.725075 11.579891 50.634877 0 73.126262-59.491899 132.618162-132.618162 132.618162l-4.581749 0c-0.318797-0.00616-0.636055-0.01078-0.951772-0.01078-25.260456 0-45.672728 21.618157-52.002472 55.0811-0.462025 2.453354-11.313456 60.622322-11.313456 106.117939 0 45.494078 10.85143 103.659965 11.314996 106.119479 6.334365 33.458322 26.758957 55.076479 52.036353 55.076479 0.320337 0 0.651455-0.00616 0.842426-0.012321l4.655674 0c73.126262 0 132.618162 59.491899 132.618162 132.616622 0 23.760413-11.444363 50.333021-11.546009 50.565574-13.093793 29.474125-3.041666 65.646075 23.395414 84.151722l1.569346 1.093459 131.838879 73.726895 1.675611 0.7377c8.750757 3.84251 18.305437 5.790715 28.397607 5.790715 21.082208 0 41.676209-8.706094 55.0888-23.290689 18.724339-20.347588 69.527086-62.362616 107.04815-62.362616 40.625872 0 92.72537 47.100385 107.759669 63.583903 13.441852 14.831008 34.176001 23.689571 55.470741 23.695731l0.00616 0c9.895039 0 19.27877-1.883523 27.893999-5.598205l1.711034-0.73924 136.659342-75.531873 1.617088-1.128882c26.492523-18.456365 36.601633-54.600594 23.538642-84.016195-0.115506-0.267974-11.595291-27.082374-11.595291-50.67646 0-73.124722 59.49344-132.616622 132.618162-132.616622l4.517066-0.00154c0.300316 0.00616 0.599092 0.009241 0.899409 0.009241 25.331299-0.00154 45.785153-21.619697 52.107197-55.054918 0.112426-0.589852 11.325776-59.507301 11.325776-106.14104C1083.464388 466.640776 1072.609877 408.67356 1072.147851 406.226367zM377.486862 945.656142l-115.32764-64.487932c5.082277-13.052211 15.437801-43.51815 15.437801-75.017486 0-109.382917-84.176364-199.816642-192.587488-208.134635-2.647404-15.427021-8.873963-54.967133-8.873963-85.667166 0-30.65691 6.223479-70.232445 8.869343-85.671786 108.415744-8.311832 192.592108-98.745557 192.592108-208.134635 0-31.416171-10.300081-61.797405-15.371577-74.854236l122.721583-67.40331c0.003081 0 0.00462 0.00154 0.007701 0.00154 4.423121 4.518606 22.121764 22.080182 46.558275 39.493911 39.929754 28.46229 77.952885 42.894416 113.014434 42.894416 34.716571 0 72.437845-14.151831 112.115025-42.06431 24.282503-17.07953 41.896442-34.302288 46.308782-38.74543 0.009241-0.00154 0.018481-0.00462 0.026182-0.00616l118.301542 65.726159c-5.077657 13.055291-15.416239 43.499669-15.416239 74.958962 0 109.389077 84.174824 199.822802 192.590568 208.134635 2.645865 15.462442 8.872423 55.107281 8.872423 85.671786 0 30.687711-6.223479 70.241685-8.869343 85.673326C890.042174 606.334084 805.86427 696.767809 805.86427 806.158426c0 31.450053 10.317022 61.851309 15.393138 74.903519l-119.783103 66.198965c-5.168521-5.490399-22.603811-23.363073-46.740005-41.288109-40.701336-30.224145-79.662378-45.549521-115.800446-45.549521-35.79155 0-74.458435 15.038919-114.927219 44.694774C400.22004 922.554885 382.666163 940.255068 377.486862 945.656142zM731.271848 511.646647c0-105.803762-86.081448-191.88059-191.888289-191.88059-105.803762 0-191.88059 86.076827-191.88059 191.88059 0 105.803762 86.076827 191.882129 191.88059 191.882129C645.19194 703.528777 731.271848 617.450409 731.271848 511.646647zM539.383558 395.903184c63.825696 0 115.751164 51.922387 115.751164 115.743463 0 63.825696-51.925468 115.751164-115.751164 115.751164-63.821076 0-115.743463-51.925468-115.743463-115.751164C423.640095 447.824031 475.562482 395.903184 539.383558 395.903184z"
-             p-id="5351"></path>
+              p-id="5351"></path>
           </svg>
         </div>
-        <div class="mid-version">
-          <h3>Click 0.1.2</h3>
-        </div>
+        <a href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容">
+          <div class="mid-version">
+            <h3>Bug反馈</h3>
+          </div>
+        </a>
+
         <div class="titlebar-button" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
           <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="4805" width="200" height="200">
@@ -117,7 +120,7 @@ import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { RouterView } from "vue-router"
 import { ColorCtr } from './util/Colors';
 import LeftContain from "./components/LeftContain.vue";
-import { comVisibility } from "./util/PluginObjects"
+import { comVisibility, set_focus_color_palette, set_special_style } from "./util/PluginObjects"
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
@@ -132,7 +135,7 @@ let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调�
 
 onMounted(async () => {
   mainColor.value.set_color_palette()
-  set_focus_color_palette()  // 设置调色板
+  set_focus_color_palette(mainColor.value)  // 设置调色板
   set_special_style()  // 设置特殊样式
 
   try {
@@ -144,52 +147,7 @@ onMounted(async () => {
   }
 })
 
-const set_focus_color_palette = () => {
-  // 特殊颜色
-  document.documentElement.style.setProperty("--icon-color", `rgba(${mainColor.value.iconColorRGBA})`)
-  document.documentElement.style.setProperty("--title-close-icon-shadow", `rgba(${mainColor.value.colseIconColorRGBA})`)
-  document.documentElement.style.setProperty("--title-close-icon-hover-shadow", `rgba(${mainColor.value.colseIconHoverColorRGBA})`)
-  document.documentElement.style.setProperty("--title-close-icon-active-shadow", `rgba(${mainColor.value.colseIconActiveColorRGBA})`)
-  document.documentElement.style.setProperty("--title-min-icon-shadow", `rgba(${mainColor.value.minSizeIconColorRGBA})`)
-  document.documentElement.style.setProperty("--title-min-icon-hover-shadow", `rgba(${mainColor.value.minSizeIconHoverColorRGBA})`)
-  document.documentElement.style.setProperty("--title-min-icon-active-shadow", `rgba(${mainColor.value.minSizeIconActiveColorRGBA})`)
-  document.documentElement.style.setProperty("--title-max-icon-shadow", `rgba(${mainColor.value.maxSizeIconColorRGBA})`)
-  document.documentElement.style.setProperty("--title-max-icon-hover-shadow", `rgba(${mainColor.value.maxSizeIconHoverColorRGBA})`)
-  document.documentElement.style.setProperty("--title-max-icon-active-shadow", `rgba(${mainColor.value.maxSizeIconActiveColorRGBA})`)
-  // 总背景颜色
-  document.documentElement.style.setProperty("--back-ground", `rgba(${mainColor.value.backGroundColorRGBA})`)
-  // 标题栏颜色
-  document.documentElement.style.setProperty("--title-bar-lg-1", `rgba(${mainColor.value.titleBarColorRGBA})`)
-  document.documentElement.style.setProperty("--title-bar-lg-2", `rgba(${mainColor.value.backGroundColorRGBA})`)
-  // 主区域颜色
-  document.documentElement.style.setProperty("--main-border", `rgba(${mainColor.value.borderColorRGBA})`)  // 边框色
-  document.documentElement.style.setProperty("--main-back-ground", `rgba(${mainColor.value.midGroundColorRGBA})`)  // 背景色
-  document.documentElement.style.setProperty("--tool-bar-color", `rgba(${mainColor.value.toolBarColorRGBA})`)  // 背景色
-  document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.value.foreGroundColorRGBA})`)
-  document.documentElement.style.setProperty("--icon-hover-shadow", `rgba(${mainColor.value.iconHoverColorRGBA})`)
-  document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.value.iconActiveColorRGBA})`)
-  document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.value.fontColorRGBA})`)
-  document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.value.buttonColorRGBA})`)  // 按钮颜色
-  document.documentElement.style.setProperty("--unite-but-color", `rgba(${mainColor.value.iconColorRGBA})`)
 
-  // 注视颜色
-  document.documentElement.style.setProperty("--normal-attention-color", `rgba(${mainColor.value.normalAttentionRGBA})`)
-  document.documentElement.style.setProperty("--active-attention-color", `rgba(${mainColor.value.activeAttentionRGBA})`)
-
-
-
-  // 左侧边框颜色
-
-
-}
-
-const set_special_style = () => {
-  document.documentElement.style.setProperty("--left-contain-width", `30vw`)  // 侧边栏宽度
-  document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
-  document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
-  document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 模拟纸面网格大小
-
-}
 const title_bar_click = (mode: string) => {
 
   switch (mode) {
@@ -450,7 +408,6 @@ const stopResize = () => {
   height: 3vh;
   max-height: 20px;
   background-color: var(--main-border);
-  /* transform: translateY(50%); */
 }
 
 .main-icon-box {
@@ -476,8 +433,8 @@ const stopResize = () => {
 }
 
 .main-icon {
-  height: 4vh;
-  width: 4vh;
+  height: 4vmin;
+  width: 4vmin;
   min-height: 15px;
   max-height: 30px;
   min-width: 15px;
@@ -490,8 +447,8 @@ const stopResize = () => {
 }
 
 .icon {
-  height: 3vh;
-  width: 3vh;
+  height: 3vmin;
+  width: 3vmin;
   min-height: 10px;
   max-height: 25px;
   min-width: 15px;
@@ -525,7 +482,6 @@ const stopResize = () => {
 }
 
 .left-contain {
-  margin: 1% 0 1% 1%;
   min-width: 0px;
   max-width: 25vw;
   min-height: 120px;
@@ -595,7 +551,7 @@ const stopResize = () => {
   left: 0vw;
   width: 0.15vw;
   max-width: 2px;
-  height: 3vh;
+  height: 3vmin;
   border-radius: 0 5vh 5vh 0;
   background-color: var(--main-border);
   /* transform: translateY(50%); */
@@ -604,7 +560,7 @@ const stopResize = () => {
 }
 
 .left-call-icon:hover:before {
-  animation: expand 0.75s both;
+  animation: expand 0.25s both;
   animation-timing-function: linear;
 }
 
@@ -651,24 +607,11 @@ const stopResize = () => {
 
 @keyframes expand {
   0% {
-
-    transform: scaleY(2);
-  }
-
-  25% {
-    transform: scaleY(4);
-  }
-
-  50% {
-    transform: scaleY(8);
-  }
-
-  75% {
-    transform: scaleY(16);
+    height: 3vmin;
   }
 
   100% {
-    transform: scaleY(28);
+    height: 90vmin;
   }
 
 }

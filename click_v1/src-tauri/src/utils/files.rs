@@ -1,5 +1,4 @@
 use std::fs;
-use std::fs::File;
 // 用于文件操作
 use serde_json::Value;
 use std::io;
@@ -256,9 +255,10 @@ impl ExplorerOperate {
 ///
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
-pub fn list_dir_by_time_com(
+pub fn list_dir_com(
     dir_path: Box<&Path>,
     old_to_new: bool,
+    mode:i32,
 ) -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
@@ -304,8 +304,74 @@ pub fn list_dir_by_time_com(
     }
 
     // 按修改时间排序（从旧到新）
-    files_with_time.sort_by_key(|f| f.modified_time);
-    folders_with_time.sort_by_key(|f| f.modified_time);
+    match mode{
+        1=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            files_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
+    match mode{
+        1=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            folders_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     if old_to_new {
         Ok(FileSystemObject::Combined(
             files_with_time,
@@ -325,9 +391,10 @@ pub fn list_dir_by_time_com(
 ///
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
-pub fn list_dir_by_time_file(
+pub fn list_dir_file(
     dir_path: Box<&Path>,
     old_to_new: bool,
+    mode:i32,
 ) -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
@@ -339,6 +406,7 @@ pub fn list_dir_by_time_file(
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
         let path = entry.path();
+
 
         if path.is_file() {
             let metadata = entry.metadata()?;
@@ -365,7 +433,40 @@ pub fn list_dir_by_time_file(
     }
 
     // 按修改时间排序（从旧到新）
-    files_with_time.sort_by_key(|f| f.modified_time);
+    match mode{
+        1=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            files_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     if old_to_new {
         Ok(FileSystemObject::File(files_with_time))
     } else {
@@ -378,9 +479,10 @@ pub fn list_dir_by_time_file(
 ///
 /// **默认**：时间从旧到新
 #[allow(dead_code)]
-pub fn list_dir_by_time_folder(
+pub fn list_dir_folder(
     dir_path: Box<&Path>,
     old_to_new: bool,
+    mode:i32,
 ) -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path.file_name() {
         Some(name) => name.to_string_lossy().to_string(),
@@ -410,7 +512,40 @@ pub fn list_dir_by_time_folder(
         } else {
         }
     }
-    folders_with_time.sort_by_key(|f| f.modified_time);
+    match mode{
+        1=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            folders_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     if old_to_new {
         Ok(FileSystemObject::Folder(folders_with_time))
     } else {
@@ -420,9 +555,10 @@ pub fn list_dir_by_time_folder(
 }
 
 #[allow(dead_code)]
-pub fn list_path_by_time_com(
+pub fn list_path_com(
     dir_path: Vec<&Path>,
     old_to_new: bool,
+    mode:i32,
 ) -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path[0].file_name() {
         Some(name) => name.to_string_lossy().to_string(),
@@ -466,8 +602,74 @@ pub fn list_path_by_time_com(
     }
 
     // 按修改时间排序（从旧到新）
-    files_with_time.sort_by_key(|f| f.modified_time);
-    folders_with_time.sort_by_key(|f| f.modified_time);
+    match mode{
+        1=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            files_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
+    match mode{
+        1=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            folders_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     if old_to_new {
         Ok(FileSystemObject::Combined(
             files_with_time,
@@ -485,9 +687,10 @@ pub fn list_path_by_time_com(
 
 
 #[allow(dead_code)]
-pub fn list_path_by_time_file(
+pub fn list_path_file(
     dir_path: Vec<&Path>,
     old_to_new: bool,
+    mode:i32,
 ) -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path[0].file_name() {
         Some(name) => name.to_string_lossy().to_string(),
@@ -520,7 +723,40 @@ pub fn list_path_by_time_file(
     }
 
     // 按修改时间排序（从旧到新）
-    files_with_time.sort_by_key(|f| f.modified_time);
+    match mode{
+        1=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            files_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            files_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     if old_to_new {
         Ok(FileSystemObject::File(
             files_with_time,
@@ -533,10 +769,19 @@ pub fn list_path_by_time_file(
     }
 }
 
+/// 将路径池池中的文件夹序列化收集到 FileSystemObject 中
+/// 参数：
+/// * `dir_path`: 路径池
+/// * `old_to_new`: 是否按修改时间排序（从旧到新）
+/// * `mode`: 模式
+///     > 1: 按修改时间排序（从旧到新）
+///     >
+///     > 2: 按名字排序（从新到旧）
 #[allow(dead_code)]
-pub fn list_path_by_time_folder(
+pub fn list_path_folder(
     dir_path: Vec<&Path>,
     old_to_new: bool,
+    mode:i32,
 )
 -> Result<FileSystemObject, Error> {
     let parent_name = match dir_path[0].file_name() {
@@ -559,6 +804,40 @@ pub fn list_path_by_time_folder(
             parent_name.clone(),
         ))
     };
+    match mode{
+        1=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        },
+        2=>{
+            folders_with_time.sort_by(|a, b| {
+                let a_name = &a.name;
+                let b_name = &b.name;
+
+                // 判断是否为纯数字字符串
+                let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
+                let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
+
+                match (a_is_numeric, b_is_numeric) {
+                    // 两个都是数字：按数值大小排序
+                    (true, true) => {
+                        match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
+                            (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
+                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                        }
+                    },
+                    // 只有a是数字：数字排在后面
+                    (true, false) => std::cmp::Ordering::Greater,
+                    // 只有b是数字：数字排在后面
+                    (false, true) => std::cmp::Ordering::Less,
+                    // 两个都不是数字：按字符串排序
+                    (false, false) => a_name.cmp(b_name),
+                }
+            });
+        },
+        _=>{
+            folders_with_time.sort_by_key(|f| f.modified_time);
+        }
+    }
     folders_with_time.sort_by_key(|f| f.modified_time);
         if old_to_new {
             Ok(FileSystemObject::Folder(folders_with_time))
@@ -845,10 +1124,11 @@ pub fn replace_name_by_modify_time(
     path: Box<&Path>,
     mode_option: i32,
     old_to_new: bool,
+    order_mode:i32,
 ) -> Result<(), Error> {
     match mode_option {
         1 => {
-            replace_name_by_modify_time_1(rule, path, old_to_new).expect("失败");
+            replace_name_by_modify_time_1(rule, path, old_to_new, order_mode).expect("失败");
         }
         2 => {}
         3 => {}
@@ -867,10 +1147,11 @@ pub fn replace_name_by_modify_time(
     path: Vec<String>,
     mode_option: i32,
     old_to_new: bool,
+    order_mode:i32,
 ) -> Result<(), Error> {
     match mode_option {
         1 => {
-            replace_name_by_modify_time_pool_1(rule, path, old_to_new).expect("失败");
+            replace_name_by_modify_time_pool_1(rule, path, old_to_new, order_mode).expect("失败");
         }
         2 => {}
         3 => {}
@@ -881,9 +1162,9 @@ pub fn replace_name_by_modify_time(
     }
     Ok(())
 }
-fn replace_name_by_modify_time_1(rule: Vec<Value>, path: Box<&Path>, old_to_new: bool) -> Result<(), Error> {
+fn replace_name_by_modify_time_1(rule: Vec<Value>, path: Box<&Path>, old_to_new: bool, order_mode:i32) -> Result<(), Error> {
     let mut name_obj = DataProcessor::new(rule, 0);
-    if let Ok(dir_list) = list_dir_by_time_file(path, old_to_new) {
+    if let Ok(dir_list) = list_dir_file(path, old_to_new, order_mode) {
         match dir_list {
             FileSystemObject::File(files) => {
                 for a_file in files {
@@ -902,17 +1183,17 @@ fn replace_name_by_modify_time_1(rule: Vec<Value>, path: Box<&Path>, old_to_new:
             FileSystemObject::Folder(_) => {
                 println!("当前操作只处理文件，但获取到了文件夹");
             }
-            FileSystemObject::Combined(files, folders) => {
+            FileSystemObject::Combined(_, _) => {
                 println!("当前操作只处理文件，但获取到了文件夹 与 文件");
             }
         }
     };
     Ok(())
 }
-fn replace_name_by_modify_time_pool_1(rule: Vec<Value>, path: Vec<String>, old_to_new: bool) -> Result<(), Error> {
+fn replace_name_by_modify_time_pool_1(rule: Vec<Value>, path: Vec<String>, old_to_new: bool,order_mode:i32) -> Result<(), Error> {
     let mut name_obj = DataProcessor::new(rule, 0);
     let path_obj = path.iter().map(|p| {Path::new(p)}).collect::<Vec<&Path>>();
-    if let Ok(path_list) = list_path_by_time_file(path_obj, old_to_new){
+    if let Ok(path_list) = list_path_file(path_obj, old_to_new, order_mode){
         match path_list {
             FileSystemObject::File(files) => {
                 for a_file in files {
@@ -931,7 +1212,7 @@ fn replace_name_by_modify_time_pool_1(rule: Vec<Value>, path: Vec<String>, old_t
             FileSystemObject::Folder(_) => {
                 println!("当前操作只处理文件，但获取到了文件夹");
             }
-            FileSystemObject::Combined(files, folders) => {
+            FileSystemObject::Combined(_, _) => {
                 println!("当前操作只处理文件，但获取到了文件夹 与 文件")
             }
 

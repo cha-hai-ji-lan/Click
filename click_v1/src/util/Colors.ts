@@ -51,6 +51,10 @@ export function ColorCtr() {
     const normalAttention = ref<HexColor>("#FFFFFF")                        // 一般注视
     const activeAttention = ref<HexColor>("#FFFFFF")                        // 积极注视
 
+    const positiveShow = ref<HexColor>("#FFFFFF")                           // 积极展示
+    const normalShow = ref<HexColor>("#FFFFFF")                             // 一般展示
+    const negativeShow = ref<HexColor>("#FFFFFF")                             // 消极展示
+
 
     const titleBarColorRGB = ref<RGBColor>([255, 255, 255])
     const toolBarColorRGB = ref<RGBColor>([255, 255, 255])
@@ -63,8 +67,13 @@ export function ColorCtr() {
     const iconActiveColorRGB = ref<RGBColor>([255, 255, 255])
     const fontColorRGB = ref<RGBColor>([255, 255, 255])
     const buttonColorRGB = ref<RGBColor>([255, 255, 255])
+
     const normalAttentionRGB = ref<RGBColor>([255, 255, 255])
     const activeAttentionRGB = ref<RGBColor>([255, 255, 255])
+
+    const positiveShowRGB = ref<RGBColor>([255, 255, 255])
+    const normalShowRGB = ref<RGBColor>([255, 255, 255])
+    const negativeShowRGB = ref<RGBColor>([255, 255, 255])
 
     const titleBarColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const toolBarColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
@@ -77,8 +86,13 @@ export function ColorCtr() {
     const iconActiveColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const fontColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const buttonColorRGBA = ref<RGBAColor>([255, 255, 255, 1])
+
     const normalAttentionRGBA = ref<RGBAColor>([255, 255, 255, 1])
     const activeAttentionRGBA = ref<RGBAColor>([255, 255, 255, 1])
+
+    const positiveShowRGBA = ref<RGBAColor>([255, 255, 255, 1])
+    const normalShowRGBA = ref<RGBAColor>([255, 255, 255, 1])
+    const negativeShowRGBA = ref<RGBAColor>([255, 255, 255, 1])
 
     const colorSign = ref<ColorSwitch>("Default")
 
@@ -101,6 +115,10 @@ export function ColorCtr() {
         }
     }
 
+    function set_theme_flag(themeFlag: ColorSwitch) {
+        colorSign.value = themeFlag;
+    }
+
     function set_color_palette() {
         switch (colorSign.value) {
             case "Light":
@@ -118,6 +136,9 @@ export function ColorCtr() {
                 buttonColor.value = "#ededed"
                 normalAttention.value = "#1e90ff"
                 activeAttention.value = "#007bff"
+                positiveShow.value = "#888888"
+                normalShow.value = "#666666"
+                negativeShow.value = "#444444"
                 // RGB
                 titleBarColorRGB.value = [249, 248, 226]
                 toolBarColorRGB.value = [205, 205, 204]
@@ -132,6 +153,9 @@ export function ColorCtr() {
                 buttonColorRGB.value = [237, 237, 237]
                 normalAttentionRGB.value = [30, 144, 255]
                 activeAttentionRGB.value = [0, 123, 255]
+                positiveShowRGB.value = [136, 136, 136]
+                normalShowRGB.value =[102, 102, 102]
+                negativeShowRGB.value  = [68, 68, 68]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [205, 205, 204, 1]
@@ -146,6 +170,9 @@ export function ColorCtr() {
                 buttonColorRGBA.value = [237, 237, 237, 1]
                 normalAttentionRGBA.value = [30, 144, 255, 1]
                 activeAttentionRGBA.value = [0, 123, 255, 1]
+                positiveShowRGBA.value = [136, 136, 136, 1]
+                normalShowRGBA.value =[102, 102, 102, 1]
+                negativeShowRGBA.value  = [68, 68, 68, 1]
                 break;
             case "Night":
                 titleBarColor.value = "#3c3f41"     //  
@@ -155,6 +182,7 @@ export function ColorCtr() {
                 backGroundColor.value = "#373838"   //  
                 iconColor.value = "#cccccc"
                 iconHoverColor.value = "#3c3c3c"
+                
                 // RGB
                 titleBarColorRGB.value = [60, 63, 65]
                 toolBarColorRGB.value = [43, 43, 43]
@@ -165,6 +193,9 @@ export function ColorCtr() {
                 iconHoverColorRGB.value = [60, 60, 60]
                 normalAttentionRGB.value = [30, 144, 255]
                 activeAttentionRGB.value = [0, 123, 255]
+                positiveShowRGB.value = [136, 136, 136]
+                normalShowRGB.value =[102, 102, 102]
+                negativeShowRGB.value  = [68, 68, 68]
                 // RGBA
                 titleBarColorRGBA.value = [60, 63, 65, 1]
                 toolBarColorRGBA.value = [43, 43, 43, 1]
@@ -175,6 +206,9 @@ export function ColorCtr() {
                 iconHoverColorRGBA.value = [60, 60, 60, 1]
                 normalAttentionRGBA.value = [30, 144, 255, 1]
                 activeAttentionRGBA.value = [0, 123, 255, 1]
+                positiveShowRGBA.value = [136, 136, 136, 1]
+                normalShowRGBA.value =[102, 102, 102, 1]
+                negativeShowRGBA.value  = [68, 68, 68, 1]
                 break;
             default:
                 // HEX
@@ -191,6 +225,9 @@ export function ColorCtr() {
                 buttonColor.value = "#ededed"
                 normalAttention.value = "#1e90ff"
                 activeAttention.value = "#007bff"
+                positiveShow.value = "#888888"
+                normalShow.value = "#666666"
+                negativeShow.value = "#444444"
                 // RGB
                 titleBarColorRGB.value = [249, 248, 226]
                 toolBarColorRGB.value = [205, 205, 204]
@@ -202,9 +239,12 @@ export function ColorCtr() {
                 iconHoverColorRGB.value = [245, 245, 127]
                 iconActiveColorRGB.value = [240, 240, 44]
                 fontColorRGB.value = [66, 73, 74]
-                buttonColorRGB.value =[237, 237, 237]
+                buttonColorRGB.value = [237, 237, 237]
                 normalAttentionRGB.value = [30, 144, 255]
                 activeAttentionRGB.value = [0, 123, 255]
+                positiveShowRGB.value = [136, 136, 136]
+                normalShowRGB.value =[102, 102, 102]
+                negativeShowRGB.value  = [68, 68, 68]
                 // RGBA
                 titleBarColorRGBA.value = [249, 248, 226, 1]
                 toolBarColorRGBA.value = [205, 205, 204, 1]
@@ -219,6 +259,9 @@ export function ColorCtr() {
                 buttonColorRGBA.value = [237, 237, 237, 1]
                 normalAttentionRGBA.value = [30, 144, 255, 1]
                 activeAttentionRGBA.value = [0, 123, 255, 1]
+                positiveShowRGBA.value = [136, 136, 136, 1]
+                normalShowRGBA.value =[102, 102, 102, 1]
+                negativeShowRGBA.value  = [68, 68, 68, 1]
                 break;
         }
     }
@@ -268,6 +311,10 @@ export function ColorCtr() {
         normalAttention,
         activeAttention,
 
+        positiveShow,
+        normalShow,
+        negativeShow,
+
         titleBarColorRGB,
         toolBarColorRGB,
         foreGroundColorRGB,
@@ -282,6 +329,10 @@ export function ColorCtr() {
 
         normalAttentionRGB,
         activeAttentionRGB,
+
+        positiveShowRGB,
+        normalShowRGB,
+        negativeShowRGB,
 
         titleBarColorRGBA,
         toolBarColorRGBA,
@@ -298,9 +349,14 @@ export function ColorCtr() {
         normalAttentionRGBA,
         activeAttentionRGBA,
 
+        positiveShowRGBA,
+        normalShowRGBA,
+        negativeShowRGBA,
+
         colorSign,
 
         switch_color,
-        set_color_palette
+        set_theme_flag,
+        set_color_palette,
     } as const
 }

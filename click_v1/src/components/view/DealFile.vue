@@ -219,6 +219,7 @@ import { type PathItem } from "../../class/PathIndex"
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import SelectorBar from '../components/SelectorBar.vue'
 import { parseStringToArray } from '../../util/DataTool'
+import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 
 const active_path = ref<PathItem[] | null>(null)
@@ -429,27 +430,98 @@ const SubmitRepluceName = (tag: String) => {
                const participle = parseStringToArray(inputRefSortName.value)
                console.log(participle)
                if (selectedPaths.value.length !== 0) {
-                    selectedPaths.value.forEach((item, _) => {
-                         invoke("change_file_name", { rule: participle, path: item[0], mode: 1 })
-                              .then(() => {
-                                   console.log("成功替换文件名");
-                              })
-                              .catch((err) => {
-                                   console.log(selectedPaths.value)
-                                   console.error("无法处理文件:", err);
+                    console.log(selectedValue.value)
+                    switch (selectedValue.value) {
+                         case 'by-name':
+                              selectedPaths.value.forEach((item, _) => {
+                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 2 })
+                                        .then(() => {
+                                             console.log("成功替换文件名");
+                                        })
+                                        .catch((err) => {
+                                             console.log(selectedPaths.value)
+                                             console.error("无法处理文件:", err);
+                                        });
                               });
-                    });
+                              break;
+                         case 'by-time':
+                              selectedPaths.value.forEach((item, _) => {
+                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
+                                        .then(() => {
+                                             console.log("成功替换文件名");
+                                        })
+                                        .catch((err) => {
+                                             console.log(selectedPaths.value)
+                                             console.error("无法处理文件:", err);
+                                        });
+                              });
+                              break;
+                         case 'by-size':
+                              console.log("施工。。。")
+                              break;
+                         case 'picture-sort':
+                              console.log("施工。。。")
+                              break;
+
+                         default:
+                         selectedPaths.value.forEach((item, _) => {
+                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
+                                        .then(() => {
+                                             console.log("成功替换文件名");
+                                        })
+                                        .catch((err) => {
+                                             console.log(selectedPaths.value)
+                                             console.error("无法处理文件:", err);
+                                        });
+                              });
+                              break;
+                    }
                } else if (userSelectedPath.value?.length !== 0) {  // 添加路径池中文件进行重命名
-                    console.log(userSelectedPath.value)
-                    invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1 })
-                         .then(() => {
-                              console.log("成功替换文件名");
-                         })
-                         .catch((err) => {
-                              console.error("无法处理文件:", err);
-                         });
-                         userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
-                         userSelectedShortPath.value = []
+                    switch (selectedValue.value) {
+                         case 'by-name':
+                              console.log(userSelectedPath.value)
+                              invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 2 })
+                                   .then(() => {
+                                        console.log("成功替换文件名");
+                                   })
+                                   .catch((err) => {
+                                        console.error("无法处理文件:", err);
+                                   });
+                              userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                              userSelectedShortPath.value = []
+                              break;
+                         case 'by-time':
+                              console.log(userSelectedPath.value)
+                              invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 1 })
+                                   .then(() => {
+                                        console.log("成功替换文件名");
+                                   })
+                                   .catch((err) => {
+                                        console.error("无法处理文件:", err);
+                                   });
+                              userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                              userSelectedShortPath.value = []
+                              break;
+                         case 'by-size':
+                              console.log("施工。。。")
+                              break;
+                         case 'picture-sort':
+                              console.log("施工。。。")
+                              break;
+
+                         default:
+                              console.log(userSelectedPath.value)
+                              invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 1 })
+                                   .then(() => {
+                                        console.log("成功替换文件名");
+                                   })
+                                   .catch((err) => {
+                                        console.error("无法处理文件:", err);
+                                   });
+                              userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                              userSelectedShortPath.value = []
+                              break;
+                    }
                }
 
                break

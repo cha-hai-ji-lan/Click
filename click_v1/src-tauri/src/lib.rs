@@ -30,13 +30,13 @@ fn test_command(data: Vec<Value>) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn change_file_name(rule: Vec<Value>, path: String, mode: i32, old_to_new: bool) -> Result<(), String> {
-    replace_name_by_modify_time(rule, Box::new(Path::new(path.as_str())), mode, old_to_new)
+fn change_file_name(rule: Vec<Value>, path: String, mode: i32, old_to_new: bool, order_mode:i32) -> Result<(), String> {
+    replace_name_by_modify_time(rule, Box::new(Path::new(path.as_str())), mode, old_to_new, order_mode)
         .map_err(|e| e.to_string())
 }
 #[tauri::command]
-fn change_pool_file_name(rule: Vec<Value>, path: Vec<String>, mode: i32, old_to_new: bool) -> Result<(), String> {
-    replace_name_by_modify_time_pool(rule, path, mode, old_to_new)
+fn change_pool_file_name(rule: Vec<Value>, path: Vec<String>, mode: i32, old_to_new: bool, order_mode:i32) -> Result<(), String> {
+    replace_name_by_modify_time_pool(rule, path, mode, old_to_new, order_mode)
         .map_err(|e| e.to_string())
 }
 #[tauri::command]
