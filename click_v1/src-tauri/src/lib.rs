@@ -1,17 +1,22 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod utils;
+use open;
+
+use serde_json::Value;
+use std::fs::File;
+use std::io::{Read, Write};
 use std::path::Path;
 use std::process::Command;
-use std::ptr::null_mut;
 use std::thread;
-use open::commands;
-use serde_json::Value; // 引入 serde_json 库
+use tauri::Error;
+// 引入 serde_json 库
 use utils::files::{
     get_active_explorer_path,
     replace_name,
-    traverse_directory_all, // 引入 traverse_directory_all 函数 广度优先遍历路径
-    change_name, // 引入 change_name 函数 用于改变文件名字
-    DataProcessor
+    replace_name_by_modify_time, // 按修改时间修改文件名
+    replace_name_by_modify_time_pool, // 按修改时间修改文件名 修改路径池中的路径
+    traverse_directory_all,      // 引入 traverse_directory_all 函数 广度优先遍历路径
+    DataProcessor,
 };
 #[tauri::command]
 fn test_command(data: Vec<Value>) -> Result<String, String> {
@@ -22,6 +27,17 @@ fn test_command(data: Vec<Value>) -> Result<String, String> {
         println!("{name_parts}")
     }
     Ok("处理完成".to_string())
+}
+
+#[tauri::command]
+fn change_file_name(rule: Vec<Value>, path: String, mode: i32, old_to_new: bool) -> Result<(), String> {
+    replace_name_by_modify_time(rule, Box::new(Path::new(path.as_str())), mode, old_to_new)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+fn change_pool_file_name(rule: Vec<Value>, path: Vec<String>, mode: i32, old_to_new: bool) -> Result<(), String> {
+    replace_name_by_modify_time_pool(rule, path, mode, old_to_new)
+        .map_err(|e| e.to_string())
 }
 #[tauri::command]
 fn run_exe(path: String) {
@@ -66,11 +82,12 @@ fn replace_all_name(
     // 调用 traverse_directory_all 获取目录下所有路径
     match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
         Ok(mut all_paths) => {
-            all_paths.reverse();  // 倒序 保证不先修改父级目录的名称
+            all_paths.reverse(); // 倒序 保证不先修改父级目录的名称
             for path in all_paths {
-                match replace_name(Box::new(Path::new(path.as_str())),
-                                   &old_name_sign,
-                                   &new_name_sign,
+                match replace_name(
+                    Box::new(Path::new(path.as_str())),
+                    &old_name_sign,
+                    &new_name_sign,
                 ) {
                     Ok(_) => {}
                     Err(e) => {
@@ -95,8 +112,45 @@ pub fn run() {
             open_url,
             active_explorer_path,
             replace_all_name,
-            test_command
+            test_command,
+            change_file_name,
+            change_pool_file_name,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+/// Android的 从JPG文件中提取MP4
+fn extract_mp4_from_jpg(jpg_path: &str, mp4_path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    // 读取JPG文件
+    let mut file = File::open(jpg_path)?;
+    let mut data = Vec::new();
+    file.read_to_end(&mut data)?;
+
+    // 查找 b'ftyp'
+    let ftyp_pos = find_subsequence(&data, b"ftyp");
+
+    if ftyp_pos.is_none() {
+        eprintln!("Error: 'ftyp' not found");
+        return Ok(());
+    }
+
+    let offset = ftyp_pos.unwrap();
+    println!("Found 'ftyp' at offset {} (0x{:08X})", offset, offset);
+
+    let start_pos = if offset >= 4 { offset - 4 } else { 0 };
+
+    // 写入MP4文件
+    let mut output_file = File::create(mp4_path)?;
+    output_file.write_all(&data[start_pos..])?;
+
+    println!("Saved MP4 to {}", mp4_path);
+    Ok(())
+}
+
+// 辅助函数：查找字节序列
+fn find_subsequence(haystack: &[u8], needle: &[u8]) -> Option<usize> {
+    haystack
+        .windows(needle.len())
+        .position(|window| window == needle)
 }

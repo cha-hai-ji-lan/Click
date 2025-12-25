@@ -107,7 +107,7 @@
                               <SelectorBar v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
                               </SelectorBar>
                               <input class="input-box" type="text" v-model="inputRefSortName"
-                                   placeholder="{起始标志}固定名称...">
+                                   placeholder="<起始标志>固定名称{原名}...">
                               <!-- <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
                               <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段"> -->
                               <div class="item-title">
@@ -247,6 +247,7 @@ const floatingWindowElement = ref<HTMLElement | null>(null);
 const selectedValue = ref('')
 
 const selectOptions = [
+     { value: 'by-name', label: '按原名称顺序排序' },
      { value: 'by-time', label: '按修改时间排序' },
      { value: 'by-size', label: '按大小排序' },
      { value: 'picture-sort', label: '图片排序' },
@@ -405,7 +406,7 @@ const SubmitRepluceName = (tag: String) => {
                                    });
                          });
                     } else if (userSelectedPath.value?.length !== 0) {  // 添加对跳跃文件夹下的文件进行重命名
-                         userSelectedPath.value?.forEach((item, _) => {
+                         userSelectedPath.value?.forEach((item, _) => { // TODO:: 写应对路径池的标志改名
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then(() => {
                                         console.log("成功替换文件名");
@@ -427,7 +428,29 @@ const SubmitRepluceName = (tag: String) => {
           case 'order-replace-name':
                const participle = parseStringToArray(inputRefSortName.value)
                console.log(participle)
-               invoke("test_command", { data: participle })
+               if (selectedPaths.value.length !== 0) {
+                    selectedPaths.value.forEach((item, _) => {
+                         invoke("change_file_name", { rule: participle, path: item[0], mode: 1 })
+                              .then(() => {
+                                   console.log("成功替换文件名");
+                              })
+                              .catch((err) => {
+                                   console.log(selectedPaths.value)
+                                   console.error("无法处理文件:", err);
+                              });
+                    });
+               } else if (userSelectedPath.value?.length !== 0) {  // 添加路径池中文件进行重命名
+                    console.log(userSelectedPath.value)
+                    invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1 })
+                         .then(() => {
+                              console.log("成功替换文件名");
+                         })
+                         .catch((err) => {
+                              console.error("无法处理文件:", err);
+                         });
+                         userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                         userSelectedShortPath.value = []
+               }
 
                break
 

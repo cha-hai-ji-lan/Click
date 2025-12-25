@@ -5,8 +5,10 @@ use serde_json::Value;
 use std::io;
 use std::path::Path; // 引入 serde_json 库
                      // 用于错误处理
+use chrono::Local;
 use std::io::{Error, ErrorKind::ConnectionRefused};
-use std::time; // 用于获取文件创建时间
+use std::time;
+// 用于获取文件创建时间
 use windows::{
     core::{Interface, HRESULT},
     Win32::{
@@ -26,78 +28,110 @@ pub struct DataProcessor {
 
 impl DataProcessor {
     pub fn new(data: Vec<Value>, counter: i32) -> Self {
-        DataProcessor {
-            data,
-            counter,
-        }
+        DataProcessor { data, counter }
     }
 
     pub fn next(&mut self) -> String {
-        let result: String = self.data.iter().map(|part| {
-            match part {
-                Value::String(s) => s.clone(),
-                Value::Array(n) => {
-                    n.iter().map(|item| {
-                        match item {
-                            Value::String(s) => {
-                                let mut ori_str = s.clone();
-                                ori_str.pop(); // 去除末尾1为了加上自增过的字符
+        let result: String = self
+            .data
+            .iter()
+            .map(|part| {
+                match part {
+                    Value::String(s) => s.clone(),
+                    Value::Array(n) => {
+                        n.iter()
+                            .map(|item| {
+                                match item {
+                                    Value::String(s) => {
+                                        let mut ori_str = s.clone();
 
-                                let c = match s.chars().last() {
-                                    Some(ch) => ch,
-                                    None => return "A".to_string(), // 处理空字符串情况
-                                };
+                                        let c = match ori_str.pop() {
+                                            Some(ch) => ch,
+                                            None => return "A".to_string(), // 处理空字符串情况
+                                        };
+                                        if !('a' <= c && c <= 'z' || 'A' <= c && c <= 'Z') {
+                                            // 获取当前系统时间
+                                            let local_time = Local::now();
+                                            ori_str =
+                                                format!("{}", local_time.format("%Y-%m-%d-%6f"));
+                                            return ori_str;
+                                        }
+                                        // 计算基于字符位置的增量，而不是全局计数器
+                                        let new_ascii;
 
-                                // 添加额外的'z'字符（基于全局计数器）
-                                let extra_z_count = self.counter / 52;
-                                for _ in 0..extra_z_count {
-                                    ori_str.push('z');
+                                        // 添加额外的'z'字符（基于全局计数器）
+                                        // let extra_z_count = self.counter / 52;  // A- Z a - z
+                                        let extra_z_count = self.counter / 26;
+                                        if c >= 'A' && c <= 'Z' {
+                                            for _ in 0..extra_z_count {
+                                                ori_str.push('Z');
+                                            }
+                                            // let up_num = self.counter % 52;  // A- Z a - z
+                                            let up_num = self.counter % 26;
+
+                                            if c < 'Z' && c as u8 + up_num as u8 > 'Z' as u8 {
+                                                ori_str.push('Z');
+                                                new_ascii = 64 + (c as i32 + up_num - 90) as u8;
+                                            } else {
+                                                new_ascii = c as u8 + up_num as u8;
+                                            }
+                                            ori_str.push(new_ascii as char);
+                                        } else if c >= 'a' && c <= 'z' {
+                                            for _ in 0..extra_z_count {
+                                                ori_str.push('z');
+                                            }
+
+                                            // let up_num = self.counter % 52;  // A- Z a - z
+                                            let up_num = self.counter % 26;
+
+                                            if c < 'z' && c as u8 + up_num as u8 > 'z' as u8 {
+                                                ori_str.push('z');
+                                                new_ascii = 96 + (c as i32 + up_num - 122) as u8;
+                                            } else {
+                                                new_ascii = c as u8 + up_num as u8;
+                                            }
+                                            ori_str.push(new_ascii as char);
+                                        }
+
+                                        // // 处理跨越大小写边界的逻辑 A- Z a - z
+                                        // if base_ascii < 90 && base_ascii + up_num as u8 > 90 { // 大写字母 A-Z
+                                        //     new_ascii = 97 + (base_ascii + up_num as u8 - 91);
+                                        //     if new_ascii >= 122 {
+                                        //         ori_str.push('z');
+                                        //         new_ascii =  65 + new_ascii - 122
+                                        //     }
+                                        // } else if base_ascii < 122 && base_ascii + up_num as u8 > 122 { // 小写字母 a-z
+                                        //     new_ascii = 65 + (base_ascii + up_num as u8 - 123);
+                                        //     if new_ascii >= 97 {
+                                        //         new_ascii = 97 + new_ascii - 90
+                                        //     }
+                                        //     ori_str.push('z');
+                                        // } else {
+                                        //     // 非字母字符的处理
+                                        //     new_ascii = (base_ascii as i32 + up_num) as u8;
+                                        // }
+
+                                        ori_str
+                                    }
+
+                                    Value::Number(n) => {
+                                        let number = n.to_string().parse::<i32>().unwrap();
+                                        let result = (number + self.counter).to_string();
+                                        result
+                                    }
+                                    _ => "".to_string(),
                                 }
-                                
-                                let up_num = self.counter % 52;
-
-                                // 计算基于字符位置的增量，而不是全局计数器
-                                let base_ascii = c as u8;
-                                let new_ascii;
-
-                                // 处理跨越大小写边界的逻辑
-                                if base_ascii < 90 && base_ascii + up_num as u8 > 90 { // 大写字母 A-Z
-                                    new_ascii = 97 + (base_ascii + up_num as u8 - 91);
-                                    // 读冲出去了 ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-                                } else if base_ascii < 122 && base_ascii + up_num as u8 > 122 { // 小写字母 a-z
-                                    new_ascii = 65 + (base_ascii + up_num as u8 - 123);
-                                    // 读冲出去了 ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-
-                                    ori_str.push('z');
-                                } else {
-                                    // 非字母字符的处理
-                                    new_ascii = (base_ascii as i32 + up_num) as u8;
-                                }
-                                
-
-
-                                ori_str.push(new_ascii as char);
-
-                                ori_str
-                            }
-
-                            Value::Number(n) => {
-                                let number = n.to_string().parse::<i32>().unwrap();
-                                let result = (number + self.counter).to_string();
-                                result
-                            },
-                            _ => "".to_string(),
-                        }
-                    }).collect()
+                            })
+                            .collect()
+                    }
+                    _ => "".to_string(),
                 }
-                _ => "".to_string(),
-            }
-        }).collect();
-        self.counter += 1;  // 递增计数器 全局加 1
+            })
+            .collect();
+        self.counter += 1; // 递增计数器 全局加 1
         result
     }
 }
-
 
 /// 管理 COM 对象
 pub struct ComGuard {
@@ -238,8 +272,8 @@ pub fn list_dir_by_time_com(
         let entry = entry?;
         let path = entry.path();
         let metadata = entry.metadata()?;
-        let name = match path.file_name() {
-            Some(n) => n.to_string_lossy().to_string(),
+        let mut name = match path.file_name() {
+            Some(n) => n.to_string_lossy().to_string().replace(".*", ""),
             None => "NULL_NAME".to_string(),
         };
         let modified_time = metadata.modified()?;
@@ -250,6 +284,7 @@ pub fn list_dir_by_time_com(
                 Some(ext) => ext.to_string_lossy().to_string(),
                 None => "NULL_EXT".to_string(),
             };
+            name = name.replace(&format!(".{}", extension_name), "");
             files_with_time.push(FileObject::new(
                 name,
                 path.to_string_lossy().to_string(),
@@ -307,7 +342,7 @@ pub fn list_dir_by_time_file(
 
         if path.is_file() {
             let metadata = entry.metadata()?;
-            let name = match path.file_name() {
+            let mut name = match path.file_name() {
                 Some(n) => n.to_string_lossy().to_string(),
                 None => "NULL_NAME".to_string(),
             };
@@ -317,6 +352,7 @@ pub fn list_dir_by_time_file(
                 Some(ext) => ext.to_string_lossy().to_string(),
                 None => "NULL_EXT".to_string(),
             };
+            name = name.replace(&format!(".{}", extension_name), "");
             files_with_time.push(FileObject::new(
                 name,
                 path.to_string_lossy().to_string(),
@@ -381,6 +417,155 @@ pub fn list_dir_by_time_folder(
         folders_with_time.reverse();
         Ok(FileSystemObject::Folder(folders_with_time))
     }
+}
+
+#[allow(dead_code)]
+pub fn list_path_by_time_com(
+    dir_path: Vec<&Path>,
+    old_to_new: bool,
+) -> Result<FileSystemObject, Error> {
+    let parent_name = match dir_path[0].file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+    let mut files_with_time: Vec<FileObject> = Vec::new();
+    let mut folders_with_time: Vec<FolderObject> = Vec::new();
+
+    for entry_path in dir_path {
+        let path = entry_path.to_path_buf(); // 修复：使用 to_path_buf() 而不是 into_path_buf()
+        let metadata = path.metadata()?;
+        let mut name = match path.file_name() {
+            Some(n) => n.to_string_lossy().to_string().replace(".*", ""),
+            None => "NULL_NAME".to_string(),
+        };
+        let modified_time = metadata.modified()?;
+
+        if path.is_file() {
+            let size = metadata.len();
+            let extension_name = match path.extension() {
+                Some(ext) => ext.to_string_lossy().to_string(),
+                None => "NULL_EXT".to_string(),
+            };
+            name = name.replace(&format!(".{}", extension_name), "");
+            files_with_time.push(FileObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                size,
+                modified_time,
+                extension_name,
+                parent_name.clone(),
+            ));
+        } else {
+            folders_with_time.push(FolderObject::new(
+                name,
+                path.to_string_lossy().to_string(),
+                modified_time,
+                parent_name.clone(),
+            ));
+        }
+    }
+
+    // 按修改时间排序（从旧到新）
+    files_with_time.sort_by_key(|f| f.modified_time);
+    folders_with_time.sort_by_key(|f| f.modified_time);
+    if old_to_new {
+        Ok(FileSystemObject::Combined(
+            files_with_time,
+            folders_with_time,
+        ))
+    } else {
+        files_with_time.reverse();
+        folders_with_time.reverse();
+        Ok(FileSystemObject::Combined(
+            files_with_time,
+            folders_with_time,
+        ))
+    }
+}
+
+
+#[allow(dead_code)]
+pub fn list_path_by_time_file(
+    dir_path: Vec<&Path>,
+    old_to_new: bool,
+) -> Result<FileSystemObject, Error> {
+    let parent_name = match dir_path[0].file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+    let mut files_with_time: Vec<FileObject> = Vec::new();
+
+    for entry_path in dir_path {
+        let path = entry_path.to_path_buf(); // 修复：使用 to_path_buf() 而不是 into_path_buf()
+        let metadata = path.metadata()?;
+        let mut name = match path.file_name() {
+            Some(n) => n.to_string_lossy().to_string().replace(".*", ""),
+            None => "NULL_NAME".to_string(),
+        };
+        let modified_time = metadata.modified()?;
+        let size = metadata.len();
+        let extension_name = match path.extension() {
+            Some(ext) => ext.to_string_lossy().to_string(),
+            None => "NULL_EXT".to_string(),
+        };
+        name = name.replace(&format!(".{}", extension_name), "");
+        files_with_time.push(FileObject::new(
+            name,
+            path.to_string_lossy().to_string(),
+            size,
+            modified_time,
+            extension_name,
+            parent_name.clone(),
+        ));
+    }
+
+    // 按修改时间排序（从旧到新）
+    files_with_time.sort_by_key(|f| f.modified_time);
+    if old_to_new {
+        Ok(FileSystemObject::File(
+            files_with_time,
+        ))
+    } else {
+        files_with_time.reverse();
+        Ok(FileSystemObject::File(
+            files_with_time,
+        ))
+    }
+}
+
+#[allow(dead_code)]
+pub fn list_path_by_time_folder(
+    dir_path: Vec<&Path>,
+    old_to_new: bool,
+)
+-> Result<FileSystemObject, Error> {
+    let parent_name = match dir_path[0].file_name() {
+        Some(name) => name.to_string_lossy().to_string(),
+        None => String::from("NULL_NAME"),
+    };
+    let mut folders_with_time: Vec<FolderObject> = Vec::new();
+    for entry_path in dir_path {
+        let path = entry_path.to_path_buf();
+        let metadata = path.metadata()?;
+        let name = match path.file_name() {
+            Some(n) => n.to_string_lossy().to_string(),
+            None => "NULL_NAME".to_string(),
+        };
+        let modified_time = metadata.modified()?;
+        folders_with_time.push(FolderObject::new(
+            name,
+            path.to_string_lossy().to_string(),
+            modified_time,
+            parent_name.clone(),
+        ))
+    };
+    folders_with_time.sort_by_key(|f| f.modified_time);
+        if old_to_new {
+            Ok(FileSystemObject::Folder(folders_with_time))
+        } else {
+            folders_with_time.reverse();
+            Ok(FileSystemObject::Folder(folders_with_time))
+        }
 }
 
 pub fn get_active_explorer_path() -> Result<ExplorerOperate, Error> {
@@ -531,8 +716,13 @@ pub fn traverse_directory_all_dfs(dir_path: Box<Path>) -> Result<Vec<String>, Er
 ///   * `path` - 要修改的文件路径
 ///   * `new_name` - 新的文件名
 ///   * `返回值` - 修改结果
+/// 修改文件名（保留扩展名）
+///   * `path` - 要修改的文件路径
+///   * `new_name` - 新的文件名（不包含扩展名）
+///   * `返回值` - 修改结果
 pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     let old_path = *path;
+    let new_path;
     // 检查原路径是否存在
     if !old_path.exists() {
         return Err(Error::new(
@@ -548,12 +738,30 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
             return Err(Error::new(io::ErrorKind::InvalidInput, "无法确定父目录"));
         }
     };
-    // 构建新的完整路径
-    let new_path = parent_dir.join(&new_name);
+    if old_path.is_file() {
+        // 提取扩展名
+        let extension = old_path.extension();
+        let new_name_with_ext = match extension {
+            Some(ext) => {
+                let ext_str = ext.to_string_lossy();
+                format!("{}.{}", new_name, ext_str)
+            }
+            None => new_name,
+        };
 
-    // 检查新路径是否已存在
-    if new_path.exists() {
-        return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
+        // 构建新的完整路径
+        new_path = parent_dir.join(&new_name_with_ext);
+        // 检查新路径是否已存在
+        if new_path.exists() {
+            return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
+        }
+    } else {
+        // 构建新的完整路径
+        new_path = parent_dir.join(&new_name);
+        // 检查新路径是否已存在
+        if new_path.exists() {
+            return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
+        }
     }
 
     // 执行重命名操作
@@ -614,62 +822,75 @@ pub fn replace_name(
 /// * `返回值` - 排序结果
 ///
 /// `mode_option`
-/// > 1101. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件排序
-/// > 1102. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件夹排序
-/// > 1103. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  混合排序
-/// > 1201. 升序  时间由旧到新 从路径池中排序         无递归排序  文件排序
-/// > 1202. 升序  时间由旧到新 从路径池中排序         无递归排序  文件夹排序
-/// > 1203. 升序  时间由旧到新 从路径池中排序         无递归排序  混合排序
-/// > 1211. 升序  时间由旧到新 从路径池中排序         递归排序    文件排序
-/// > 1212. 升序  时间由旧到新 从路径池中排序         递归排序    文件夹排序
-/// > 1213. 升序  时间由旧到新 从路径池中排序         递归排序    混合排序
-/// > 2101. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件排序
-/// > 2102. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件夹排序
-/// > 2103. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   混合排序
-/// > 2201. 降序 时间由新到旧  从路径池中排序         无递归排序   文件排序
-/// > 2202. 降序 时间由新到旧  从路径池中排序         无递归排序   文件夹排序
-/// > 2203. 降序 时间由新到旧  从路径池中排序         无递归排序   混合排序
-/// > 2211. 降序 时间由新到旧  从路径池中排序         递归排序     文件排序
-/// > 2212. 降序 时间由新到旧  从路径池中排序         递归排序     文件夹排序
-/// > 2213. 降序 时间由新到旧  从路径池中排序         递归排序     混合排序
+/// > 1. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件排序
+/// > 2. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  文件夹排序
+/// > 3. 升序  时间由旧到新 从选中父级目录中排序    递归排序  文件夹排序
+/// > 4. 升序  时间由旧到新 从选中父级目录中排序    无递归排序  混合排序
+/// > 5. 升序  时间由旧到新 从选中父级目录中排序    递归排序  混合排序
+/// > 6. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件排序
+/// > 7. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   文件夹排序
+/// > 8. 降序 时间由新到旧  从选中父级目录中排序    递归排序   文件夹排序
+/// > 9. 降序 时间由新到旧  从选中父级目录中排序    无递归排序   混合排序
+/// > 10. 降序 时间由新到旧  从选中父级目录中排序    递归排序   混合排序
+///
+/// > 1. 升序  时间由旧到新 从路径池中排序         无递归排序  文件排序
+/// > 2. 升序  时间由旧到新 从路径池中排序         无递归排序  文件夹排序
+/// > 3. 升序  时间由旧到新 从路径池中排序         递归排序    文件夹排序
+/// > 4. 降序 时间由新到旧  从路径池中排序         无递归排序   文件排序
+/// > 5. 降序 时间由新到旧  从路径池中排序         无递归排序   文件夹排序
+/// > 6. 降序 时间由新到旧  从路径池中排序         递归排序     文件夹排序
 
 pub fn replace_name_by_modify_time(
     rule: Vec<Value>,
-    path: Box<Path>,
+    path: Box<&Path>,
     mode_option: i32,
+    old_to_new: bool,
 ) -> Result<(), Error> {
     match mode_option {
-        1101 => {}
-        1102 => {}
-        1103 => {}
-        1201 => {}
-        1202 => {}
-        1203 => {}
-        1211 => {}
-        1212 => {}
-        1213 => {}
-        2101 => {}
-        2102 => {}
-        2103 => {}
-        2201 => {}
-        2202 => {}
-        2203 => {}
-        2211 => {}
-        2212 => {}
-        2213 => {}
+        1 => {
+            replace_name_by_modify_time_1(rule, path, old_to_new).expect("失败");
+        }
+        2 => {}
+        3 => {}
+        4 => {}
+        5 => {}
+        6 => {}
+        7 => {}
+        8 => {}
+        9 => {}
+        10 => {}
+        _ => {}
+    }
+    Ok(())
+}pub fn replace_name_by_modify_time_pool(
+    rule: Vec<Value>,
+    path: Vec<String>,
+    mode_option: i32,
+    old_to_new: bool,
+) -> Result<(), Error> {
+    match mode_option {
+        1 => {
+            replace_name_by_modify_time_pool_1(rule, path, old_to_new).expect("失败");
+        }
+        2 => {}
+        3 => {}
+        4 => {}
+        5 => {}
+        6 => {}
         _ => {}
     }
     Ok(())
 }
-fn replace_name_by_modify_time_1101(rule: Vec<Value>, path: Box<&Path>) -> Result<(), Error> {
-    let mut name = "".to_string();
-    for part in rule.clone() {
-        name += &part.to_string();
-    }
-    if let Ok(dir_list) = list_dir_by_time_file(path, true) {
+fn replace_name_by_modify_time_1(rule: Vec<Value>, path: Box<&Path>, old_to_new: bool) -> Result<(), Error> {
+    let mut name_obj = DataProcessor::new(rule, 0);
+    if let Ok(dir_list) = list_dir_by_time_file(path, old_to_new) {
         match dir_list {
             FileSystemObject::File(files) => {
                 for a_file in files {
+                    let mut name = name_obj.next();
+                    name = name
+                        .replace("{}", &a_file.name)
+                        .replace("{原名}", &a_file.name);
                     match change_name(Box::new(Path::new(&a_file.path)), name.clone()) {
                         Ok(_) => {}
                         Err(e) => {
@@ -686,5 +907,36 @@ fn replace_name_by_modify_time_1101(rule: Vec<Value>, path: Box<&Path>) -> Resul
             }
         }
     };
+    Ok(())
+}
+fn replace_name_by_modify_time_pool_1(rule: Vec<Value>, path: Vec<String>, old_to_new: bool) -> Result<(), Error> {
+    let mut name_obj = DataProcessor::new(rule, 0);
+    let path_obj = path.iter().map(|p| {Path::new(p)}).collect::<Vec<&Path>>();
+    if let Ok(path_list) = list_path_by_time_file(path_obj, old_to_new){
+        match path_list {
+            FileSystemObject::File(files) => {
+                for a_file in files {
+                    let mut name = name_obj.next();
+                    name = name
+                        .replace("{}", &a_file.name)
+                        .replace("{原名}", &a_file.name);
+                    match change_name(Box::new(Path::new(&a_file.path)), name.clone()) {
+                        Ok(_) => {}
+                        Err(e) => {
+                            println!("文件{}修改失败: {}", a_file.name, e)
+                        }
+                    }
+                }
+            }
+            FileSystemObject::Folder(_) => {
+                println!("当前操作只处理文件，但获取到了文件夹");
+            }
+            FileSystemObject::Combined(files, folders) => {
+                println!("当前操作只处理文件，但获取到了文件夹 与 文件")
+            }
+
+        }
+    };
+
     Ok(())
 }
