@@ -4,3 +4,12 @@ export interface PathItem extends Array<string> {
 }
 
 export type AllowIconType = ".jpg" | ".jepg" | ".JPG" | ".JEPG" | ".png" | ".PNG"
+
+
+// 定义FloatingWindow的类型
+export interface FloatingWindowState {
+  "choose-path-pool": boolean;
+  "choose-path-pool-close": boolean;
+  "choose-function":  boolean,
+  "choose-function-close":  boolean,
+}

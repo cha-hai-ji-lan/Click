@@ -1,6 +1,7 @@
 import {reactive, shallowRef, markRaw } from "vue";
 import IconFile from '../icon/IconFile.vue'
 import IconShutdown from '../icon/IconShutDown.vue'
+import LivePicture from '../icon/LivePicture.vue'
 export const comVisibility = reactive({
   "LeftContain": {
     "LeftContain-data": {
@@ -18,6 +19,13 @@ export const comVisibility = reactive({
           "is-focus": false,
           "icon": "IconShutdown",
           "router": "/make-shutdown"
+        },
+        {
+          "name": "未分类功能",
+          "index": 0,
+          "is-focus": false,
+          "icon": "LivePicture",
+          "router": "/live-picture"
         }
       ]
     },
@@ -29,6 +37,7 @@ export const comVisibility = reactive({
 export const iconComponents = shallowRef({
   'IconFile': markRaw(IconFile),
   'IconShutdown': markRaw(IconShutdown),
+  'LivePicture': markRaw(LivePicture),
 })
 
 export const set_color_flag = (mainColor : any, flag: String) => {

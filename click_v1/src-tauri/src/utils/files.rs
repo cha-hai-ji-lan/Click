@@ -1,8 +1,9 @@
+use percent_encoding::{percent_decode_str};
 use std::fs;
 // 用于文件操作
 use serde_json::Value;
 use std::io;
-use std::path::Path; // 引入 serde_json 库
+use std::path::{Path, PathBuf}; // 引入 serde_json 库
                      // 用于错误处理
 use chrono::Local;
 use std::io::{Error, ErrorKind::ConnectionRefused};
@@ -882,8 +883,20 @@ pub fn get_active_explorer_path() -> Result<ExplorerOperate, Error> {
                 // 获取当前URL/location
                 match browser.LocationURL() {
                     Ok(url) => {
-                        path_stream
-                            .push((url.to_string().replace("file:///", ""), "".parse().unwrap()));
+                        let url_string = url.to_string().replace("file:///", "");
+
+                        // 使用 percent_encoding 库进行更彻底的解码
+                        let decoded_path = percent_decode_str(&url_string)
+                            .decode_utf8_lossy()
+                            .to_string();
+
+                        // 创建 PathBuf 对象
+                        let path = PathBuf::from(decoded_path);
+
+                        // 转换为字符串
+                        let final_path = path.to_string_lossy().to_string();
+
+                        path_stream.push((final_path.clone(), "".parse().unwrap()));
                         // LocationURL通常是file:///C:/path/to/folder格式 所以需要去掉file:///
                     }
                     Err(e) => {
@@ -991,10 +1004,6 @@ pub fn traverse_directory_all_dfs(dir_path: Box<Path>) -> Result<Vec<String>, Er
     Ok(paths)
 }
 
-/// 修改文件名
-///   * `path` - 要修改的文件路径
-///   * `new_name` - 新的文件名
-///   * `返回值` - 修改结果
 /// 修改文件名（保留扩展名）
 ///   * `path` - 要修改的文件路径
 ///   * `new_name` - 新的文件名（不包含扩展名）

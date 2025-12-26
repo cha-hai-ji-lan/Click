@@ -44,7 +44,8 @@ interface RouteNameMap {
 const routeName: RouteNameMap = {
   // 根据实际路由路径添加名称映射
   "deal-file": "处理文件",
-  "make-shutdown": "关机问询"
+  "make-shutdown": "关机问询",
+  "live-picture": "未分类",
   // 可以根据需要添加更多路由映射
 }
 // 在组件的 setup 函数中
@@ -69,7 +70,7 @@ watch(
 )
 
 // import { watch, ref, onMounted, onUnmounted } from "vue"
-const props = defineProps({
+defineProps({
     comVisibility: {
         type: Object,
         default: {}
@@ -140,9 +141,9 @@ const props = defineProps({
 //     }
 // });
 // 定义更新事件
-const emit = defineEmits<{
-    (e: 'update:comVisibility', value: Object): void
-}>()
+// const emit = defineEmits<{
+//     (e: 'update:comVisibility', value: Object): void
+// }>()
 
 // 定义获取图标的函数
 const getIconComponent = (iconName: string) => {

@@ -19,6 +19,10 @@ const router = createRouter({
         {
             path: '/make-shutdown',
             component: MakeShutDown
+        },
+        {
+            path: '/live-picture',
+            component: MakeShutDown
         }
 
     ]

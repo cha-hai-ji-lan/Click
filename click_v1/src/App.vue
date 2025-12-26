@@ -722,6 +722,10 @@ html {
   padding: 0;
 }
 
+svg {
+  fill: var(--icon-color)
+}
+
 a {
   text-decoration: none;
   /* 移除下划线 */
@@ -739,4 +743,5 @@ body {
   margin: 0;
   padding: 0;
 }
+
 </style>

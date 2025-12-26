@@ -2,20 +2,29 @@
      <div class="main-contain">
           <div class="title">
                <div class="tag-icon " @click="() => { openFileDialog() }">
-                    <svg t="1766153567513" class="icon " viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="7556" width="200" height="200">
-                         <path d="M910.096853 360.579647v-61.707521c0-52.999376-42.030493-112.28336-98.281728-112.28336H528.430288l-11.681508-22.048347c-11.685603-22.352441-34.588894-36.229158-59.807189-36.229158H154.570848c-50.436591 0-91.447294 42.168717-91.447294 94.010079v575.540275c0 51.814741 41.010703 93.969123 91.447294 93.969124h711.539892c50.436591 0 91.447294-42.154383 91.447294-93.969124V444.614011c-0.001024-30.633625-20.252452-63.054954-47.461181-84.034364z m-98.281728-117.546131c19.540851 0 41.838002 29.75206 41.838002 55.83861v39.040748c-0.956309-0.038908-1.913642-0.097269-2.865855-0.097269H608.55341l-50.21748-94.782089h253.479195z m89.297134 554.828099c0 20.684531-15.709473 37.524373-35.002543 37.524374h-711.538868c-19.292047 0-35.002544-16.839842-35.002544-37.524374V222.32134c0-20.712176 15.709473-37.565329 35.002544-37.565329h302.370743c4.134449 0 7.882893 2.274049 9.867182 6.07676l99.825748 188.420497a28.252068 28.252068 0 0 0 24.94287 15.007087h259.209881c20.229926 0 50.326011 30.12373 50.326011 50.353656v353.247604z"
-                              p-id="7557">
-                         </path>
+                    <svg t="1766725619065" class="icon" viewBox="0 0 1329 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="10656" width="200" height="200">
+                         <path d="M1036.572 951.784h-780.721c-62.416 0-113.411-47.899-115.072-107.38l-78.125-495.818v-2.735c0-60.873 51.662-110.396 115.164-110.396h14.961v-63.036c0-60.873 51.651-110.396 115.13-110.396h234.199c42.067 0 105.428 34.714 140.178 74.338h302.237c48.717 0 161.228 35.661 166.943 104.891 45.468 14.762 78.311 56.069 78.311 104.599v2.747l-78.137 495.807c-1.659 59.493-52.643 107.38-115.072 107.38zM136.887 343.559l78.008 495.070v2.747c0 21.109 18.374 38.279 40.957 38.279h780.721c22.582 0 40.957-17.17 40.957-38.279v-2.747l78.008-495.070c-1.274-20.046-19.146-35.989-40.932-35.989h-37.075v-59.903c-1.823-3.846-12.027-14.026-34.48-24.113-23.096-10.357-46.52-15.078-58.536-15.078h-341.532l-10.87-17.147c-17.953-28.368-70.714-57.191-90-57.191h-234.199c-22.593 0-40.968 17.182-40.968 38.279v135.152h-89.135c-21.775 0-39.647 15.942-40.921 36z"
+                              p-id="10657"></path>
+                         <path d="M100.875 306.542h1086.428v69.779h-1086.428z" p-id="10658"></path>
                     </svg>
                </div>
                <div class="tag-icon wire" @click="() => { click('choose-path-pool') }">
-                    <svg t="1766335459475" class="icon" viewBox="0 0 1121 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="7571" width="200" height="200">
-                         <path d="M1039.255327 23.915108a14.494005 14.494005 0 0 0-10.870503-23.915108H13.079777A13.044604 13.044604 0 0 0 3.658674 22.103358L362.385296 384.091131V797.170272l108.705038 108.705037a36.235012 36.235012 0 0 0 22.828057 10.508154 53.990168 53.990168 0 0 0 57.61367-52.540768v-4.348202a36.235012 36.235012 0 0 0-10.870504-26.813909l-78.629977-77.180576-3.623501-406.919189L200.052441 101.458035a9.058753 9.058753 0 0 1 6.159952-15.943406l644.62087-4.710551a9.421103 9.421103 0 0 1 6.884652 15.581055l-250.383935 253.645086-2.536451 625.053964a48.917267 48.917267 0 1 0 97.834534 0v-594.254203z"
-                              p-id="7572"></path>
-                         <path d="M743.577627 471.055161a44.569065 44.569065 0 0 0 44.569065 44.569065h289.880099a44.569065 44.569065 0 0 0 0-88.77578h-289.880099A44.569065 44.569065 0 0 0 743.577627 471.055161zM1077.664441 603.675306h-289.880099a44.569065 44.569065 0 1 0 0 88.77578h289.880099a44.569065 44.569065 0 0 0 0-88.77578zM1077.664441 793.184421h-289.880099a44.569065 44.569065 0 1 0 0 88.77578h289.880099a44.569065 44.569065 0 0 0 0-88.77578z"
-                              p-id="7573"></path>
+                    <svg t="1766718881525" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="8409" width="200" height="200">
+                         <path d="M516.973714 950.857143a67.584 67.584 0 0 1-30.427428-7.606857l-111.616-53.248a64.073143 64.073143 0 0 1-38.034286-58.368V499.346286v-2.56L100.937143 179.712a65.609143 65.609143 0 0 1-5.046857-71.021714c10.166857-22.893714 32.914286-35.547429 58.368-35.547429h611.328c25.380571 0 48.274286 12.653714 58.368 35.547429 10.166857 22.820571 10.166857 48.201143-5.12 68.461714L582.948571 494.226286v388.169143c0 22.820571-12.653714 43.154286-30.427428 55.808a55.442286 55.442286 0 0 1-35.547429 12.653714zM154.185143 133.997714c-2.486857 0-5.046857 0-5.046857 2.56v5.12l235.958857 317.074286a70.217143 70.217143 0 0 1 12.653714 40.594286v332.288c0 2.56 0 5.12 2.56 5.12l114.102857 53.248h5.12c2.56 0 2.56-2.56 2.56-5.12V499.346286c0-15.213714 5.046857-27.940571 12.653715-40.594286l235.885714-317.147429c2.56-2.486857 2.56-5.046857 0-5.046857 0-2.56-2.486857-2.56-5.046857-2.56H154.331429z m740.790857 482.011429H717.385143a29.257143 29.257143 0 0 1-30.427429-30.427429 29.257143 29.257143 0 0 1 30.427429-30.427428h177.590857a29.257143 29.257143 0 0 1 30.427429 30.427428 29.257143 29.257143 0 0 1-30.427429 30.427429z m0 126.829714H717.385143a29.257143 29.257143 0 0 1-30.427429-30.427428 29.257143 29.257143 0 0 1 30.427429-30.427429h177.590857a29.257143 29.257143 0 0 1 30.427429 30.427429 29.257143 29.257143 0 0 1-30.427429 30.427428z m0 126.829714H717.385143a29.257143 29.257143 0 0 1-30.427429-30.427428 29.257143 29.257143 0 0 1 30.427429-30.427429h177.590857a29.257143 29.257143 0 0 1 30.427429 30.427429 29.257143 29.257143 0 0 1-30.427429 30.427428z"
+                              p-id="8410"></path>
+                         <path d="M483.254857 949.76q16.822857 8.411429 33.718857 8.411429 22.162286 0 39.936-14.189715 33.353143-23.917714 33.353143-61.586285V496.64l234.422857-315.099429q24.868571-33.206857 5.924572-75.849142Q812.909714 65.828571 765.586286 65.828571H154.331429q-47.177143 0-64.950858 39.497143-22.528 40.96 5.851429 78.701715l234.422857 315.172571v332.434286q0 46.08 42.276572 64.950857l111.396571 53.174857z m33.718857 1.097143a55.442286 55.442286 0 0 0 35.547429-12.653714 69.705143 69.705143 0 0 0 30.427428-55.808V494.226286l235.885715-317.074286c15.286857-20.260571 15.286857-45.641143 5.12-68.461714-10.166857-22.893714-32.987429-35.547429-58.368-35.547429H154.331429c-25.380571 0-48.274286 12.653714-58.368 35.547429a65.609143 65.609143 0 0 0 5.12 70.948571l235.885714 317.147429v334.848c0 25.380571 15.213714 48.201143 38.034286 58.368l111.616 53.248c10.166857 5.12 20.333714 7.606857 30.427428 7.606857z m248.685715-816.859429c2.486857 0 4.973714 0 4.973714 2.56 2.56 0 2.56 2.56 0 5.12l-1.462857 2.048-0.146286 0.146286L534.674286 458.752a76.653714 76.653714 0 0 0-12.653715 40.594286v385.536c0 2.56 0 5.12-2.56 5.12h-5.12l-114.102857-53.321143c-2.56 0-2.56-2.486857-2.56-5.12V499.419429a70.217143 70.217143 0 0 0-12.653714-40.594286L149.138286 141.604571v-5.046857c0-2.56 2.56-2.56 5.12-2.56h611.328z m-607.597715 7.314286h603.721143L528.676571 454.656l-0.219428 0.292571q-13.677714 22.893714-13.677714 44.397715v382.683428l-109.714286-51.2V499.346286q0-26.112-14.116572-44.982857l-232.886857-313.051429z m559.323429 482.011429h177.590857q16.310857 0 27.062857-10.678858 10.678857-10.752 10.678857-27.062857 0-37.741714-37.741714-37.741714H717.385143q-37.741714 0-37.741714 37.741714t37.741714 37.741715z m0-7.314286h177.590857a29.257143 29.257143 0 0 0 30.427429-30.427429 29.257143 29.257143 0 0 0-30.427429-30.427428H717.385143a29.257143 29.257143 0 0 0-30.427429 30.427428 29.257143 29.257143 0 0 0 30.427429 30.427429z m0 134.144h177.590857q37.741714 0 37.741714-37.741714t-37.741714-37.741715H717.385143q-16.310857 0-27.062857 10.678857-10.678857 10.678857-10.678857 27.062858 0 37.741714 37.741714 37.741714z m0-7.314286h177.590857a29.257143 29.257143 0 0 0 30.427429-30.427428 29.257143 29.257143 0 0 0-30.427429-30.427429H717.385143a29.257143 29.257143 0 0 0-30.427429 30.427429 29.257143 29.257143 0 0 0 30.427429 30.427428z m0 134.144h177.590857q37.741714 0 37.741714-37.741714 0-16.310857-10.678857-27.062857-10.752-10.678857-27.062857-10.678857H717.385143q-16.310857 0-27.062857 10.678857-10.678857 10.752-10.678857 27.062857 0 37.741714 37.741714 37.741714z m0-7.314286h177.590857a29.257143 29.257143 0 0 0 30.427429-30.427428 29.257143 29.257143 0 0 0-30.427429-30.427429H717.385143a29.257143 29.257143 0 0 0-30.427429 30.427429 29.257143 29.257143 0 0 0 30.427429 30.427428z"
+                              p-id="8411"></path>
+                    </svg>
+               </div>
+               <div class="tag-icon wire" @click="() => { click('choose-function') }">
+                    <svg t="1766718761251" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg" p-id="7191" width="200" height="200">
+                         <path d="M802.864762 131.462095a97.52381 97.52381 0 0 1 97.523809 97.52381v547.84a97.52381 97.52381 0 0 1-97.523809 97.523809H188.025905a97.52381 97.52381 0 0 1-97.52381-97.523809V228.985905a97.52381 97.52381 0 0 1 97.52381-97.52381h614.887619z m0 73.142857H188.025905a24.380952 24.380952 0 0 0-24.380953 24.380953v547.84a24.380952 24.380952 0 0 0 24.380953 24.380952h614.887619a24.380952 24.380952 0 0 0 24.380952-24.380952V228.985905a24.380952 24.380952 0 0 0-24.380952-24.380953z"
+                              p-id="7192"></path>
+                         <path d="M472.795429 147.456v707.047619h-73.142858v-707.047619zM354.889143 323.486476v73.142857h-170.666667v-73.142857zM354.889143 466.358857v73.142857h-170.666667v-73.142857z"
+                              p-id="7193"></path>
                     </svg>
                </div>
 
@@ -24,7 +33,7 @@
           <div class="explorer-act-path">
                <transition-group name="path-item" tag="div">
 
-                    <div class="index-path coming-animation" v-for="item in active_path" :key="item[1]">
+                    <div class="index-path" v-for="item in active_path" :key="item[1]">
                          <div class="choose">
                               <input type="checkbox" :value="item" :checked="isSelected(item)"
                                    @change="handleCheckboxChange(item)" />
@@ -55,10 +64,10 @@
                          </svg>
                     </span>
                </div>
-               <div class="oper-1">
-                    <div class="item-title">批处理操作</div>
+               <div v-if="focusMethod !== ''" class="oper-1">
+                    <div class="item-title">{{ (availableMethods as any)[`${focusMethod}`] }}</div>
                </div>
-               <div class="oper-1">
+               <div v-if="focusMethod === '0'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
                          <div v-if="active_path && active_path.length > 0" class="replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
@@ -75,7 +84,13 @@
                                              p-id="7059"></path>
                                    </svg>
                               </div>
-                              <div class="item-title">修改名字字段</div>
+                              <div class="item-title">
+                                   <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
+                                        <path d="M815.98 379.92c21.84-0.2 41.83-12.04 51.39-31.48l77.52-157.47c10.42-21.18 6.46-46.86-9.88-63.91L894.3 84.57c-18.3-19.09-46.97-22.94-69.62-9.4l-156.63 93.49c-16.94 10.12-27.47 28.67-27.47 48.41v70.13l-100.32 96.14c-30.02-32.81-56.01-61.27-69.8-76.49 10.82-91.02-6.52-157.53-51.59-197.79-63.69-56.86-158.93-40.02-196.93-30.12A37.72 37.72 0 0 0 194.92 106c-3.44 13.3 0.62 27.45 10.58 36.91l62.45 59.41c-1.18 16.28-8.15 31.38-19.89 42.97-10.64 10.5-24.11 17.02-38.66 18.86l-68.29-66.01c-10.3-9.94-25.07-13.21-38.63-8.54-13.49 4.66-23.08 16.34-25.05 30.45-6.29 45.12-13.59 156.76 54.53 218.73 40.81 37.14 99.25 48.39 173.87 33.53 2.06 2.16 4.34 4.57 6.79 7.14 13.14 13.81 29.93 31.45 43.35 44.9L114.99 765.29c-22.6 22.6-36.69 51.38-39.68 81.04-3.19 31.61 6.92 61.67 27.74 82.48 18.28 18.29 43.72 28.31 71.06 28.31 3.78 0 7.59-0.19 11.42-0.57 29.66-2.99 58.44-17.09 81.03-39.68l252.02-252.01c9.58 10.32 21.64 23.9 32.87 38.29-11.86 95.35 5.6 164.39 51.94 205.3 34.38 30.35 77.67 39.1 116.13 39.1 32.77 0 62.02-6.34 79.31-11.09 13.2-3.63 23.4-14.15 26.64-27.45 3.24-13.34-1.01-27.42-11.08-36.71l-60.43-55.97a61.251 61.251 0 0 1 18.28-42.72 61.258 61.258 0 0 1 38.8-17.45c17.16 17.36 45.84 46.04 61.23 59.6 9.95 8.77 23.99 11.7 36.59 7.56 12.69-4.12 22.38-14.75 25.28-27.72 21.94-97.55 10.13-167.95-35.08-209.25-58.66-53.6-151.71-37.85-196.52-25.9l-70.59-76.98 109.16-104.59 74.87 1.04zM358.8 435.47c-8.68-9.12-15.47-16.23-18.03-18.74-9.26-9.07-22.36-12.66-35.09-9.68-59.9 14.22-103.91 9.01-130.81-15.46-25.92-23.59-36.17-65.75-37.37-108.22l35.6 34.42a37.609 37.609 0 0 0 25.8 10.67c34.92 0.47 68.73-12.92 93.94-37.76 25.2-24.85 39.08-58.02 39.08-93.42v-5.95c0-10.33-4.3-20.34-11.75-27.39l-32.68-31.08c29.48-1.76 64.73 2.19 88.91 23.79 30.15 26.93 40.01 78.55 29.33 153.37-1.6 11.04 1.7 22.1 9.08 30.37 8.99 10.07 41.01 45.15 79.39 87.1l-12.5 11.98-20.44-20.44-60.21 60.21c-12.98-13.01-29.99-30.89-42.25-43.77zM221.47 871.78c-23.12 23.09-56.67 28.54-73.32 11.94-9.87-9.88-10.11-23.66-9.37-30.99 1.49-14.85 9.26-30.27 21.31-42.33l301.16-301.17 61.38 61.38-301.16 301.17z m445.07-256.21c9.97 10.83 25.43 14.91 39.29 10.37 10.73-3.44 106.26-32.64 150.22 7.51 23.92 21.85 27.62 61.79 23.68 101.23a3202.444 3202.444 0 0 1-30.7-30.87c-6.35-6.48-14.86-10.45-23.98-11.18-36.18-2.94-71.68 10.09-97.52 35.51a124.98 124.98 0 0 0-37.11 96.93l0.35 5.65c0.66 9.74 4.98 18.72 12.04 25.19l29.6 27.42c-28.91 1.85-63.07-1.73-86.8-22.68-38.51-34-37.34-105.29-29.57-159.16 1.4-9.82-1.17-20.05-7.11-28.12-15.2-20.54-32.45-39.95-45.22-53.62l49.13-49.13-35.15-35.15 8.2-7.86 80.65 87.96z m32.65-284.84l-166.6 159.62-5.77-5.77 160.11-153.44c11.09-10.59 17.44-25.46 17.44-40.78v-69.1l147.95-88.31 33.06 34.5-73.16 148.62-73.27-1.02c-15.21-0.32-29.05 5.38-39.76 15.68z"
+                                             p-id="9297"></path>
+                                   </svg>
+                              </div>
                               <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
                               <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段">
                               <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
@@ -86,7 +101,7 @@
                          </div>
                     </transition>
                </div>
-               <div class="oper-1">
+               <div v-if="focusMethod === '1'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
                          <div v-if="active_path && active_path.length > 0" class="order-and-replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
@@ -103,13 +118,6 @@
                                              p-id="7059"></path>
                                    </svg>
                               </div>
-                              <div class="item-title">改名排序</div>
-                              <SelectorBar v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
-                              </SelectorBar>
-                              <input class="input-box" type="text" v-model="inputRefSortName"
-                                   placeholder="<起始标志>固定名称{原名}...">
-                              <!-- <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
-                              <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段"> -->
                               <div class="item-title">
                                    <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
@@ -117,6 +125,12 @@
                                              p-id="9297"></path>
                                    </svg>
                               </div>
+                              <SelectorBar v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
+                              </SelectorBar>
+                              <input class="input-box" type="text" v-model="inputRefSortName"
+                                   placeholder="<起始标志>固定名称{原名}...">
+                              <!-- <input class="input-box" type="text" v-model="inputRefReplaceOldName" placeholder="旧字段">
+                              <input class="input-box" type="text" v-model="inputRefReplaceNewName" placeholder="新字段"> -->
                               <div class="submit-replace-name"
                                    @click="() => { SubmitRepluceName('order-replace-name') }">修改
                               </div>
@@ -130,6 +144,9 @@
           </div>
      </div>
 
+
+
+     <!-- 顶部悬浮活动栏 -->
      <div v-show="FloatingWindow['choose-path-pool']" class="choose-path-pool"
           :class="{ 'choose-path-pool-close': FloatingWindow['choose-path-pool-close'] }" ref="floatingWindowElement">
           <div class="drag-head-contain" @mousedown="startDrag">
@@ -179,10 +196,11 @@
 
           </div>
           <div class="drag-contain">
-               <div v-if="userSelectedShortPath && userSelectedShortPath.length === 0">
+               <div v-if="userSelectedShortPath && userSelectedShortPath.length <= 0">
                     <span>🔎 当前无注视路径</span>
                </div>
-               <div v-else v-for="(path_item, index) in userSelectedShortPath" :key="index" class="user-choose-item">
+               <div v-else-if="userSelectedShortPath && userSelectedShortPath.length > 0"
+                    v-for="(path_item, index) in userSelectedShortPath" :key="index" class="user-choose-item">
                     <span @click="() => { click('close-path-item', index) }">
                          <svg t="1766420001028" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
                               xmlns="http://www.w3.org/2000/svg" p-id="6984" width="200" height="200">
@@ -208,18 +226,27 @@
 
 
                </div>
+               <div v-else>
+                    <span>🔎 当前无注视路径</span>
+               </div>
+
 
           </div>
      </div>
+
+     <FloatWindow v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod"></FloatWindow>
+
 </template>
 <script setup lang="ts">
 import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
 import { open } from '@tauri-apps/plugin-dialog';
 import { type PathItem } from "../../class/PathIndex"
+import { type FloatingWindowState } from '../../class/PathIndex';
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import SelectorBar from '../components/SelectorBar.vue'
 import { parseStringToArray } from '../../util/DataTool'
-import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
+import FloatWindow from "./components-view/FloatWindow.vue";
+// import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 
 const active_path = ref<PathItem[] | null>(null)
@@ -233,9 +260,11 @@ const inputRefReplaceOldName = ref("")
 const inputRefReplaceNewName = ref("")
 const inputRefSortName = ref("")
 
-const FloatingWindow = reactive({
+const FloatingWindow = reactive<FloatingWindowState>({
      "choose-path-pool": false,
-     "choose-path-pool-close": false
+     "choose-path-pool-close": false,
+     "choose-function": false,
+     "choose-function-close": false,
 })
 const userSelectedPath = ref<string[] | null>()
 const userSelectedShortPath = ref<string[] | null>()
@@ -246,7 +275,11 @@ const floatingWindowElement = ref<HTMLElement | null>(null);
 
 
 const selectedValue = ref('')
-
+const focusMethod = ref<string>("")
+const availableMethods = reactive({
+     "0": "修改名字字段",
+     "1": "改名排序"
+})
 const selectOptions = [
      { value: 'by-name', label: '按原名称顺序排序' },
      { value: 'by-time', label: '按修改时间排序' },
@@ -256,7 +289,7 @@ const selectOptions = [
 
 
 
-const props = defineProps({
+defineProps({
      mainColor: {
           type: Object,
           default: () => ({})
@@ -266,7 +299,6 @@ const props = defineProps({
 const get_explorer_active_path = async () => {
      try {
           const data = await invoke<PathItem[] | null>("active_explorer_path");
-
           // 将新数据转换为 JSON 字符串以便比较
           const newDataString = JSON.stringify(data);
 
@@ -316,6 +348,7 @@ const stopPolling = () => {
 onMounted(() => {
      get_explorer_active_path();
      startPolling();
+     click('choose-function'); // 默认打开操作窗口
 });
 
 onUnmounted(() => {
@@ -357,7 +390,9 @@ const openFileDialog = async () => {
      }
 };
 
-
+const changeMethod = (methodName: string) => {
+     focusMethod.value = methodName
+}
 const click = (whichOne: string, index: number = 0) => {
      switch (whichOne) {
           case 'choose-path-pool':
@@ -371,6 +406,18 @@ const click = (whichOne: string, index: number = 0) => {
                     setTimeout(() => {
                          FloatingWindow["choose-path-pool"] = false;
                          FloatingWindow["choose-path-pool-close"] = false;
+                    }, 500)
+               }
+               break;
+
+          case 'choose-function':
+               if (FloatingWindow["choose-function"] === false) {
+                    FloatingWindow["choose-function"] = true
+               } else {
+                    FloatingWindow["choose-function-close"] = true;
+                    setTimeout(() => {
+                         FloatingWindow["choose-function"] = false;
+                         FloatingWindow["choose-function-close"] = false;
                     }, 500)
                }
                break;
@@ -428,13 +475,12 @@ const SubmitRepluceName = (tag: String) => {
 
           case 'order-replace-name':
                const participle = parseStringToArray(inputRefSortName.value)
-               console.log(participle)
                if (selectedPaths.value.length !== 0) {
                     console.log(selectedValue.value)
                     switch (selectedValue.value) {
                          case 'by-name':
                               selectedPaths.value.forEach((item, _) => {
-                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 2 })
+                                   invoke("change_file_name", { rule: participle, path: item[1], mode: 1, oldToNew: true, orderMode: 2 })
                                         .then(() => {
                                              console.log("成功替换文件名");
                                         })
@@ -446,7 +492,7 @@ const SubmitRepluceName = (tag: String) => {
                               break;
                          case 'by-time':
                               selectedPaths.value.forEach((item, _) => {
-                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
+                                   invoke("change_file_name", { rule: participle, path: item[1], mode: 1, oldToNew: true, orderMode: 1 })
                                         .then(() => {
                                              console.log("成功替换文件名");
                                         })
@@ -454,6 +500,8 @@ const SubmitRepluceName = (tag: String) => {
                                              console.log(selectedPaths.value)
                                              console.error("无法处理文件:", err);
                                         });
+                                   userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                                   userSelectedShortPath.value = []
                               });
                               break;
                          case 'by-size':
@@ -464,7 +512,7 @@ const SubmitRepluceName = (tag: String) => {
                               break;
 
                          default:
-                         selectedPaths.value.forEach((item, _) => {
+                              selectedPaths.value.forEach((item, _) => {
                                    invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
                                         .then(() => {
                                              console.log("成功替换文件名");
@@ -671,6 +719,7 @@ h3 {
      fill: var(--icon-color)
 }
 
+
 .icon-right-margin {
      margin-right: 2.5vmin;
 }
@@ -708,8 +757,36 @@ h3 {
      width: 100%;
      height: 22%;
      overflow-y: auto;
+     /* scrollbar-width: thin; "auto" 或 "thin" */
+     /* scrollbar-color: var(--unite-but-color) var(--title-bar-lg-2); 滑块颜色 轨道颜色 */
 
 
+}
+
+/* Webkit内核浏览器的滚动条样式（Chrome, Safari, Edge） */
+.explorer-act-path::-webkit-scrollbar {
+     width: 1vmin;
+     /* 垂直滚动条宽度 */
+     height: 1vmin;
+     /* 水平滚动条高度 */
+
+}
+
+.explorer-act-path::-webkit-scrollbar-track {
+     background: var(--title-bar-lg-1);
+     /* 滚动条轨道背景色 */
+     border-radius: 4px;
+}
+
+.explorer-act-path::-webkit-scrollbar-thumb {
+     background: var(--normal-attention-color);
+     /* 滚动条滑块颜色 */
+     border-radius: 4px;
+}
+
+.explorer-act-path::-webkit-scrollbar-thumb:hover {
+     background: var(--active-attention-color);
+     /* 滑块悬停时的颜色 */
 }
 
 .index-path {
@@ -781,10 +858,10 @@ h3 {
 .choose input[type="checkbox"]:checked::after {
      content: '';
      position: absolute;
-     width: 5px;
-     height: 10px;
+     width: 0.5vmin;
+     height: 0.4vmin;
      border: solid white;
-     border-width: 0 2px 2px 0;
+     border-width: 0 0.2vmin 0.2vmin 0;
      transform: rotate(45deg);
 }
 
@@ -885,6 +962,7 @@ h3 {
      flex-direction: column;
      border-top: 1px dashed var(--unite-but-color);
      border-bottom: 1px dashed var(--unite-but-color);
+     animation: show-method 0.5s ease-in-out forwards;
 
 
 
@@ -895,15 +973,17 @@ h3 {
      display: grid;
      width: 100%;
      height: 4vh;
-     grid-template-columns: 5% 15% 32.5% 32.5% 15%;
+     grid-template-columns: 5% 5% 37.5% 37.5% 15%;
+
 }
 
 .order-and-replace-name {
      font-size: 2vmin;
      display: grid;
+     display: grid;
      width: 100%;
      height: 4vh;
-     grid-template-columns: 5% 15% 30% 30% 5% 15%;
+     grid-template-columns: 5% 5% 37.5% 37.5% 15%;
 }
 
 .place-holder {
@@ -950,7 +1030,7 @@ h3 {
 }
 
 .submit-replace-name {
-     border-radius: 1vmax;
+     border-radius: 1vmin;
      height: 4vmin;
      border-left: 2px solid var(--active-attention-color);
      border-right: 2px solid var(--active-attention-color);
@@ -982,12 +1062,6 @@ h3 {
 }
 
 
-.coming-animation {
-     animation: show-submit-replace-name 0.5s ease-in-out forwards;
-}
-
-
-
 /* ----------------------------------------悬浮窗区----------------------------------------------- */
 .choose-path-pool {
      position: fixed;
@@ -1003,7 +1077,7 @@ h3 {
      will-change: transform;
      user-select: none;
      overflow: auto;
-     z-index: 5;
+     z-index: 100;
 
      /* 添加以下样式使元素更像悬浮窗 */
 
@@ -1069,7 +1143,7 @@ h3 {
 
 /* 替换名称区域的过渡动画 */
 .replace-name-transition-leave-active {
-     transition: all 0.5s ease;
+     transition: all 0.25s ease;
 }
 
 .replace-name-transition-leave-from {
@@ -1083,8 +1157,24 @@ h3 {
 }
 
 /* 列表项的过渡动画 */
+.path-item-enter-active,
 .path-item-leave-active {
-     transition: all 0.5s ease;
+     transition: all 0.25s ease;
+}
+
+.path-item-leave-active {
+     transition-delay: 0.25s;
+     /* 进入动画延迟 */
+}
+
+.path-item-enter-from {
+     opacity: 0;
+     filter: blur(10px);
+}
+
+.path-item-enter-to {
+     opacity: 1;
+     filter: blur(0px);
 }
 
 .path-item-leave-from {
@@ -1103,7 +1193,7 @@ h3 {
 } */
 
 
-@keyframes show-submit-replace-name {
+@keyframes show-method {
      0% {
           opacity: 0;
           filter: blur(10px);

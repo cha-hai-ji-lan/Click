@@ -10,7 +10,9 @@
     "frontendDist": "../dist"
   },
   "app": {
+    
     "windows": [
+      
       {
         "title": "Click v0.1.0",
         "width": 800,
@@ -21,11 +23,29 @@
         "transparent": true
       }
     ],
+    
     "security": {
       "csp": null
     }
   },
+  
   "bundle": {
+    "windows": {
+      "allowDowngrades": true,
+      "certificateThumbprint": null,
+      "digestAlgorithm": null,
+      "nsis": {
+        "installerIcon": "icons/setupClick.ico"
+      },
+      "signCommand": null,
+      "timestampUrl": null,
+      "tsp": false,
+      "webviewInstallMode": {
+        "silent": true,
+        "type": "downloadBootstrapper"
+      },
+      "wix": null
+    },
     "active": true,
     "targets": "all",
     "icon": [
@@ -33,7 +53,9 @@
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/icon.ico",
+      "icons/setupClick.ico"
     ]
   }
+  
 }

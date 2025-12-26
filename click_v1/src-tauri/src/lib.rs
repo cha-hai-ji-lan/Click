@@ -1,18 +1,18 @@
+extern crate core;
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod utils;
 use open;
 
 use serde_json::Value;
-use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 use std::process::Command;
 use std::thread;
-use tauri::Error;
 // 引入 serde_json 库
 use utils::files::{
-    get_active_explorer_path,
-    replace_name,
+    get_active_explorer_path,  // 获取当前活动窗口的目录
+    replace_name,  // 修改文件名字
     replace_name_by_modify_time, // 按修改时间修改文件名
     replace_name_by_modify_time_pool, // 按修改时间修改文件名 修改路径池中的路径
     traverse_directory_all,      // 引入 traverse_directory_all 函数 广度优先遍历路径
@@ -118,39 +118,4 @@ pub fn run() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
-
-/// Android的 从JPG文件中提取MP4
-fn extract_mp4_from_jpg(jpg_path: &str, mp4_path: &str) -> Result<(), Box<dyn std::error::Error>> {
-    // 读取JPG文件
-    let mut file = File::open(jpg_path)?;
-    let mut data = Vec::new();
-    file.read_to_end(&mut data)?;
-
-    // 查找 b'ftyp'
-    let ftyp_pos = find_subsequence(&data, b"ftyp");
-
-    if ftyp_pos.is_none() {
-        eprintln!("Error: 'ftyp' not found");
-        return Ok(());
-    }
-
-    let offset = ftyp_pos.unwrap();
-    println!("Found 'ftyp' at offset {} (0x{:08X})", offset, offset);
-
-    let start_pos = if offset >= 4 { offset - 4 } else { 0 };
-
-    // 写入MP4文件
-    let mut output_file = File::create(mp4_path)?;
-    output_file.write_all(&data[start_pos..])?;
-
-    println!("Saved MP4 to {}", mp4_path);
-    Ok(())
-}
-
-// 辅助函数：查找字节序列
-fn find_subsequence(haystack: &[u8], needle: &[u8]) -> Option<usize> {
-    haystack
-        .windows(needle.len())
-        .position(|window| window == needle)
 }
