@@ -93,5 +93,6 @@ export const set_special_style = () => {
   document.documentElement.style.setProperty("--font-blur", `5`)  // 动态栏的字模糊滤镜
   document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
   document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 模拟纸面网格大小
+  document.documentElement.style.setProperty("--timing-schedule", `0%`)  // 模拟纸面网格大小
 
 }

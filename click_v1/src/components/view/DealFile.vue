@@ -669,8 +669,8 @@ h3 {
 
 .title {
      display: flex;
-     height: 4vh;
-     margin-top: 2vh;
+     height: 4%;
+     margin-top: 2%;
      width: 100%;
      justify-content: start;
      align-items: center;
@@ -753,7 +753,7 @@ h3 {
 }
 
 .explorer-act-path {
-     margin-top: 2vh;
+     margin-top: 2%;
      width: 100%;
      height: 22%;
      overflow-y: auto;

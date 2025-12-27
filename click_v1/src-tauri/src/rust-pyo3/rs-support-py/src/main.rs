@@ -1,87 +1,197 @@
-use image::{ImageFormat, open, GenericImageView};
-use std::path::Path;
-use image::{imageops::FilterType};
+use std::process::Command;
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::{Duration, Instant};
 
+// 全局计时状态结构体
+#[derive(Debug)]
+pub struct TimerState {
+    pub start_time: Option<Instant>,
+    pub target_duration: Option<Duration>,
+    pub elapsed_time: Duration,
+    pub is_running: bool,
+}
 
-fn create_multi_size_ico(
-    input_path: &str,
-    output_path: &str,
-    sizes: &[u32]  // 多个尺寸的数组，如 &[16, 32, 48, 64, 128, 256]
-) -> Result<(), Box<dyn std::error::Error>> {
-    let img = open(input_path)?;
-    let mut ico_images = Vec::new();
+// 使用静态变量存储全局状态
+use std::sync::LazyLock;
 
-    // 为每个指定尺寸创建图片
-    for &size in sizes {
-        let resized_img = img.resize(size, size, FilterType::Lanczos3);
-        ico_images.push(resized_img);
+pub static TIMER_STATE: LazyLock<Arc<Mutex<TimerState>>> = LazyLock::new(|| {
+    Arc::new(Mutex::new(TimerState {
+        start_time: None,
+        target_duration: None,
+        elapsed_time: Duration::new(0, 0),
+        is_running: false,
+    }))
+});
+
+/// 启动计时器
+pub fn start_timer(duration_secs: u64) {
+    let mut state = TIMER_STATE.lock().unwrap();
+    state.start_time = Some(Instant::now());
+    state.target_duration = Some(Duration::from_secs(duration_secs));
+    state.elapsed_time = Duration::new(0, 0);
+    state.is_running = true;
+}
+
+/// 等待指定时间（在后台运行）
+/// 运行一个后台线程，每秒检查一次计时进度，并更新全局状态。
+///
+pub fn wait_with_timer(duration_secs: u64) {
+    // 启动计时器
+    start_timer(duration_secs);
+
+    // 在新线程中执行计时
+    thread::spawn(move || {
+        let total_duration = Duration::from_secs(duration_secs); // 目标时间
+        let check_interval = Duration::from_secs(1); // 每秒更新一次
+
+        loop {
+            let state = TIMER_STATE.lock().unwrap();
+            let start_time = state.start_time;
+            let target_duration = state.target_duration;
+            let is_running = state.is_running;
+            drop(state); // 释放锁
+
+            if !is_running {
+                break;
+            }
+
+            if let (Some(start), Some(target)) = (start_time, target_duration) {
+                let elapsed = start.elapsed();
+
+                // 更新全局状态
+                {
+                    let mut state = TIMER_STATE.lock().unwrap();
+                    state.elapsed_time = elapsed;
+
+                    // 如果达到目标时间，停止计时
+                    if elapsed >= target {
+                        state.is_running = false;
+                        break;
+                    }
+                }
+
+                // 每秒检查一次，避免过于频繁的检查
+                if elapsed < target {
+                    thread::sleep(check_interval);
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+    });
+}
+
+/// 获取当前计时进度
+pub fn get_current_time() -> Duration {
+    let state = TIMER_STATE.lock().unwrap();
+    state.elapsed_time
+}
+
+/// 获取计时进度百分比
+pub fn get_timer_progress_percentage() -> f64 {
+    let state = TIMER_STATE.lock().unwrap();
+
+    if let (Some(_), Some(target)) = (state.start_time, state.target_duration) {
+        if target.as_millis() == 0 {
+            return 0.0;
+        }
+
+        let progress = state.elapsed_time.as_millis() as f64;
+        let total = target.as_millis() as f64;
+        (progress / total) * 100.0
+    } else {
+        0.0
     }
+}
 
-    // 将第一个尺寸的图片保存为 ICO（image 库会自动包含多尺寸）
-    if let Some(first_img) = ico_images.first() {
-        first_img.save(output_path)?;
+/// 检查计时是否完成
+pub fn is_timer_finished() -> bool {
+    let state = TIMER_STATE.lock().unwrap();
+    let is_running = state.is_running;
+    let elapsed = state.elapsed_time;
+    let target = state.target_duration;
+
+    if let Some(target_duration) = target {
+        !is_running && elapsed >= target_duration
+    } else {
+        !is_running
     }
-
-    Ok(())
 }
 
-fn convert_image_with_resize(
-    input_path: &str,
-    output_path: &str,
-    width: u32,
-    height: u32,
-    output_format: ImageFormat
-) -> Result<(), Box<dyn std::error::Error>> {
-    // 1. 打开并加载原始图片
-    let img = open(input_path)?;
-
-    // 2. 调整图片大小
-    let resized_img = img.resize(width, height, image::imageops::FilterType::Lanczos3);
-
-    // 3. 保存为指定格式的图片
-    resized_img.save_with_format(output_path, output_format)?;
-
-    Ok(())
+/// 停止计时器
+pub fn stop_timer() {
+    let mut state = TIMER_STATE.lock().unwrap();
+    state.is_running = false;
 }
 
-
-
-
-/// 按给定最大宽高比调整图片大小
-fn resize_with_aspect_ratio(
-    input_path: &str,
-    output_path: &str,
-    max_width: u32,
-    max_height: u32
-) -> Result<(), Box<dyn std::error::Error>> {
-    let input= Path::new(input_path);
-    let output= Path::new(output_path);
-    let img = open(input)?;
-    let (orig_width, orig_height) = img.dimensions();
-
-    // 计算保持宽高比的目标尺寸
-    let ratio = (max_width as f32 / orig_width as f32)
-        .min(max_height as f32 / orig_height as f32);
-
-    let new_width = (orig_width as f32 * ratio) as u32;
-    let new_height = (orig_height as f32 * ratio) as u32;
-
-    let resized_img = img.resize(new_width, new_height, FilterType::Lanczos3);
-    resized_img.save(output)?;
-
-    Ok(())
+/// 重置计时器
+pub fn reset_timer() {
+    let mut state = TIMER_STATE.lock().unwrap();
+    state.start_time = None;
+    state.target_duration = None;
+    state.elapsed_time = Duration::new(0, 0);
+    state.is_running = false;
 }
 
-// 使用示例
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    convert_image_with_resize(
-        r"D:\Downloads\1.avif",
-        r"D:\Downloads\1.png",
-        800,  // 目标宽度
-        600,  // 目标高度
-        ImageFormat::Png
-    )?;
+fn get_work() {
+    // 获取当前时间
+    let now = Instant::now();
 
-    println!("图片转换完成！");
-    Ok(())
+    // 获取当前时间戳
+    let timestamp = now.elapsed().as_secs();
+
+    // 获取当前时间戳的秒数部分
+    let seconds = timestamp % 60;
+
+    // 获取当前时间戳的分钟数部分
+    let minutes = (timestamp / 60) % 60;
+
+    // 获取当前时间戳的小时数部分
+    let hours = (timestamp / 3600) % 24;
+
+    // 获取当前时间戳的天数部分
+    let days = timestamp / 86400;
+    println!("{}天 {}小时 {}分 {}秒", days, hours, minutes, seconds);
+}
+
+fn end_work() {
+    println!("结束工作--------------");
+    // Command::new("shutdown")
+    //     .args(&["-s", "-t", "0"])
+    //     .output()
+    //     .unwrap();
+}
+
+fn start_end_work(duration_secs: u64) {
+    wait_with_timer(duration_secs);
+    loop {
+        if is_timer_finished() {
+            end_work();
+            break;
+        }
+    }
+}
+
+fn prevent_sleep() {
+    // Windows
+    #[cfg(windows)]
+    Command::new("powercfg")
+        .args(&["/SETACTIVE", "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"])
+        .output()
+        .unwrap();
+
+    // Linux (需要特定的工具如 caffeine)
+    #[cfg(unix)]
+    Command::new("caffeine")
+        .arg("-t")
+        .arg("28800") // 8小时
+        .output()
+        .unwrap();
+}
+
+fn main() {
+    start_end_work(12);
 }
