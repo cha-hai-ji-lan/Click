@@ -1,7 +1,7 @@
 <template>
     <div class="home-main">
-        <div class="home-title">
-            <img class="home-main-icon" src="../../assets/ico.svg" alt="">
+        <div class="home-title tooltip" data-tooltip="connect：https://space.bilibili.com/419772620">
+            <img class="home-main-icon" src="../../assets/ico.svg">
             <div class="welcome-msg">
                 <h2>{{ titleMessage }}</h2>
                 <div class="version">Click Version: 0.1.2</div>
@@ -61,7 +61,7 @@ const opeanLinkling = async (url: String) => {
     align-items: center;
     flex-direction: column;
     width: 100%;
-
+    transition: all;
     user-select: none;
     /* 用户无法选择 */
     -webkit-user-select: none;
@@ -162,6 +162,7 @@ const opeanLinkling = async (url: String) => {
     align-items: center;
     color: var(--normal-show-color);
 }
+
 .about-msg {
     display: flex;
     width: 20vmin;
@@ -189,6 +190,7 @@ const opeanLinkling = async (url: String) => {
 
 
 }
+
 .about-icon {
     width: 10vmin;
     height: 10vmin;
@@ -196,6 +198,55 @@ const opeanLinkling = async (url: String) => {
 
 
 }
+
+
+/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
+
+.tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 102%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-color);
+    color: var(--font-color);
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 2.5vmin;
+    opacity: 1;
+    margin-bottom: 5px;
+}
+
+.tooltip:hover::before {
+    content: '';
+    position: absolute;
+    bottom: -2%;
+    left: 50%;
+    transform: translateX(-100%);
+    border: clamp(3px, 3vmin, 12px) solid transparent;
+    border-bottom-color: var(--button-color);
+    margin-bottom: -5px;
+    z-index: 999;
+}
+
+/* 为气泡添加过渡效果
+.tooltip::after,
+.tooltip::before {
+    animation: show-bubbles 1.5 ease-in-out forwards;
+}
+
+.tooltip:hover::after,
+.tooltip:hover::before {
+    
+} */
 
 /* --------------------------------------------------------动画区----------------------------------------------------- */
 @keyframes show-home {
