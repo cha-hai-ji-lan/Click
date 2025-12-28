@@ -3,7 +3,7 @@
         :class="{ 'choose-function-close': FloatingWindow['choose-function-close'] }" ref="floatingWindowElement">
         <div class="static-head" @mousedown="startDrag">
             <div class="tip"><span>批处理操作</span>
-                <span class="float-close-icon">
+                <span class="float-close-icon tooltip" data-tooltip="收起">
                     <svg t="1766338714320" class="small-icon" @click="() => { click('choose-function') }"
                         viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10844"
                         width="200" height="200">
@@ -17,7 +17,7 @@
 
                 </span>
             </div>
-            <div class="button-small">
+            <div class="button-small tooltip" data-tooltip="拖动">
                 <svg t="1766338639348" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="9788" width="200" height="200">
                     <path d="M476.5 924V100c0-19.8 16.2-36 36-36s36 16.2 36 36v824c0 19.8-16.2 36-36 36s-36-16.2-36-36z"
@@ -34,14 +34,17 @@
         </div>
 
         <div class="static-contain">
-            <div draggable="true" class="item" @click="() => { changeMethod('0') }">
+            <div draggable="true" class="item" :class="{ 'active-item': focus[0] }"
+                @click="() => { changeFeedbackMethod('0') }">
                 <span>修改名字字段</span>
             </div>
-            <div draggable="true" class="item" @click="() => { changeMethod('1') }">
+            <div draggable="true" class="item" :class="{ 'active-item': focus[1] }"
+                @click="() => { changeFeedbackMethod('1') }">
                 <span>改名排序</span>
             </div>
-            <div draggable="true" class="item" @click="() => { changeMethod('') }">
-                <span>改名排序</span>
+            <div draggable="true" class="item" :class="{ 'active-item': focus[2] }"
+                @click="() => { changeFeedbackMethod('1') }">
+                <span>搜集存放</span>
             </div>
         </div>
     </div>
@@ -53,7 +56,9 @@ import { ref } from 'vue';
 const isDragging = ref(false);
 const dragOffset = ref({ x: 0, y: 0 });
 const floatingWindowElement = ref<HTMLElement | null>(null);
-defineProps<{
+
+const focus = ref([false, false, false])
+const props = defineProps<{
     FloatingWindow: FloatingWindowState,
     click: (whichOne: string, index?: number) => void,  // 接收函数类型
     changeMethod: (methodName: string) => void  // 接收函数类型
@@ -102,6 +107,27 @@ const stopDrag = () => {
     document.removeEventListener('mousemove', drag);
     document.removeEventListener('mouseup', stopDrag);
 };
+
+const changeFeedbackMethod = (methoad: string) => {
+    props.changeMethod(methoad);
+    focus.value.fill(false);
+    switch (methoad) {
+        case '0':
+            focus.value[0] = true;
+            break;
+        case '1':
+            focus.value[1] = true;
+            break;
+        case '2':
+            focus.value[2] = true;
+            break;
+
+        default:
+            console.error("changeFeedbackMethod：方法未定义")
+            break;
+    }
+
+}
 </script>
 
 <style scoped>
@@ -235,6 +261,45 @@ const stopDrag = () => {
     animation-timing-function: linear;
 }
 
+.active-item {
+    box-shadow: 2px 4px 4px linear-gradient(45deg, var(--active-attention-color), var(--normal-attention-color));
+    border-radius: 2vmin;
+}
+
+/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
+
+.tooltip {
+    position: relative;
+    cursor: pointer;
+
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-color);
+    color: var(--font-color);
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 1.5vmin;
+    opacity: 1;
+    margin-bottom: 5px;
+
+}
+
+
+/* 为气泡添加过渡效果 */
+.tooltip::after {
+    animation: show-bubbles 0.5s forwards;
+    animation-timing-function: ease-in-out;
+}
+
 /* ------------------------------------------------动画区------------------------------------------------------------*/
 
 @keyframes show-choose-function {
@@ -278,6 +343,17 @@ const stopDrag = () => {
 
     100% {
         transform: scale(1);
+    }
+
+}
+
+@keyframes show-bubbles {
+    0% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 1;
     }
 
 }

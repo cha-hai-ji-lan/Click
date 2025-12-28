@@ -8,7 +8,7 @@
         </div>
       </div>
       <div data-tauri-drag-region class="mid-button">
-        <div class="titlebar-button" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+        <div class="titlebar-button tooltip"data-tooltip="设置 施工ing🔨" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
           <svg t="1766646139964" class="icon" viewBox="0 0 1084 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="5350" width="200" height="200">
             <path
@@ -16,13 +16,13 @@
               p-id="5351"></path>
           </svg>
         </div>
-        <a href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容">
+        <a class="tooltip" href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容"  data-tooltip="反馈邮件">
           <div class="mid-version">
             <h3>Bug反馈</h3>
           </div>
         </a>
 
-        <div class="titlebar-button" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+        <div class="titlebar-button tooltip" data-tooltip="跳转仓库" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
           <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="4805" width="200" height="200">
             <path
@@ -30,7 +30,7 @@
               p-id="4806"></path>
           </svg>
         </div>
-        <div class="titlebar-button split-icon" @click="() => { pin_screen() }">
+        <div class="titlebar-button split-icon tooltip" data-tooltip="置顶" @click="() => { pin_screen() }">
           <svg t="1765954787870" class="icon" :class="{ 'active-pin': isPin }" viewBox="0 0 1024 1024" version="1.1"
             xmlns="http://www.w3.org/2000/svg" p-id="1814" width="200" height="200">
             <path
@@ -398,7 +398,7 @@ const stopResize = () => {
   filter: drop-shadow(0 0 0.75em var(--title-close-icon-active-shadow));
 }
 
-.split-icon:after {
+.split-icon:before {
   content: "";
   position: absolute;
   /* top: 50%; */
@@ -578,6 +578,39 @@ const stopResize = () => {
   top: 0;
   left: 100%;
 }
+/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
+
+.tooltip {
+    position: relative;
+    cursor: pointer;
+    
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-color);
+    color: var(--font-color);
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 1.5vmin;
+    opacity: 1;
+    margin-bottom: 5px;
+    
+}
+
+
+/* 为气泡添加过渡效果 */
+.tooltip::after{
+    animation: show-bubbles 0.5s forwards;
+    animation-timing-function: ease-in-out;
+}
 
 /* ==============================================动画实现============================================== */
 @keyframes active-pin {
@@ -709,6 +742,16 @@ const stopResize = () => {
   100% {
     transform: rotate(180deg);
   }
+}
+
+@keyframes show-bubbles {
+    0% {
+        opacity: 0.25;
+    }
+    100% {
+        opacity: 1;
+    }
+
 }
 </style>
 <style>

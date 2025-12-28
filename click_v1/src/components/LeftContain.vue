@@ -2,17 +2,17 @@
     <div v-show="comVisibility.LeftContain['LeftContain-open']" class="main-left">
         <div class="navigation">
             <div class="contain">
-                <RouterLink to="/">/</RouterLink>
-                <RouterLink v-for="(item) in routePath" :key="item[0]" :to="item[1]">{{ routeName[item[1]] }}</RouterLink>
+                <RouterLink class="router-item" to="/">/</RouterLink>
+                <RouterLink class="router-item" v-for="(item) in routePath" :key="item[0]" :to="item[1]">{{ routeName[item[1]] }}
+                </RouterLink>
             </div>
 
         </div>
         <div class="sub-left-contain">
 
-            <div v-if="menuFocus === 'normal'" v-for="(item) in comVisibility.LeftContain['LeftContain-data']['item']" :key="item['index']"
-                class="item">
-                <RouterLink :to="item.router" @click="" class="single-item">
-                    <!-- 注意给路由提供图标颜色 -->
+            <div v-if="menuFocus === 'normal'" v-for="(item) in comVisibility.LeftContain['LeftContain-data']['item']"
+                :key="item['index']" class="item">
+                <RouterLink :to="item.router" class="single-item" :class="[$route.path === item.router ? 'active-item' : '', 'single-item']">
                     <div class="icon menu-icon">
                         <component :is="getIconComponent(item.icon)" :mainColor="mainColor" />
                     </div>
@@ -36,17 +36,17 @@ const menuFocus = ref("normal")
 const routePath = ref<PathItem[] | null>([])
 // 添加 routeName 类型定义
 interface RouteNameMap {
-  [key: string]: string;
-  "deal-file": string;
-  "make-shutdown": string;
+    [key: string]: string;
+    "deal-file": string;
+    "make-shutdown": string;
 }
 
 const routeName: RouteNameMap = {
-  // 根据实际路由路径添加名称映射
-  "deal-file": "处理文件",
-  "make-shutdown": "关机问询",
-  "live-picture": "未分类",
-  // 可以根据需要添加更多路由映射
+    // 根据实际路由路径添加名称映射
+    "deal-file": "处理文件",
+    "make-shutdown": "关机问询",
+    "live-picture": "未分类",
+    // 可以根据需要添加更多路由映射
 }
 // 在组件的 setup 函数中
 const route = useRoute()
@@ -63,7 +63,7 @@ watch(
         console.log(route.path)
         console.log(route.fullPath)
         console.log(route.meta)
-        
+
 
     },
     { immediate: true }  // 立即执行一次以设置初始值
@@ -235,6 +235,11 @@ const getIconComponent = (iconName: string) => {
     -ms-user-select: none;
 }
 
+.router-item{
+    border: 1px solid var(--main-border);
+    border-radius: 1vmin;
+}
+
 .item {
     width: 100%;
     display: flex;
@@ -275,6 +280,10 @@ const getIconComponent = (iconName: string) => {
     animation-timing-function: linear;
 }
 
+.active-item {
+    /* box-shadow: 2px 4px 4px linear-gradient(45deg, var(--active-attention-color), var(--normal-attention-color)); */
+    border-radius: 2vmin;
+}
 
 .menu-icon {
     display: flex;

@@ -82,11 +82,13 @@ import { ref } from 'vue';
 }
 
 .hold-time {
-  flex: 1;
+  width: 15%;
+  min-width: 5px;
   font-family: "楷体", 'Courier New', Courier, monospace;
   font-size: 2vmin;
   text-align: center;
   border-radius: 1vmin;
+  background: var(--button-color);
   border-top: 1px dashed var(--unite-but-color);
   border-bottom: 1px dashed var(--unite-but-color);
   border-left: 1px dashed var(--unite-but-color);

@@ -8,10 +8,9 @@
             </div>
         </div>
         <div class="detail">
-            <div class="storehouse">
+            <div class="storehouse tooltip" data-tooltip="跳转仓库" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
                 <div class="msg">远程仓库</div>
-                <div class="titlebar-button"
-                    @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+                <div class="titlebar-button">
                     <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1"
                         xmlns="http://www.w3.org/2000/svg" p-id="4805" width="200" height="200">
                         <path
@@ -20,7 +19,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="about">
+            <div class="about tooltip" data-tooltip="关于我 施工ing🔨">
                 <div class="about-msg">关于</div>
                 <div class="titlebar-button"
                     @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
@@ -205,12 +204,13 @@ const opeanLinkling = async (url: String) => {
 .tooltip {
     position: relative;
     cursor: pointer;
+    
 }
 
 .tooltip:hover::after {
     content: attr(data-tooltip);
     position: absolute;
-    top: 102%;
+    top: 103%;
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--button-color);
@@ -220,33 +220,19 @@ const opeanLinkling = async (url: String) => {
     border-radius: 4px;
     white-space: nowrap;
     z-index: 1000;
-    font-size: 2.5vmin;
+    font-size: 1.5vmin;
     opacity: 1;
     margin-bottom: 5px;
-}
-
-.tooltip:hover::before {
-    content: '';
-    position: absolute;
-    bottom: -2%;
-    left: 50%;
-    transform: translateX(-100%);
-    border: clamp(3px, 3vmin, 12px) solid transparent;
-    border-bottom-color: var(--button-color);
-    margin-bottom: -5px;
-    z-index: 999;
-}
-
-/* 为气泡添加过渡效果
-.tooltip::after,
-.tooltip::before {
-    animation: show-bubbles 1.5 ease-in-out forwards;
-}
-
-.tooltip:hover::after,
-.tooltip:hover::before {
     
-} */
+}
+
+
+/* 为气泡添加过渡效果 */
+.tooltip::after{
+    animation: show-bubbles 0.5s forwards;
+    animation-timing-function: ease-in-out;
+}
+
 
 /* --------------------------------------------------------动画区----------------------------------------------------- */
 @keyframes show-home {
@@ -254,6 +240,15 @@ const opeanLinkling = async (url: String) => {
         opacity: 0;
     }
 
+    100% {
+        opacity: 1;
+    }
+
+}
+@keyframes show-bubbles {
+    0% {
+        opacity: 0.25;
+    }
     100% {
         opacity: 1;
     }
