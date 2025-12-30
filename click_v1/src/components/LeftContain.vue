@@ -259,7 +259,6 @@ const getIconComponent = (iconName: string) => {
 
     border-bottom-right-radius: 1vmin;
     box-shadow: 2px 4px 4px var(--tool-bar-color);
-
     border-top: var(--title-min-icon-shadow) solid 0.3vmin;
     border-bottom: var(--main-border) solid 0.3vmin;
     background: transparent;
@@ -348,6 +347,6 @@ const getIconComponent = (iconName: string) => {
     }
 
 }
+
 </style>
 
-<style></style>

@@ -3,6 +3,13 @@ export interface PathItem extends Array<string> {
     1: string; // 名称
 }
 
+export interface ComVisibility {
+  setting: {
+      'setting-open': boolean;
+      'setting-close': boolean;
+  };
+}
+
 export type AllowIconType = ".jpg" | ".jepg" | ".JPG" | ".JEPG" | ".png" | ".PNG"
 
 

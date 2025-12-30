@@ -3,7 +3,8 @@
   "identifier": "default",
   "description": "Capability for the main window",
   "windows": [
-    "main"
+    "main",
+    "theUniqueLabel"
   ],
   "permissions": [
     "core:default",
@@ -15,6 +16,7 @@
     "core:window:allow-toggle-maximize",
     "core:window:allow-set-always-on-top",
     "core:app:allow-default-window-icon",
+    "core:webview:allow-create-webview-window",
     "core:window:allow-destroy",
     "core:window:allow-hide",
     "core:window:allow-show",

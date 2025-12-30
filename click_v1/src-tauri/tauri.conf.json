@@ -10,11 +10,9 @@
     "frontendDist": "../dist"
   },
   "app": {
-    
-    "windows": [
-      
+    "windows": [   
       {
-        "title": "Click v0.1.0",
+        "title": "Click v0.1.2",
         "width": 800,
         "height": 600,
         "minWidth": 400,
@@ -28,7 +26,6 @@
       "csp": null
     }
   },
-  
   "bundle": {
     "windows": {
       "allowDowngrades": true,

@@ -8,7 +8,8 @@
         </div>
       </div>
       <div data-tauri-drag-region class="mid-button">
-        <div class="titlebar-button tooltip"data-tooltip="设置 施工ing🔨" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+        <div class="titlebar-button tooltip" data-tooltip="设置 施工ing🔨"
+          @click="() => { openWindow('setting') }">
           <svg t="1766646139964" class="icon" viewBox="0 0 1084 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="5350" width="200" height="200">
             <path
@@ -16,13 +17,14 @@
               p-id="5351"></path>
           </svg>
         </div>
-        <a class="tooltip" href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容"  data-tooltip="反馈邮件">
+        <a class="tooltip" href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容" data-tooltip="反馈邮件">
           <div class="mid-version">
             <h3>Bug反馈</h3>
           </div>
         </a>
 
-        <div class="titlebar-button tooltip" data-tooltip="跳转仓库" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+        <div class="titlebar-button tooltip" data-tooltip="跳转仓库"
+          @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
           <svg t="1765561345418" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="4805" width="200" height="200">
             <path
@@ -100,12 +102,8 @@
       <div class="right-contain">
 
       </div>
-
-      <!-- <form class="row" @submit.prevent="greet"> -->
-      <!-- <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form> -->
     </main>
+    <Setting :comVisibility="comVisibility" :openWindow="openWindow"></Setting>
   </div>
 
 </template>
@@ -120,6 +118,7 @@ import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { RouterView } from "vue-router"
 import { ColorCtr } from './util/Colors';
 import LeftContain from "./components/LeftContain.vue";
+import Setting from "./components/Setting.vue";
 import { comVisibility, set_focus_color_palette, set_special_style } from "./util/PluginObjects"
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
@@ -129,6 +128,7 @@ const leftContainer = ref<HTMLElement | null>(null)  // 左侧容器DOM元素
 let appIcon = null  //  在挂载组件时获取软件的图标
 let isResizing = false
 let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
+
 
 
 
@@ -189,6 +189,25 @@ const open_sidebar = (operObj: string) => {
     default:
       break;
   }
+
+}
+
+const openWindow = (windowName: string) => {
+  switch (windowName) {
+    case 'setting':
+      if (comVisibility.setting["setting-open"] === false) {
+        comVisibility.setting["setting-open"] = true;
+
+      } else {
+        comVisibility.setting["setting-close"] = true
+        setTimeout(() => {
+          comVisibility.setting["setting-open"] = false;
+          comVisibility.setting["setting-close"] = false
+
+        }, 500)
+      }
+  }
+
 
 }
 
@@ -578,38 +597,39 @@ const stopResize = () => {
   top: 0;
   left: 100%;
 }
+
 /* --------------------------------------------------------气泡区提示----------------------------------------------------- */
 
 .tooltip {
-    position: relative;
-    cursor: pointer;
-    
+  position: relative;
+  cursor: pointer;
+
 }
 
 .tooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 103%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--button-color);
-    color: var(--font-color);
-    text-align: center;
-    padding: 6px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 1000;
-    font-size: 1.5vmin;
-    opacity: 1;
-    margin-bottom: 5px;
-    
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 103%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--button-color);
+  color: var(--font-color);
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 1.5vmin;
+  opacity: 1;
+  margin-bottom: 5px;
+
 }
 
 
 /* 为气泡添加过渡效果 */
-.tooltip::after{
-    animation: show-bubbles 0.5s forwards;
-    animation-timing-function: ease-in-out;
+.tooltip::after {
+  animation: show-bubbles 0.5s forwards;
+  animation-timing-function: ease-in-out;
 }
 
 /* ==============================================动画实现============================================== */
@@ -745,12 +765,13 @@ const stopResize = () => {
 }
 
 @keyframes show-bubbles {
-    0% {
-        opacity: 0.25;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0.25;
+  }
+
+  100% {
+    opacity: 1;
+  }
 
 }
 </style>
@@ -786,5 +807,4 @@ body {
   margin: 0;
   padding: 0;
 }
-
 </style>

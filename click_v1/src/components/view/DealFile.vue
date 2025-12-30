@@ -114,7 +114,7 @@
                     <transition name="replace-name-transition" mode="out-in">
                          <div v-if="active_path && active_path.length > 0" class="order-and-replace-name"
                               :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
-                              <div class="item-titletooltip" data-tooltip="------示例 施工ing🔨">
+                              <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
                                    <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
                                         <path d="M512 145.92c201.728 0 366.08 164.352 366.08 366.08s-164.352 366.08-366.08 366.08S145.92 713.728 145.92 512 310.272 145.92 512 145.92M512 87.04c-234.496 0-424.96 190.464-424.96 424.96s189.952 424.96 424.96 424.96c234.496 0 424.96-190.464 424.96-424.96S746.496 87.04 512 87.04L512 87.04z"
@@ -127,7 +127,7 @@
                                              p-id="7059"></path>
                                    </svg>
                               </div>
-                              <div class="item-titletooltip" data-tooltip="配置 施工ing🔨">
+                              <div class="item-title tooltip" data-tooltip="配置 施工ing🔨">
                                    <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
                                         <path d="M815.98 379.92c21.84-0.2 41.83-12.04 51.39-31.48l77.52-157.47c10.42-21.18 6.46-46.86-9.88-63.91L894.3 84.57c-18.3-19.09-46.97-22.94-69.62-9.4l-156.63 93.49c-16.94 10.12-27.47 28.67-27.47 48.41v70.13l-100.32 96.14c-30.02-32.81-56.01-61.27-69.8-76.49 10.82-91.02-6.52-157.53-51.59-197.79-63.69-56.86-158.93-40.02-196.93-30.12A37.72 37.72 0 0 0 194.92 106c-3.44 13.3 0.62 27.45 10.58 36.91l62.45 59.41c-1.18 16.28-8.15 31.38-19.89 42.97-10.64 10.5-24.11 17.02-38.66 18.86l-68.29-66.01c-10.3-9.94-25.07-13.21-38.63-8.54-13.49 4.66-23.08 16.34-25.05 30.45-6.29 45.12-13.59 156.76 54.53 218.73 40.81 37.14 99.25 48.39 173.87 33.53 2.06 2.16 4.34 4.57 6.79 7.14 13.14 13.81 29.93 31.45 43.35 44.9L114.99 765.29c-22.6 22.6-36.69 51.38-39.68 81.04-3.19 31.61 6.92 61.67 27.74 82.48 18.28 18.29 43.72 28.31 71.06 28.31 3.78 0 7.59-0.19 11.42-0.57 29.66-2.99 58.44-17.09 81.03-39.68l252.02-252.01c9.58 10.32 21.64 23.9 32.87 38.29-11.86 95.35 5.6 164.39 51.94 205.3 34.38 30.35 77.67 39.1 116.13 39.1 32.77 0 62.02-6.34 79.31-11.09 13.2-3.63 23.4-14.15 26.64-27.45 3.24-13.34-1.01-27.42-11.08-36.71l-60.43-55.97a61.251 61.251 0 0 1 18.28-42.72 61.258 61.258 0 0 1 38.8-17.45c17.16 17.36 45.84 46.04 61.23 59.6 9.95 8.77 23.99 11.7 36.59 7.56 12.69-4.12 22.38-14.75 25.28-27.72 21.94-97.55 10.13-167.95-35.08-209.25-58.66-53.6-151.71-37.85-196.52-25.9l-70.59-76.98 109.16-104.59 74.87 1.04zM358.8 435.47c-8.68-9.12-15.47-16.23-18.03-18.74-9.26-9.07-22.36-12.66-35.09-9.68-59.9 14.22-103.91 9.01-130.81-15.46-25.92-23.59-36.17-65.75-37.37-108.22l35.6 34.42a37.609 37.609 0 0 0 25.8 10.67c34.92 0.47 68.73-12.92 93.94-37.76 25.2-24.85 39.08-58.02 39.08-93.42v-5.95c0-10.33-4.3-20.34-11.75-27.39l-32.68-31.08c29.48-1.76 64.73 2.19 88.91 23.79 30.15 26.93 40.01 78.55 29.33 153.37-1.6 11.04 1.7 22.1 9.08 30.37 8.99 10.07 41.01 45.15 79.39 87.1l-12.5 11.98-20.44-20.44-60.21 60.21c-12.98-13.01-29.99-30.89-42.25-43.77zM221.47 871.78c-23.12 23.09-56.67 28.54-73.32 11.94-9.87-9.88-10.11-23.66-9.37-30.99 1.49-14.85 9.26-30.27 21.31-42.33l301.16-301.17 61.38 61.38-301.16 301.17z m445.07-256.21c9.97 10.83 25.43 14.91 39.29 10.37 10.73-3.44 106.26-32.64 150.22 7.51 23.92 21.85 27.62 61.79 23.68 101.23a3202.444 3202.444 0 0 1-30.7-30.87c-6.35-6.48-14.86-10.45-23.98-11.18-36.18-2.94-71.68 10.09-97.52 35.51a124.98 124.98 0 0 0-37.11 96.93l0.35 5.65c0.66 9.74 4.98 18.72 12.04 25.19l29.6 27.42c-28.91 1.85-63.07-1.73-86.8-22.68-38.51-34-37.34-105.29-29.57-159.16 1.4-9.82-1.17-20.05-7.11-28.12-15.2-20.54-32.45-39.95-45.22-53.62l49.13-49.13-35.15-35.15 8.2-7.86 80.65 87.96z m32.65-284.84l-166.6 159.62-5.77-5.77 160.11-153.44c11.09-10.59 17.44-25.46 17.44-40.78v-69.1l147.95-88.31 33.06 34.5-73.16 148.62-73.27-1.02c-15.21-0.32-29.05 5.38-39.76 15.68z"
@@ -155,112 +155,13 @@
 
 
 
-     <!-- 顶部悬浮活动栏 -->
-     <div v-show="FloatingWindow['choose-path-pool']" class="choose-path-pool"
-          :class="{ 'choose-path-pool-close': FloatingWindow['choose-path-pool-close'] }" ref="floatingWindowElement">
-          <div class="drag-head-contain" @mousedown="startDrag">
-               <div class="tag-icon tooltip" data-tooltip="拖动">
-                    <svg t="1766338639348" class="icon " viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="9788" width="200" height="200">
-                         <path d="M476.5 924V100c0-19.8 16.2-36 36-36s36 16.2 36 36v824c0 19.8-16.2 36-36 36s-36-16.2-36-36z"
-                              p-id="9789"></path>
-                         <path d="M100.5 476h824c19.8 0 36 16.2 36 36s-16.2 36-36 36h-824c-19.8 0-36-16.2-36-36s16.2-36 36-36zM690.1 797.6L538.4 949.3c-14.3 14.3-37.4 14.3-51.7 0L334.2 796.8c-14.3-14.3-14.6-37.9 0-52 14.1-13.5 36.5-13.4 50.4 0.5l117.6 117.6c5.8 5.8 15.1 5.8 20.8 0l115.6-115.6c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.3zM333.7 226.4L485.4 74.7c14.3-14.3 37.4-14.3 51.7 0l152.5 152.5c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5L521.6 161.1c-5.8-5.8-15.1-5.8-20.8 0L385.1 276.7c-14.3 14.3-37.9 14.6-52 0-13.4-14.1-13.3-36.5 0.6-50.3z"
-                              p-id="9790"></path>
-                         <path d="M226.7 690.1L75.1 538.4c-14.3-14.3-14.3-37.4 0-51.7l152.5-152.5c14.3-14.3 37.9-14.6 52 0 13.5 14.1 13.4 36.5-0.5 50.4L161.5 502.2c-5.8 5.8-5.8 15.1 0 20.8l115.6 115.6c14.3 14.3 14.6 37.9 0 52-14.1 13.5-36.5 13.4-50.4-0.5zM798.1 333.7l151.7 151.7c14.3 14.3 14.3 37.4 0 51.7L797.3 689.6c-14.3 14.3-37.9 14.6-52 0-13.5-14.1-13.4-36.5 0.5-50.4l117.6-117.6c5.8-5.8 5.8-15.1 0-20.8L747.8 385.1c-14.3-14.3-14.6-37.9 0-52 14.1-13.4 36.5-13.3 50.3 0.6z"
-                              p-id="9791"></path>
-                    </svg>
-               </div>
-               <div class="tag-icon wire tooltip" data-tooltip="清除全部路径" @click="() => { click('close-path-item-all') }">
-                    <svg t="1766420001028" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="6984" width="200" height="200">
-                         <path d="M630.784 831.488c12.288 0 20.48-8.192 20.48-16.384l28.672-450.56c0-12.288-8.192-20.48-16.384-20.48-12.288 0-20.48 8.192-20.48 16.384l-28.672 450.56C614.4 823.296 622.592 831.488 630.784 831.488z"
-                              p-id="6985"></path>
-                         <path d="M409.6 831.488c12.288 0 20.48-8.192 16.384-20.48l-28.672-450.56c0-12.288-8.192-20.48-20.48-16.384C368.64 344.064 360.448 352.256 360.448 360.448l28.672 450.56C389.12 823.296 397.312 831.488 409.6 831.488z"
-                              p-id="6986"></path>
-                         <path d="M520.192 831.488c12.288 0 20.48-8.192 20.48-20.48l0-450.56c0-12.288-8.192-20.48-20.48-20.48-12.288 0-20.48 8.192-20.48 20.48l0 450.56C499.712 823.296 507.904 831.488 520.192 831.488z"
-                              p-id="6987"></path>
-                         <path d="M839.68 229.376l-188.416 0L651.264 151.552c0-20.48-16.384-36.864-36.864-36.864l-188.416 0c-20.48 0-36.864 16.384-36.864 36.864l0 73.728L200.704 225.28C188.416 229.376 180.224 237.568 180.224 245.76c0 12.288 8.192 20.48 20.48 20.48l36.864 0 36.864 602.112c4.096 40.96 32.768 73.728 73.728 73.728l339.968 0c40.96 0 69.632-32.768 73.728-73.728l36.864-602.112 36.864 0C851.968 266.24 860.16 258.048 860.16 245.76 860.16 237.568 851.968 229.376 839.68 229.376zM425.984 151.552 614.4 151.552l0 73.728-188.416 0L425.984 151.552zM729.088 868.352c-4.096 20.48-16.384 36.864-36.864 36.864L352.256 905.216c-20.48 0-32.768-16.384-36.864-36.864L274.432 266.24l491.52 0L729.088 868.352z"
-                              p-id="6988"></path>
-                    </svg>
-               </div>
-               <div class="tag-icon tooltip" data-tooltip="选择文件" @click="() => { openFileDialog() }">
-                    <svg t="1766902940874" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="11272" width="200" height="200">
-                         <path d="M682.624 693.312a32 32 0 0 1 0 64H341.312a32 32 0 0 1 0-64h341.312zM682.624 522.688a32 32 0 1 1 0 64H341.312a32 32 0 0 1 0-64h341.312zM426.624 352a32 32 0 0 1 0 64H341.312a32 32 0 0 1 0-64h85.312z"
-                              p-id="11273"></path>
-                         <path d="M603.648 53.952a32.128 32.128 0 0 1 10.56 4.288l1.536 0.96a31.808 31.808 0 0 1 4.224 3.456l256 256a32.064 32.064 0 0 1 9.408 22.656v512A117.44 117.44 0 0 1 768 970.624H256a117.312 117.312 0 0 1-117.312-117.312V170.624A117.376 117.376 0 0 1 256 53.312h341.376l6.272 0.64zM256 117.312a53.376 53.376 0 0 0-53.312 53.312v682.688a53.312 53.312 0 0 0 53.312 53.312h512a53.44 53.44 0 0 0 53.376-53.312v-480H597.312a32 32 0 0 1-32-32v-224H256z m373.312 192h146.816L629.312 162.496v146.816z"
-                              p-id="11274"></path>
-                    </svg>
-               </div>
-               <div class="tag-icon wire tooltip" data-tooltip="选择文件夹" @click="() => { openFolderDialog() }">
-                    <svg t="1766725619065" class="icon" viewBox="0 0 1329 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg" p-id="10656" width="200" height="200">
-                         <path d="M1036.572 951.784h-780.721c-62.416 0-113.411-47.899-115.072-107.38l-78.125-495.818v-2.735c0-60.873 51.662-110.396 115.164-110.396h14.961v-63.036c0-60.873 51.651-110.396 115.13-110.396h234.199c42.067 0 105.428 34.714 140.178 74.338h302.237c48.717 0 161.228 35.661 166.943 104.891 45.468 14.762 78.311 56.069 78.311 104.599v2.747l-78.137 495.807c-1.659 59.493-52.643 107.38-115.072 107.38zM136.887 343.559l78.008 495.070v2.747c0 21.109 18.374 38.279 40.957 38.279h780.721c22.582 0 40.957-17.17 40.957-38.279v-2.747l78.008-495.070c-1.274-20.046-19.146-35.989-40.932-35.989h-37.075v-59.903c-1.823-3.846-12.027-14.026-34.48-24.113-23.096-10.357-46.52-15.078-58.536-15.078h-341.532l-10.87-17.147c-17.953-28.368-70.714-57.191-90-57.191h-234.199c-22.593 0-40.968 17.182-40.968 38.279v135.152h-89.135c-21.775 0-39.647 15.942-40.921 36z"
-                              p-id="10657"></path>
-                         <path d="M100.875 306.542h1086.428v69.779h-1086.428z" p-id="10658"></path>
-                    </svg>
-               </div>
-
-               <div class="tag-icon float-close-icon tooltip" data-tooltip="收起">
-                    <svg t="1766338714320" class="icon " @click="() => { click('choose-path-pool') }"
-                         viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10844"
-                         width="200" height="200">
-                         <path d="M199.36 572.768a31.904 31.904 0 0 0 22.624-9.376l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.352-308.352a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 0 0 22.656 54.624z"
-                              p-id="10845"></path>
-                         <path d="M538.784 457.376a32 32 0 0 0-45.28 0l-316.768 316.768a31.968 31.968 0 1 0 45.248 45.248l294.144-294.144 285.728 285.728a31.968 31.968 0 1 0 45.248-45.248l-308.32-308.352z"
-                              p-id="10846"></path>
-                    </svg>
-               </div>
-
-          </div>
-          <div class="drag-contain">
-               <div v-if="userSelectedShortPath && userSelectedShortPath.length <= 0">
-                    <span>🔎 当前无注视路径</span>
-               </div>
-               <div v-else-if="userSelectedShortPath && userSelectedShortPath.length > 0"
-                    v-for="(path_item, index) in userSelectedShortPath" :key="index" class="user-choose-item">
-                    <span class="tooltip" data-tooltip="清除" @click="() => { click('close-path-item', index) }">
-                         <svg t="1766420001028" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
-                              xmlns="http://www.w3.org/2000/svg" p-id="6984" width="200" height="200">
-                              <path d="M630.784 831.488c12.288 0 20.48-8.192 20.48-16.384l28.672-450.56c0-12.288-8.192-20.48-16.384-20.48-12.288 0-20.48 8.192-20.48 16.384l-28.672 450.56C614.4 823.296 622.592 831.488 630.784 831.488z"
-                                   p-id="6985"></path>
-                              <path d="M409.6 831.488c12.288 0 20.48-8.192 16.384-20.48l-28.672-450.56c0-12.288-8.192-20.48-20.48-16.384C368.64 344.064 360.448 352.256 360.448 360.448l28.672 450.56C389.12 823.296 397.312 831.488 409.6 831.488z"
-                                   p-id="6986"></path>
-                              <path d="M520.192 831.488c12.288 0 20.48-8.192 20.48-20.48l0-450.56c0-12.288-8.192-20.48-20.48-20.48-12.288 0-20.48 8.192-20.48 20.48l0 450.56C499.712 823.296 507.904 831.488 520.192 831.488z"
-                                   p-id="6987"></path>
-                              <path d="M839.68 229.376l-188.416 0L651.264 151.552c0-20.48-16.384-36.864-36.864-36.864l-188.416 0c-20.48 0-36.864 16.384-36.864 36.864l0 73.728L200.704 225.28C188.416 229.376 180.224 237.568 180.224 245.76c0 12.288 8.192 20.48 20.48 20.48l36.864 0 36.864 602.112c4.096 40.96 32.768 73.728 73.728 73.728l339.968 0c40.96 0 69.632-32.768 73.728-73.728l36.864-602.112 36.864 0C851.968 266.24 860.16 258.048 860.16 245.76 860.16 237.568 851.968 229.376 839.68 229.376zM425.984 151.552 614.4 151.552l0 73.728-188.416 0L425.984 151.552zM729.088 868.352c-4.096 20.48-16.384 36.864-36.864 36.864L352.256 905.216c-20.48 0-32.768-16.384-36.864-36.864L274.432 266.24l491.52 0L729.088 868.352z"
-                                   p-id="6988"></path>
-                         </svg>
-
-                    </span>
-                    <span>
-                         <svg v-if="selectFolder === true" t="1766153567513" class="small-icon" viewBox="0 0 1024 1024"
-                              version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7556" width="200" height="200">
-                              <path d="M910.096853 360.579647v-61.707521c0-52.999376-42.030493-112.28336-98.281728-112.28336H528.430288l-11.681508-22.048347c-11.685603-22.352441-34.588894-36.229158-59.807189-36.229158H154.570848c-50.436591 0-91.447294 42.168717-91.447294 94.010079v575.540275c0 51.814741 41.010703 93.969123 91.447294 93.969124h711.539892c50.436591 0 91.447294-42.154383 91.447294-93.969124V444.614011c-0.001024-30.633625-20.252452-63.054954-47.461181-84.034364z m-98.281728-117.546131c19.540851 0 41.838002 29.75206 41.838002 55.83861v39.040748c-0.956309-0.038908-1.913642-0.097269-2.865855-0.097269H608.55341l-50.21748-94.782089h253.479195z m89.297134 554.828099c0 20.684531-15.709473 37.524373-35.002543 37.524374h-711.538868c-19.292047 0-35.002544-16.839842-35.002544-37.524374V222.32134c0-20.712176 15.709473-37.565329 35.002544-37.565329h302.370743c4.134449 0 7.882893 2.274049 9.867182 6.07676l99.825748 188.420497a28.252068 28.252068 0 0 0 24.94287 15.007087h259.209881c20.229926 0 50.326011 30.12373 50.326011 50.353656v353.247604z"
-                                   p-id="7557">
-                              </path>
-                         </svg>
-                         <svg v-else t="1766902940874" class="small-icon" viewBox="0 0 1024 1024" version="1.1"
-                              xmlns="http://www.w3.org/2000/svg" p-id="11272" width="200" height="200">
-                              <path d="M682.624 693.312a32 32 0 0 1 0 64H341.312a32 32 0 0 1 0-64h341.312zM682.624 522.688a32 32 0 1 1 0 64H341.312a32 32 0 0 1 0-64h341.312zM426.624 352a32 32 0 0 1 0 64H341.312a32 32 0 0 1 0-64h85.312z"
-                                   p-id="11273"></path>
-                              <path d="M603.648 53.952a32.128 32.128 0 0 1 10.56 4.288l1.536 0.96a31.808 31.808 0 0 1 4.224 3.456l256 256a32.064 32.064 0 0 1 9.408 22.656v512A117.44 117.44 0 0 1 768 970.624H256a117.312 117.312 0 0 1-117.312-117.312V170.624A117.376 117.376 0 0 1 256 53.312h341.376l6.272 0.64zM256 117.312a53.376 53.376 0 0 0-53.312 53.312v682.688a53.312 53.312 0 0 0 53.312 53.312h512a53.44 53.44 0 0 0 53.376-53.312v-480H597.312a32 32 0 0 1-32-32v-224H256z m373.312 192h146.816L629.312 162.496v146.816z"
-                                   p-id="11274"></path>
-                         </svg>
-                    </span>
-                    <span>{{ path_item }}</span>
 
 
-               </div>
-               <div v-else>
-                    <span>🔎 当前无注视路径</span>
-               </div>
-
-
-          </div>
-     </div>
-
-     <FloatWindow v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod"></FloatWindow>
+     <DFPathPoolFW :userSelectedShortPath="userSelectedShortPath" :selectFolder="selectFolder"
+          v-model:FloatingWindow="FloatingWindow" :click="click" :openFileDialog="openFileDialog"
+          :openFolderDialog="openFolderDialog"></DFPathPoolFW>
+     <DFChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
+     </DFChooseMethoadFW>
 
 </template>
 <script setup lang="ts">
@@ -271,7 +172,8 @@ import { type FloatingWindowState } from '../../class/PathIndex';
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import SelectorBar from '../components/SelectorBar.vue'
 import { parseStringToArray } from '../../util/DataTool'
-import FloatWindow from "./components-view/FloatWindow.vue";
+import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
+import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 // import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 
@@ -289,14 +191,11 @@ const inputRefSortName = ref("")
 const FloatingWindow = reactive<FloatingWindowState>({
      "choose-path-pool": false,
      "choose-path-pool-close": false,
-     "choose-function": false,
+     "choose-function": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
      "choose-function-close": false,
 })
-const userSelectedPath = ref<string[] | null>()
-const userSelectedShortPath = ref<string[] | null>()
-
-const isDragging = ref(false);
-const dragOffset = ref({ x: 0, y: 0 });
+const userSelectedPath = ref<string[] | null>(null)
+const userSelectedShortPath = ref<string[] | null>(null)
 const floatingWindowElement = ref<HTMLElement | null>(null);
 
 const selectFolder = ref(false)
@@ -658,48 +557,6 @@ const getShortPath = (fullPath: string): string => {
 }
 
 
-//  ------------------------------------悬浮窗拖拽-----------------------------------
-// 开始拖拽
-const startDrag = (event: MouseEvent) => {
-     if (!floatingWindowElement.value) return;
-
-     isDragging.value = true;
-
-     // 计算鼠标相对于悬浮窗左上角的偏移量
-     const rect = floatingWindowElement.value.getBoundingClientRect();
-     dragOffset.value = {
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top
-     };
-
-     // 添加全局事件监听器
-     document.addEventListener('mousemove', drag);
-     document.addEventListener('mouseup', stopDrag);
-};
-
-// 拖拽过程
-const drag = (event: MouseEvent) => {
-     if (!isDragging.value || !floatingWindowElement.value) return;
-
-     // 计算新的位置
-     const newX = event.clientX - dragOffset.value.x;
-     const newY = event.clientY - dragOffset.value.y;
-
-     // 应用新位置
-     if (floatingWindowElement.value) {
-          floatingWindowElement.value.style.left = `${newX}px`;
-          floatingWindowElement.value.style.top = `${newY}px`;
-     }
-};
-
-// 停止拖拽
-const stopDrag = () => {
-     isDragging.value = false;
-
-     // 移除全局事件监听器
-     document.removeEventListener('mousemove', drag);
-     document.removeEventListener('mouseup', stopDrag);
-};
 
 </script>
 <style scoped>
@@ -744,11 +601,11 @@ h3 {
 .title::after {
      content: '';
      position: absolute;
-     bottom: 2px;
+     bottom: -2px;
      left: 0;
      width: 100%;
      height: 2px;
-     background: linear-gradient(to right, var(--main-border) 60%, var(--font-color) 62.5%, var(--button-color) 65%, var(--back-ground) 67.5%, var(--main-back-ground) 70%);
+     background: linear-gradient(to right, var(--normal-attention-color) 20%,var(--active-attention-color) 40% , var(--main-border) 60%, var(--main-back-ground) 80%);
 }
 
 
@@ -771,16 +628,7 @@ h3 {
      fill: var(--icon-color)
 }
 
-.small-icon {
-     margin: 0 0.5vmin;
-     height: 2.5vmin;
-     width: 2.5vmin;
-     min-height: 2px;
-     max-height: 15px;
-     min-width: 2px;
-     max-width: 15px;
-     fill: var(--icon-color)
-}
+
 
 
 .icon-right-margin {
@@ -805,7 +653,7 @@ h3 {
      content: "";
      position: absolute;
      /* top: 50%; */
-     left: -0.5vmin;
+     left: -0.35vmin;
      width: 0.2vmin;
      border-radius: 0.1vmin;
      max-width: 2px;
@@ -976,11 +824,13 @@ h3 {
      display: flex;
      width: 100%;
      /* flex:1; */
+     box-sizing: border-box;
      border-radius: 1vmin;
      justify-content: start;
      align-items: center;
      flex-direction: column;
      border: 1px solid var(--unite-but-color);
+     padding: 2vmin;
      background: var(--title-bar-lg-2);
      /* 画格子模拟纸张 */
      background-image:
@@ -1052,7 +902,7 @@ h3 {
 
 .place-holder {
      width: 100%;
-     height: 4vh;
+     height: 4vmin;
      font-size: medium;
      display: flex;
      justify-content: center;
@@ -1062,6 +912,7 @@ h3 {
 }
 
 .item-title {
+     height: 4vmin;
      display: flex;
      justify-content: center;
      align-items: center;
@@ -1125,83 +976,6 @@ h3 {
      animation-timing-function: linear;
 }
 
-
-/* ----------------------------------------悬浮窗区----------------------------------------------- */
-.choose-path-pool {
-     position: fixed;
-     display: flex;
-     justify-self: center;
-     align-items: center;
-     flex-direction: column;
-     top: 1vh;
-     left: 1vw;
-     height: 80vmin;
-     width: 45vmin;
-     transform: translateZ(0);
-     will-change: transform;
-     user-select: none;
-     overflow: auto;
-     z-index: 100;
-
-     /* 添加以下样式使元素更像悬浮窗 */
-
-     border: 1px solid var(--unite-but-color);
-     background: var(--title-bar-lg-2);
-     /* 画格子模拟纸张 */
-     background-image:
-          linear-gradient(to right, var(--button-color) 1px, transparent 1px),
-          linear-gradient(to bottom, var(--button-color) 1px, transparent 1px);
-     background-size: var(--grid-size) var(--grid-size);
-     overflow: auto;
-
-     border-radius: 8px;
-     box-shadow: 0 4px 12px var(--font-color);
-     border: 1px solid #e0e0e0;
-     padding: 1vmin;
-     overflow-x: hidden;
-     animation: show-choose-pool 0.5s ease-in-out forwards;
-
-}
-
-.choose-path-pool-close {
-     animation: hide-choose-pool 0.5s ease-in-out forwards;
-}
-
-.float-close-icon {
-     margin-left: auto;
-     margin-right: 2vmin;
-}
-
-.drag-head-contain {
-     display: flex;
-     justify-self: start;
-     align-items: start;
-     flex-direction: row;
-     height: 10%;
-     width: 100%;
-}
-
-.drag-contain {
-     flex: 1;
-     width: 100%;
-     border: 1px dashed var(--unite-but-color);
-     border-radius: 1vmin;
-}
-
-.user-choose-item {
-     display: flex;
-     justify-self: center;
-     height: 2.5vmin;
-     font-size: 2vmin;
-     width: 100%;
-     overflow: hidden;
-     text-overflow: ellipsis;
-     white-space: nowrap;
-     -webkit-box-orient: vertical;
-     border-bottom: 1px dashed var(--unite-but-color);
-
-
-}
 
 /* --------------------------------------------------------气泡区提示----------------------------------------------------- */
 
@@ -1328,34 +1102,6 @@ h3 {
           height: 78%;
      }
 
-}
-
-@keyframes show-choose-pool {
-     0% {
-          height: 0vmin;
-          opacity: 0;
-     }
-
-     100% {
-          height: 80vmin;
-          opacity: 1;
-
-     }
-
-}
-
-@keyframes hide-choose-pool {
-     0% {
-          height: 80vmin;
-          opacity: 1;
-
-     }
-
-     100% {
-          height: 0vmin;
-          opacity: 0;
-
-     }
 }
 
 @keyframes show-bubbles {

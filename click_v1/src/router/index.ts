@@ -2,6 +2,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DealFile from '../components/view/DealFile.vue'
 import MakeShutDown from '../components/view/MakeShutDown.vue'
+import LivePicture from '../components/view/LivePicture.vue'
+import Temp from '../components/view/Temp.vue'
 import Home from '../components/view/Home.vue'
 
 // 初始化路由器
@@ -22,7 +24,11 @@ const router = createRouter({
         },
         {
             path: '/live-picture',
-            component: MakeShutDown
+            component: LivePicture
+        },
+        {
+            path: '/child',
+            component: Temp
         }
 
     ]

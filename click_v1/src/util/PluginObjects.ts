@@ -11,26 +11,33 @@ export const comVisibility = reactive({
           "index": 0,
           "is-focus": false,
           "icon": "IconFile",
-          "router": "/deal-file"
+          "router": "/deal-file",
+          "props": true,
         },
         {
           "name": "关机问询",
           "index": 0,
           "is-focus": false,
           "icon": "IconShutdown",
-          "router": "/make-shutdown"
+          "router": "/make-shutdown",
+          "props": true,
         },
         {
           "name": "未分类功能",
           "index": 0,
           "is-focus": false,
           "icon": "LivePicture",
-          "router": "/live-picture"
+          "router": "/live-picture",
+          "props": true,
         }
       ]
     },
     "LeftContain-open": false,
     "LeftContain-close": true, // 保障关闭侧边栏按钮可以正常运转
+  },
+  "setting":{
+    "setting-open": false,
+    "setting-close": false,
   }
 })
 
@@ -94,5 +101,6 @@ export const set_special_style = () => {
   document.documentElement.style.setProperty("--letter-spacing", `normal`)  // 动态栏的字字间距
   document.documentElement.style.setProperty("--grid-size", `4vmin`)  // 模拟纸面网格大小
   document.documentElement.style.setProperty("--timing-schedule", `0%`)  // 模拟纸面网格大小
+  document.documentElement.style.setProperty("--float-window2-height", `90vh`)  // 浮动窗口2起始高度
 
 }
