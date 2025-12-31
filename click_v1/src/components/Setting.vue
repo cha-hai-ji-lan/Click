@@ -275,7 +275,7 @@ const getsize = async () => {
 
 const collapse = () => {
     props.openWindow('setting')
-    if (!floatingWindowElement.value) return
+    if (!floatingWindowElement.value || newHeight <= 0) return
     floatingWindowElement.value.style.height = `${newHeight}px`;  // 移除 important
 }
 </script>
@@ -318,6 +318,7 @@ const collapse = () => {
     min-height: 20px;
     max-height: 60px;
     padding: 2px;
+    box-shadow: -2px 0.5vmin  20px -2px var(--positive-show-color);
     background: conic-gradient(from 0deg,
             var(--normal-attention-color),
             var(--title-min-icon-hover-shadow),
@@ -386,9 +387,9 @@ const collapse = () => {
 
 .left-setting-contain {
     width: 30%;
-    min-width:fit-content;
+    min-width: fit-content;
     height: 100%;
-    min-height:fit-content;
+    min-height: fit-content;
 
     position: relative;
     /* background-color: #fff; */
@@ -408,9 +409,9 @@ const collapse = () => {
 
 .right-setting-contain {
     flex: 1;
-    min-width:fit-content;
+    min-width: fit-content;
     height: 100%;
-    min-height:fit-content;
+    min-height: fit-content;
 
     /* background-color: #e00303; */
 

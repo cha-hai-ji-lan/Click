@@ -46,6 +46,7 @@ const routeName: RouteNameMap = {
     "deal-file": "处理文件",
     "make-shutdown": "关机问询",
     "live-picture": "未分类",
+    "record-screen": "屏幕录制",
     // 可以根据需要添加更多路由映射
 }
 // 在组件的 setup 函数中
@@ -164,6 +165,9 @@ const getIconComponent = (iconName: string) => {
     font-family: "楷体", 'Courier New', Courier, monospace;
     font-weight: 600;
     border-right: 1px solid var(--main-border);
+    /* 多重阴影 */
+    box-shadow: 0.5vmin 4px 20px 2px var(--positive-show-color);
+    /* box-shadow: 1vmin 2px 30px  -2px var(--negative-show-color), 1.5vmin -2px 15px  var(--normal-show-color); */
     background: linear-gradient(to left, var(--icon-hover), var(--main-back-ground));
 }
 

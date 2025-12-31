@@ -55,7 +55,9 @@
           </div>
           <div class="oper">
                <div class="h3-head">
-                    <span class="icon-left-margin tooltip" data-tooltip="-------工作台 施工ing🔨">
+                    <span class="icon-left-margin tooltip" data-tooltip="工作台" @click="() => {
+                         click('work-bench')
+                    }">
                          <svg t="1766485462276" class="icon " viewBox="0 0 1024 1024" version="1.1"
                               xmlns="http://www.w3.org/2000/svg" p-id="8143" width="200" height="200">
                               <path d="M896.1 115H128c-35.3 0-63.9 28.6-64 63.9V689c-0.1 35.3 28.5 64 63.8 64H896.1c35.3 0 63.9-28.6 63.9-63.9V179c0-35.3-28.6-64-63.9-64z m-25.6 546.1H153.7V202h716.8v459.1zM64.1 840.2c0 35.3 28.6 63.9 63.9 64h768.2c35.3 0 63.9-28.6 63.9-63.9v-56.5H64l0.1 56.4z m409.1-13.1h77.7c9.6 0 17.1 7.6 17.1 16.8-0.1 9.3-7.7 16.9-17 16.8h-77.8c-9.3 0.2-17-7.3-17.2-16.6v-0.2c0-9.2 7.6-16.8 17.2-16.8z"
@@ -134,7 +136,7 @@
                                              p-id="9297"></path>
                                    </svg>
                               </div>
-                              <SelectorBar v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
+                              <SelectorBar class="select-bar" v-model="selectedValue" :options="selectOptions" placeholder="排序方式">
                               </SelectorBar>
                               <input class="input-box" type="text" v-model="inputRefSortName"
                                    placeholder="<起始标志>固定名称{原名}...">
@@ -155,7 +157,7 @@
 
 
 
-
+     <DFWorkbenchFW v-model:FloatingWindow="FloatingWindow" :click="click"> </DFWorkbenchFW>
 
      <DFPathPoolFW :userSelectedShortPath="userSelectedShortPath" :selectFolder="selectFolder"
           v-model:FloatingWindow="FloatingWindow" :click="click" :openFileDialog="openFileDialog"
@@ -174,6 +176,7 @@ import SelectorBar from '../components/SelectorBar.vue'
 import { parseStringToArray } from '../../util/DataTool'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
+import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
 // import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 
@@ -189,10 +192,12 @@ const inputRefReplaceNewName = ref("")
 const inputRefSortName = ref("")
 
 const FloatingWindow = reactive<FloatingWindowState>({
-     "choose-path-pool": false,
+     "choose-path-pool": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
      "choose-path-pool-close": false,
-     "choose-function": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
+     "choose-function": false,
      "choose-function-close": false,
+     "work-bench": false,
+     "work-bench-close": false,
 })
 const userSelectedPath = ref<string[] | null>(null)
 const userSelectedShortPath = ref<string[] | null>(null)
@@ -394,6 +399,17 @@ const click = (whichOne: string, index: number = 0) => {
           case 'close-path-item-all':
                userSelectedPath.value = []
                userSelectedShortPath.value = []
+               break;
+          case 'work-bench':
+               if (FloatingWindow["work-bench"] === false) {
+                    FloatingWindow["work-bench"] = true
+               } else {
+                    FloatingWindow["work-bench-close"] = true;
+                    setTimeout(() => {
+                         FloatingWindow["work-bench"] = false;
+                         FloatingWindow["work-bench-close"] = false;
+                    }, 500)
+               }
                break;
           default:
                break;
@@ -605,7 +621,7 @@ h3 {
      left: 0;
      width: 100%;
      height: 2px;
-     background: linear-gradient(to right, var(--normal-attention-color) 20%,var(--active-attention-color) 40% , var(--main-border) 60%, var(--main-back-ground) 80%);
+     background: linear-gradient(to right, var(--normal-attention-color) 20%, var(--active-attention-color) 40%, var(--main-border) 60%, var(--main-back-ground) 80%);
 }
 
 
@@ -618,15 +634,7 @@ h3 {
      align-items: center;
 }
 
-.icon {
-     height: 3vmin;
-     width: 3vmin;
-     min-height: 10px;
-     max-height: 25px;
-     min-width: 15px;
-     max-width: 30px;
-     fill: var(--icon-color)
-}
+
 
 
 
@@ -637,6 +645,16 @@ h3 {
 
 .icon-left-margin {
      margin-left: 2.5vmin;
+}
+
+.icon {
+     height: 3vmin;
+     width: 3vmin;
+     min-height: 10px;
+     max-height: 25px;
+     min-width: 15px;
+     max-width: 30px;
+     fill: var(--icon-color)
 }
 
 .icon:active {
@@ -886,7 +904,7 @@ h3 {
      font-size: 2vmin;
      display: grid;
      width: 100%;
-     height: 4vh;
+     height: 4vmin;
      grid-template-columns: 5% 5% 37.5% 37.5% 15%;
 
 }
@@ -896,7 +914,7 @@ h3 {
      display: grid;
      display: grid;
      width: 100%;
-     height: 4vh;
+     height: 4vmin;
      grid-template-columns: 5% 5% 37.5% 37.5% 15%;
 }
 
@@ -926,21 +944,34 @@ h3 {
      /* IE兼容性 */
      border-bottom: 1px dashed var(--unite-but-color);
 }
+.select-bar {
+     height: 4vmin;
 
+}
 .input-box {
      font-family: "楷体", 'Courier New', Courier, monospace;
      font-size: 2vmin;
      text-align: center;
-     height: 3.5vmin;
+     height: 4vmin;
+     padding: 0px 0px;
      margin: auto 0;
-     border-top: 1px dashed var(--unite-but-color);
-     border-bottom: 1px dashed var(--unite-but-color);
-     border-left: 1px dashed var(--unite-but-color);
-     border-right: 1px dashed var(--unite-but-color);
+     background: transparent;
+     border-top: 0px dashed var(--unite-but-color);
+     border-bottom: 2px dashed var(--unite-but-color);
+     border-left: 0px dashed var(--unite-but-color);
+     border-right: 0px dashed var(--unite-but-color);
+     transition: all 0.3s ease;
+}
+.input-box:hover {
+     border-color: var(--positive-show-color);
+}
 
-
-
-
+.input-box:focus {
+     outline: none;
+     /* 取消默认的焦点轮廓 */
+     /* border: 1px solid var(--active-attention-color); */
+     border-bottom: 2px dashed var(--active-attention-color);
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
 }
 

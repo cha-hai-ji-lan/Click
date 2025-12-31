@@ -88,7 +88,7 @@ let newWidth = 0 // 修改后的宽度
 let newHeight = 0  // 修改后的高度
 
 
-const focus = ref([false, false, false, false , false, false])
+const focus = ref([false, false, false, false, false, false])
 const props = defineProps<{
     FloatingWindow: FloatingWindowState,
     click: (whichOne: string, index?: number) => void,  // 接收函数类型
@@ -157,12 +157,9 @@ const drag = (event: MouseEvent) => {
     const newX = event.clientX - dragOffset.value.x;
     const newY = event.clientY - dragOffset.value.y;
 
-
     // 应用新位置
-    if (floatingWindowElement.value) {
-        floatingWindowElement.value.style.left = `${newX}px`;
-        floatingWindowElement.value.style.top = `${newY}px`;
-    }
+    floatingWindowElement.value.style.left = `${newX}px`;
+    floatingWindowElement.value.style.top = `${newY}px`;
 };
 
 /**

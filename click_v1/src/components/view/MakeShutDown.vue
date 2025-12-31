@@ -29,11 +29,11 @@
               p-id="9297"></path>
           </svg>
         </div>
-        <input :v-model="timing.h" class="hold-time" type="number" placeholder="时（h）" min="0" max="23">
-        <input :v-model="timing.m"class="hold-time" type="number" placeholder="分（m）" min="0" max="59">
-        <input :v-model="timing.s"class="hold-time" type="number" placeholder="秒（s）" min="0" max="59">
-        <div class="submin-time" @click="() => { }"><span>确定</span></div>
-        <div class="reset-time" @click="() => { }"><span>重置</span></div>
+        <input v-model="timing.h" class="input-box" type="number" placeholder="时（h）" min="0" max="23">
+        <input v-model="timing.m" class="input-box" type="number" placeholder="分（m）" min="0" max="59">
+        <input v-model="timing.s" class="input-box" type="number" placeholder="秒（s）" min="0" max="59">
+        <div class="submin-time" @click="() => { takeTiming() }"><span>确定</span></div>
+        <div class="reset-time" @click="() => { cleanInputTiming() }"><span>重置</span></div>
       </form>
     </div>
   </div>
@@ -43,10 +43,19 @@
 import { reactive } from 'vue';
 
 const timing = reactive({
-  "h": 100,
-  "m": 100,
-  "s": 100,
+  "h": null,
+  "m": null,
+  "s": null,
 })
+
+const takeTiming = ()=>{
+  console.log(timing)
+}
+const cleanInputTiming = () => {
+  timing.h = null
+  timing.m = null
+  timing.s = null
+}
 </script>
 
 <style scoped>
@@ -127,20 +136,31 @@ const timing = reactive({
   border-bottom: 1px dashed var(--unite-but-color);
 }
 
-.hold-time {
-  
-  height: 4vmin;
-  min-height: fit-content;
-  min-width: fit-content;
+.input-box {
   font-family: "楷体", 'Courier New', Courier, monospace;
   font-size: 2vmin;
   text-align: center;
-  border-radius: 1vmin;
-  background: var(--button-color);
-  border-top: 1px dashed var(--unite-but-color);
-  border-bottom: 1px dashed var(--unite-but-color);
-  border-left: 1px dashed var(--unite-but-color);
-  border-right: 1px dashed var(--unite-but-color);
+  height: 4vmin;
+  padding: 0px 0px;
+  margin: auto 0;
+  background: transparent;
+  border-top: 0px dashed var(--unite-but-color);
+  border-bottom: 2px dashed var(--unite-but-color);
+  border-left: 0px dashed var(--unite-but-color);
+  border-right: 0px dashed var(--unite-but-color);
+  transition: all 0.3s ease;
+}
+
+.input-box:hover {
+  border-color: var(--positive-show-color);
+}
+
+.input-box:focus {
+  outline: none;
+  /* 取消默认的焦点轮廓 */
+  /* border: 1px solid var(--active-attention-color); */
+  border-bottom: 2px dashed var(--active-attention-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
 }
 
@@ -151,8 +171,8 @@ const timing = reactive({
   justify-content: center;
   align-items: center;
   border: 0px solid var(--main-border);
-  border-left: 1px solid var(--main-border);
-  border-right: 1px solid var(--main-border);
+  border-left: 2px solid var(--main-border);
+  border-right: 2px solid var(--main-border);
   border-radius: 1vmin;
   user-select: none;
   /* 用户无法选择 */

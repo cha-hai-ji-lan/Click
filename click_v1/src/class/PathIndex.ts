@@ -19,4 +19,6 @@ export interface FloatingWindowState {
   "choose-path-pool-close": boolean;
   "choose-function":  boolean,
   "choose-function-close":  boolean,
+  "work-bench":  boolean,  
+  "work-bench-close":  boolean,
 }

@@ -14,6 +14,7 @@
     "@tauri-apps/plugin-dialog": "^2.4.2",
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-shell": "^2.3.3",
+    "echarts": "^6.0.0",
     "vue": "^3.5.13",
     "vue-drag-resize": "^1.5.4",
     "vue-router": "^4.6.4"

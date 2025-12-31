@@ -2,6 +2,7 @@ import {reactive, shallowRef, markRaw } from "vue";
 import IconFile from '../icon/IconFile.vue'
 import IconShutdown from '../icon/IconShutDown.vue'
 import LivePicture from '../icon/LivePicture.vue'
+import RecordScreen from '../icon/RecordScreen.vue'
 export const comVisibility = reactive({
   "LeftContain": {
     "LeftContain-data": {
@@ -29,6 +30,14 @@ export const comVisibility = reactive({
           "icon": "LivePicture",
           "router": "/live-picture",
           "props": true,
+        },
+        {
+          "name": "屏幕录制",
+          "index": 0,
+          "is-focus": false,
+          "icon": "RecordScreen",
+          "router": "/record-screen",
+          "props": true,
         }
       ]
     },
@@ -45,6 +54,7 @@ export const iconComponents = shallowRef({
   'IconFile': markRaw(IconFile),
   'IconShutdown': markRaw(IconShutdown),
   'LivePicture': markRaw(LivePicture),
+  'RecordScreen':markRaw(RecordScreen),
 })
 
 export const set_color_flag = (mainColor : any, flag: String) => {
