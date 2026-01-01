@@ -4,12 +4,14 @@
     <div data-tauri-drag-region class="titlebar">
       <div data-tauri-drag-region class="left-button">
         <div class="main-icon-box">
-          <img class="main-icon" src="./assets/ico.svg" alt="卡塔">
+          <RouterLink to="/">
+            <img class="main-icon" src="./assets/ico.svg" alt="卡塔">
+
+          </RouterLink>
         </div>
       </div>
       <div data-tauri-drag-region class="mid-button">
-        <div class="titlebar-button tooltip" data-tooltip="设置 施工ing🔨"
-          @click="() => { openWindow('setting') }">
+        <div class="titlebar-button tooltip" data-tooltip="设置 施工ing🔨" @click="() => { openWindow('setting') }">
           <svg t="1766646139964" class="icon" viewBox="0 0 1084 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="5350" width="200" height="200">
             <path
@@ -465,21 +467,6 @@ const stopResize = () => {
   animation-timing-function: linear;
 }
 
-.icon {
-  height: 3vmin;
-  width: 3vmin;
-  min-height: 10px;
-  max-height: 25px;
-  min-width: 15px;
-  max-width: 30px;
-  fill: var(--icon-color)
-}
-
-.icon:active {
-  animation: active-icon 0.25s forwards;
-  animation-timing-function: linear;
-}
-
 /* -------------------------------------主区域样式----------------------------------------- */
 .container {
   transition: 0.5s;
@@ -598,39 +585,6 @@ const stopResize = () => {
   left: 100%;
 }
 
-/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
-
-.tooltip {
-  position: relative;
-  cursor: pointer;
-
-}
-
-.tooltip:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 103%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--button-color);
-  color: var(--font-color);
-  text-align: center;
-  padding: 6px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  z-index: 1000;
-  font-size: 1.5vmin;
-  opacity: 1;
-  margin-bottom: 5px;
-
-}
-
-
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-  animation: show-bubbles 0.5s forwards;
-  animation-timing-function: ease-in-out;
-}
 
 /* ==============================================动画实现============================================== */
 @keyframes active-pin {
@@ -764,16 +718,6 @@ const stopResize = () => {
   }
 }
 
-@keyframes show-bubbles {
-  0% {
-    opacity: 0.25;
-  }
-
-  100% {
-    opacity: 1;
-  }
-
-}
 </style>
 <style>
 html {
@@ -806,5 +750,182 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+/* --------------------------------------------------------一般图标----------------------------------------------------- */
+
+.icon {
+  height: 3vmin;
+  width: 3vmin;
+  min-height: 10px;
+  max-height: 25px;
+  min-width: 15px;
+  max-width: 30px;
+  fill: var(--icon-color)
+}
+
+.icon:active {
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
+}
+/* --------------------------------------------------------小图标----------------------------------------------------- */
+
+
+.small-icon {
+    height: 2.5vmin;
+    width: 2.5vmin;
+    min-height: 2px;
+    max-height: 15px;
+    min-width: 2px;
+    max-width: 15px;
+    fill: var(--icon-color)
+}
+
+.small-icon:active {
+    animation: active-icon 0.25s forwards;
+    animation-timing-function: linear;
+}
+
+/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
+
+.tooltip {
+  position: relative;
+  cursor: pointer;
+
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 103%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--button-color);
+  color: var(--font-color);
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 1.5vmin;
+  opacity: 1;
+  margin-bottom: 5px;
+
+}
+
+
+/* 为气泡添加过渡效果 */
+.tooltip::after {
+  animation: show-bubbles 0.5s forwards;
+  animation-timing-function: ease-in-out;
+}
+
+/* --------------------------------------------------------可拖缩放动框----------------------------------------------------- */
+
+
+.lt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2.5%;
+    width: 2.5%;
+    cursor: nw-resize;
+}
+
+.lc {
+    position: absolute;
+    top: 2.5%;
+    left: 0;
+    height: 95%;
+    width: 2.5%;
+    cursor: e-resize;
+}
+
+.lb {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2.5%;
+    width: 2.5%;
+    cursor: sw-resize;
+
+
+}
+
+.ct {
+    position: absolute;
+    top: 0;
+    left: 2.5%;
+    width: 95%;
+    height: 2.5%;
+    cursor: n-resize;
+
+
+}
+
+.cb {
+    position: absolute;
+    bottom: 0;
+    left: 2.5%;
+    width: 95%;
+    height: 2.5%;
+    cursor: s-resize;
+}
+
+.rt {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2.5%;
+    width: 2.5%;
+    cursor: ne-resize;
+
+}
+
+.rc {
+    position: absolute;
+    top: 2.5%;
+    right: 0;
+    height: 95%;
+    width: 2.5%;
+    cursor: e-resize;
+
+}
+
+.rb {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 2.5%;
+    width: 2.5%;
+    cursor: se-resize;
+
+}
+
+/* ==============================================动画实现============================================== */
+
+@keyframes active-icon {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+@keyframes show-bubbles {
+  0% {
+    opacity: 0.25;
+  }
+
+  100% {
+    opacity: 1;
+  }
+
 }
 </style>

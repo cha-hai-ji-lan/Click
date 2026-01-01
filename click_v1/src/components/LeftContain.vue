@@ -320,37 +320,8 @@ const getIconComponent = (iconName: string) => {
 
 }
 
-.icon {
-    height: 3vmin;
-    width: 3vmin;
-    min-height: 10px;
-    max-height: 25px;
-    min-width: 15px;
-    max-width: 30px;
-}
-
-.icon:active {
-    animation: active-icon 0.25s forwards;
-    animation-timing-function: linear;
-}
 
 /* ----------------------------------------动画区----------------------------------------------- */
-
-
-@keyframes active-icon {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(0.85);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-
-}
 
 </style>
 

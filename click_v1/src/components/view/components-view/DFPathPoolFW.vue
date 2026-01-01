@@ -425,27 +425,6 @@ const stopMove = () => {
     align-items: center;
 }
 
-.icon {
-    height: 3vmin;
-    width: 3vmin;
-    min-height: 10px;
-    max-height: 25px;
-    min-width: 15px;
-    max-width: 30px;
-    fill: var(--icon-color)
-}
-
-.small-icon {
-    margin: 0 0.5vmin;
-    height: 2.5vmin;
-    width: 2.5vmin;
-    min-height: 2px;
-    max-height: 15px;
-    min-width: 2px;
-    max-width: 15px;
-    fill: var(--icon-color)
-}
-
 .float-close-icon {
     margin-left: auto;
     margin-right: 2vmin;
@@ -489,120 +468,6 @@ const stopMove = () => {
 
 }
 
-/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
-
-.tooltip {
-    position: relative;
-    cursor: pointer;
-
-}
-
-.tooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 103%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--button-color);
-    color: var(--font-color);
-    text-align: center;
-    padding: 6px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 1000;
-    font-size: 1.5vmin;
-    opacity: 1;
-    margin-bottom: 5px;
-
-}
-
-
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-    animation: show-bubbles 0.5s forwards;
-    animation-timing-function: ease-in-out;
-}
-
-
-.lt {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: nw-resize;
-}
-
-.lc {
-    position: absolute;
-    top: 2.5%;
-    left: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
-}
-
-.lb {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: sw-resize;
-
-
-}
-
-.ct {
-    position: absolute;
-    top: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: n-resize;
-
-
-}
-
-.cb {
-    position: absolute;
-    bottom: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: s-resize;
-}
-
-.rt {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: ne-resize;
-
-}
-
-.rc {
-    position: absolute;
-    top: 2.5%;
-    right: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
-
-}
-
-.rb {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: se-resize;
-
-}
-
 /* ----------------------------------------动画区----------------------------------------------- */
 
 
@@ -634,14 +499,4 @@ const stopMove = () => {
     }
 }
 
-@keyframes show-bubbles {
-    0% {
-        opacity: 0.25;
-    }
-
-    100% {
-        opacity: 1;
-    }
-
-}
 </style>

@@ -80,8 +80,8 @@
                </div>
                <div v-if="focusMethod === '0'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
-                         <div v-if="active_path && active_path.length > 0" class="replace-name"
-                              :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
+                         <DFChangeName :active_path="active_path" v-model:inputRefReplaceOldName="inputRefReplaceOldName" v-model:inputRefReplaceNewName="inputRefReplaceNewName" :SubmitRepluceName="SubmitRepluceName"></DFChangeName>
+                         <!-- <div v-if="active_path && active_path.length > 0" class="replace-name">
                               <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
                                    <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
@@ -109,13 +109,12 @@
                          </div>
                          <div v-else class="place-holder">
                               <span>🔎 当前无可观察路径...</span>
-                         </div>
+                         </div> -->
                     </transition>
                </div>
                <div v-if="focusMethod === '1'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
-                         <div v-if="active_path && active_path.length > 0" class="order-and-replace-name"
-                              :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
+                         <div v-if="active_path && active_path.length > 0" class="order-and-replace-name">
                               <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
                                    <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
@@ -177,6 +176,7 @@ import { parseStringToArray } from '../../util/DataTool'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
+import DFChangeName from "./components-view/DFChangeName.vue"
 // import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
 
@@ -635,10 +635,6 @@ h3 {
 }
 
 
-
-
-
-
 .icon-right-margin {
      margin-right: 2.5vmin;
 }
@@ -647,20 +643,6 @@ h3 {
      margin-left: 2.5vmin;
 }
 
-.icon {
-     height: 3vmin;
-     width: 3vmin;
-     min-height: 10px;
-     max-height: 25px;
-     min-width: 15px;
-     max-width: 30px;
-     fill: var(--icon-color)
-}
-
-.icon:active {
-     animation: active-icon 0.25s forwards;
-     animation-timing-function: linear;
-}
 
 .small-icon:active {
      animation: active-icon 0.25s forwards;
@@ -895,9 +877,6 @@ h3 {
      border-top: 1px dashed var(--unite-but-color);
      border-bottom: 1px dashed var(--unite-but-color);
      animation: show-method 0.5s ease-in-out forwards;
-
-
-
 }
 
 .replace-name {
@@ -1007,42 +986,6 @@ h3 {
      animation-timing-function: linear;
 }
 
-
-/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
-
-.tooltip {
-     position: relative;
-     cursor: pointer;
-
-}
-
-.tooltip:hover::after {
-     content: attr(data-tooltip);
-     position: absolute;
-     top: 103%;
-     left: 50%;
-     transform: translateX(-50%);
-     background-color: var(--button-color);
-     color: var(--font-color);
-     text-align: center;
-     padding: 6px 10px;
-     border-radius: 4px;
-     white-space: nowrap;
-     z-index: 1000;
-     font-size: 1.5vmin;
-     opacity: 1;
-     margin-bottom: 5px;
-
-}
-
-
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-     animation: show-bubbles 0.5s forwards;
-     animation-timing-function: ease-in-out;
-}
-
-
 /* ----------------------------------------动画区----------------------------------------------- */
 
 /* 替换名称区域的过渡动画 */
@@ -1109,20 +1052,6 @@ h3 {
      }
 }
 
-@keyframes active-icon {
-     0% {
-          transform: scale(1);
-     }
-
-     50% {
-          transform: scale(0.85);
-     }
-
-     100% {
-          transform: scale(1);
-     }
-
-}
 
 @keyframes show-paper {
      0% {
@@ -1131,17 +1060,6 @@ h3 {
 
      100% {
           height: 78%;
-     }
-
-}
-
-@keyframes show-bubbles {
-     0% {
-          opacity: 0.25;
-     }
-
-     100% {
-          opacity: 1;
      }
 
 }

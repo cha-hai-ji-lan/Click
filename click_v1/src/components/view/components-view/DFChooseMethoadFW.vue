@@ -414,20 +414,6 @@ const collapse = () => {
     margin-top: 1vmin;
 }
 
-.small-icon {
-    height: 2.5vmin;
-    width: 2.5vmin;
-    min-height: 2px;
-    max-height: 15px;
-    min-width: 2px;
-    max-width: 15px;
-    fill: var(--icon-color)
-}
-
-.small-icon:active {
-    animation: active-icon 0.25s forwards;
-    animation-timing-function: linear;
-}
 
 .static-contain {
     width: 100%;
@@ -477,119 +463,7 @@ const collapse = () => {
     border-radius: 2vmin;
 }
 
-/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
 
-.tooltip {
-    position: relative;
-    cursor: pointer;
-
-}
-
-.tooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 103%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--button-color);
-    color: var(--font-color);
-    text-align: center;
-    padding: 6px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 1000;
-    font-size: 1.5vmin;
-    opacity: 1;
-    margin-bottom: 5px;
-
-}
-
-
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-    animation: show-bubbles 0.5s forwards;
-    animation-timing-function: ease-in-out;
-}
-
-/* ------------------------------------------------可拖拽边框------------------------------------------------------------*/
-.lt {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: nw-resize;
-}
-
-.lc {
-    position: absolute;
-    top: 2.5%;
-    left: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
-}
-
-.lb {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: sw-resize;
-
-
-}
-
-.ct {
-    position: absolute;
-    top: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: n-resize;
-
-
-}
-
-.cb {
-    position: absolute;
-    bottom: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: s-resize;
-}
-
-.rt {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: ne-resize;
-
-}
-
-.rc {
-    position: absolute;
-    top: 2.5%;
-    right: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
-
-}
-
-.rb {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: se-resize;
-
-}
 
 /* ------------------------------------------------动画区------------------------------------------------------------*/
 
@@ -623,29 +497,4 @@ const collapse = () => {
 
 }
 
-@keyframes active-icon {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(0.85);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-
-}
-
-@keyframes show-bubbles {
-    0% {
-        opacity: 0.25;
-    }
-
-    100% {
-        opacity: 1;
-    }
-
-}
 </style>

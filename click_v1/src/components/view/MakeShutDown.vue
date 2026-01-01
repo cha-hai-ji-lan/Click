@@ -200,55 +200,6 @@ const cleanInputTiming = () => {
   animation-timing-function: linear;
 }
 
-.icon {
-  height: 3vmin;
-  width: 3vmin;
-  min-height: 10px;
-  max-height: 25px;
-  min-width: 15px;
-  max-width: 30px;
-  fill: var(--icon-color)
-}
-
-.icon:active {
-  animation: active-icon 0.25s forwards;
-  animation-timing-function: linear;
-}
-
-/* --------------------------------------------------------气泡区提示----------------------------------------------------- */
-
-.tooltip {
-  position: relative;
-  cursor: pointer;
-
-}
-
-.tooltip:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 103%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--button-color);
-  color: var(--font-color);
-  text-align: center;
-  padding: 6px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  z-index: 1000;
-  font-size: 1.5vmin;
-  opacity: 1;
-  margin-bottom: 5px;
-
-}
-
-
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-  animation: show-bubbles 0.5s forwards;
-  animation-timing-function: ease-in-out;
-}
-
 /* --------------------------------------------------------动画区----------------------------------------------------- */
 
 @keyframes show-paper {
@@ -262,33 +213,4 @@ const cleanInputTiming = () => {
 
 }
 
-@keyframes active-icon {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.85);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-
-}
-
-@keyframes active-icon {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.85);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-
-}
 </style>
