@@ -1,4 +1,4 @@
-import {reactive, shallowRef, markRaw } from "vue";
+import { reactive, shallowRef, markRaw, Ref } from "vue";
 import IconFile from '../icon/IconFile.vue'
 import IconShutdown from '../icon/IconShutDown.vue'
 import LivePicture from '../icon/LivePicture.vue'
@@ -44,7 +44,7 @@ export const comVisibility = reactive({
     "LeftContain-open": false,
     "LeftContain-close": true, // 保障关闭侧边栏按钮可以正常运转
   },
-  "setting":{
+  "setting": {
     "setting-open": false,
     "setting-close": false,
   }
@@ -54,15 +54,32 @@ export const iconComponents = shallowRef({
   'IconFile': markRaw(IconFile),
   'IconShutdown': markRaw(IconShutdown),
   'LivePicture': markRaw(LivePicture),
-  'RecordScreen':markRaw(RecordScreen),
+  'RecordScreen': markRaw(RecordScreen),
 })
 
-export const set_color_flag = (mainColor : any, flag: String) => {
+
+export const waitAtomTime = 50  // 原子时间 ms 用于时间计数的最小时间
+
+export const alertMsg = (errorMsg: Ref<string, string>, closeerrorMsg: Ref<string, string>, showMsg: string, errorLevel: Ref<number, number>, warningLevel: number) => {
+  errorLevel.value = warningLevel
+  setTimeout(() => {
+    errorMsg.value = showMsg
+    setTimeout(() => {
+      closeerrorMsg.value = "<__CLOSE__>"
+      setTimeout(() => {
+        errorMsg.value = '';
+        closeerrorMsg.value = ''
+      }, 250)
+    }, waitAtomTime * errorMsg.value.length * 3 + 250)/*  */
+  }, waitAtomTime)
+
+}
+export const set_color_flag = (mainColor: any, flag: String) => {
   mainColor.set_theme_flag(flag)
-  
+
 }
 
-export const set_focus_color_palette = (mainColor : any) => {
+export const set_focus_color_palette = (mainColor: any) => {
   // 特殊颜色
   document.documentElement.style.setProperty("--icon-color", `rgba(${mainColor.iconColorRGBA})`)
   document.documentElement.style.setProperty("--title-close-icon-shadow", `rgba(${mainColor.colseIconColorRGBA})`)
@@ -86,17 +103,25 @@ export const set_focus_color_palette = (mainColor : any) => {
   document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.foreGroundColorRGBA})`)
   document.documentElement.style.setProperty("--icon-hover-shadow", `rgba(${mainColor.iconHoverColorRGBA})`)
   document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.iconActiveColorRGBA})`)
-  document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.fontColorRGBA})`)
-  document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.buttonColorRGBA})`)  // 按钮颜色
-  document.documentElement.style.setProperty("--unite-but-color", `rgba(${mainColor.iconColorRGBA})`)
+
+  document.documentElement.style.setProperty("--button-color", `rgba(${mainColor.buttonColorRGBA})`)                              // 按钮颜色
+  document.documentElement.style.setProperty("--unite-but-color", `rgba(${mainColor.iconColorRGBA})`)                             // 单元图标颜色
 
   // 注视颜色
-  document.documentElement.style.setProperty("--normal-attention-color", `rgba(${mainColor.normalAttentionRGBA})`)
-  document.documentElement.style.setProperty("--active-attention-color", `rgba(${mainColor.activeAttentionRGBA})`)
 
-  document.documentElement.style.setProperty("--positive-show-color", `rgba(${mainColor.positiveShowRGBA})`)
-  document.documentElement.style.setProperty("--normal-show-color", `rgba(${mainColor.normalShowRGBA})`)
-  document.documentElement.style.setProperty("--negative-show-color", `rgba(${mainColor.negativeShowRGBA})`)
+  document.documentElement.style.setProperty("--font-color", `rgba(${mainColor.fontColorRGBA})`)                                  // 一般文字颜色
+  document.documentElement.style.setProperty("--active-font-color", `rgba(${mainColor.ActiveFontColorRGBA})`)                     // 活动文字颜色
+
+  document.documentElement.style.setProperty("--normal-attention-color", `rgba(${mainColor.normalAttentionRGBA})`)                // 一般注视颜色
+  document.documentElement.style.setProperty("--active-attention-color", `rgba(${mainColor.activeAttentionRGBA})`)                // 活动注视颜色
+
+  document.documentElement.style.setProperty("--positive-show-color", `rgba(${mainColor.positiveShowRGBA})`)                      // 积极显示颜色
+  document.documentElement.style.setProperty("--normal-show-color", `rgba(${mainColor.normalShowRGBA})`)                          // 一般显示颜色
+  document.documentElement.style.setProperty("--negative-show-color", `rgba(${mainColor.negativeShowRGBA})`) 
+                       // 消极显示颜色
+  document.documentElement.style.setProperty("--positive-agree-color", `rgba(${mainColor.positiveAgreeRGBA})`)                      // 积极显示颜色
+  document.documentElement.style.setProperty("--normal-agree-color", `rgba(${mainColor.normalAgreeRGBA})`)                          // 一般显示颜色
+  document.documentElement.style.setProperty("--negative-agree-color", `rgba(${mainColor.negativeAgreeRGBA})`)                      // 消极显示颜色
 
 
 

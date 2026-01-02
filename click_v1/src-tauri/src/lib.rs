@@ -9,6 +9,7 @@ use std::io::{Read, Write};
 use std::path::Path;
 use std::process::Command;
 use std::thread;
+use std::time::Instant;
 // 引入 serde_json 库
 use utils::files::{
     get_active_explorer_path,  // 获取当前活动窗口的目录
@@ -79,7 +80,8 @@ fn replace_all_name(
     dir_path: String,
     old_name_sign: String,
     new_name_sign: String,
-) -> Result<(), String> {
+) -> Result<String, String> {
+    let start = Instant::now();
     // 调用 traverse_directory_all 获取目录下所有路径
     match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
         Ok(mut all_paths) => {
@@ -96,7 +98,8 @@ fn replace_all_name(
                     }
                 }
             }
-            Ok(())
+            let duration = start.elapsed();
+            Ok(format!("花费时间: {:?}", duration))
         }
         Err(e) => Err(format!("遍历目录失败: {}", e)),
     }

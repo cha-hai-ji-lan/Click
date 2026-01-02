@@ -91,7 +91,6 @@
                          <DFSortChangeName :active_path="active_path" v-model:selectedValue="selectedValue"
                               v-model:inputRefSortName="inputRefSortName" :selectOptions="selectOptions"
                               :SubmitRepluceName="SubmitRepluceName"></DFSortChangeName>
-
                     </transition>
                </div>
 
@@ -107,6 +106,7 @@
           :openFolderDialog="openFolderDialog"></DFPathPoolFW>
      <DFChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
      </DFChooseMethoadFW>
+     <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{'close-err-msg': closeerrorMsg ==='<__CLOSE__>'}" :msg="errorMsg" :errLevel="errorLevel"></Megbox>
 
 </template>
 <script setup lang="ts">
@@ -116,14 +116,18 @@ import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { parseStringToArray } from '../../util/DataTool'
+import { alertMsg } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
 import DFChangeName from "./components-view/DFChangeName.vue"
 import DFSortChangeName from "./components-view/DFSortChangeName.vue"
+import Megbox from "../components/Megbox.vue"
 // import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
-
+const errorMsg = ref("")
+const closeerrorMsg = ref("")
+const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
 const active_path = ref<PathItem[] | null>(null)
 const selectedPaths = ref<PathItem[]>([]) // 选中的路径
 
@@ -135,14 +139,7 @@ const inputRefReplaceOldName = ref("")  // 旧字段
 const inputRefReplaceNewName = ref("")  // 新字段
 const inputRefSortName = ref("")
 
-const FloatingWindow = reactive<FloatingWindowState>({
-     "choose-path-pool": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
-     "choose-path-pool-close": false,
-     "choose-function": false,
-     "choose-function-close": false,
-     "work-bench": false,
-     "work-bench-close": false,
-})
+
 const userSelectedPath = ref<string[] | null>(null)
 const userSelectedShortPath = ref<string[] | null>(null)
 const floatingWindowElement = ref<HTMLElement | null>(null);
@@ -153,6 +150,15 @@ const focusMethod = ref<string>("")
 const availableMethods = reactive({
      "0": "修改名字字段",
      "1": "改名排序"
+})
+
+const FloatingWindow = reactive<FloatingWindowState>({
+     "choose-path-pool": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
+     "choose-path-pool-close": false,
+     "choose-function": false,
+     "choose-function-close": false,
+     "work-bench": false,
+     "work-bench-close": false,
 })
 const selectOptions = [
      { value: 'by-name', label: '按原名称顺序排序' },
@@ -363,13 +369,12 @@ const click = (whichOne: string, index: number = 0) => {
 const SubmitRepluceName = (tag: String) => {
      switch (tag) {
           case 'replace-name':
-               console.log(inputRefReplaceOldName.value)
                if (inputRefReplaceOldName.value !== "") {
                     if (selectedPaths.value.length !== 0) {
                          selectedPaths.value.forEach((item, _) => {
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
-                                        console.log("成功替换文件名", ok);
+                                        alertMsg(errorMsg, closeerrorMsg,`已完成替换文件名${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
                                         console.log(selectedPaths.value)
@@ -391,7 +396,7 @@ const SubmitRepluceName = (tag: String) => {
 
 
                } else {
-                    alert("请输入要替换的字段")
+                    alertMsg(errorMsg, closeerrorMsg,"请输入要替换的字段", errorLevel, 3)
                }
 
                break;

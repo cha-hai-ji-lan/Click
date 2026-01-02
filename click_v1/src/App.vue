@@ -786,6 +786,18 @@ body {
     animation-timing-function: linear;
 }
 
+/* --------------------------------------------------------错误提示----------------------------------------------------- */
+.show-err-msg{
+    animation: show-err 0.25s forwards;
+
+}
+
+.close-err-msg {
+    animation: hide-err 0.25s forwards;
+
+}
+
+
 /* --------------------------------------------------------气泡区提示----------------------------------------------------- */
 
 .tooltip {
@@ -925,6 +937,26 @@ body {
 
   100% {
     opacity: 1;
+  }
+
+}
+@keyframes show-err {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+
+}
+@keyframes hide-err {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 
 }
