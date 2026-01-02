@@ -21,7 +21,7 @@
         </div>
         <a class="tooltip" href="mailto:shi2760992374@outlook.com?subject=BUG反馈&body=请发送反馈内容" data-tooltip="反馈邮件">
           <div class="mid-version">
-            <h3>Bug反馈</h3>
+            <h3>0.1.2β Bug反馈</h3>
           </div>
         </a>
 

@@ -5,19 +5,17 @@ mod utils;
 use open;
 
 use serde_json::Value;
-use std::io::{Read, Write};
 use std::path::Path;
 use std::process::Command;
 use std::thread;
 use std::time::Instant;
 // 引入 serde_json 库
 use utils::files::{
-    get_active_explorer_path,  // 获取当前活动窗口的目录
-    replace_name,  // 修改文件名字
-    replace_name_by_modify_time, // 按修改时间修改文件名
-    replace_name_by_modify_time_pool, // 按修改时间修改文件名 修改路径池中的路径
-    traverse_directory_all,      // 引入 traverse_directory_all 函数 广度优先遍历路径
-    DataProcessor,
+    file_object::DataProcessor,
+    open_file_functions::{
+        get_active_explorer_path, replace_name_by_modify_time, replace_name_by_modify_time_pool,
+    },
+    path_operations::{replace_name, traverse_directory_all},
 };
 
 #[tauri::command]
@@ -31,16 +29,49 @@ fn test_command(data: Vec<Value>) -> Result<String, String> {
     Ok("处理完成".to_string())
 }
 
+/// 批量替换文件名
 #[tauri::command]
-fn change_file_name(rule: Vec<Value>, path: String, mode: i32, old_to_new: bool, order_mode:i32) -> Result<(), String> {
-    replace_name_by_modify_time(rule, Box::new(Path::new(path.as_str())), mode, old_to_new, order_mode)
-        .map_err(|e| e.to_string())
+fn change_file_name(
+    rule: Vec<Value>,
+    path: String,
+    mode: i32,
+    old_to_new: bool,
+    order_mode: i32,
+) -> Result<String, String> {
+    let start = Instant::now();
+    match replace_name_by_modify_time(
+        rule,
+        Box::new(Path::new(path.as_str())),
+        mode,
+        old_to_new,
+        order_mode,
+    ) {
+        Ok(_) => {
+            let duration = start.elapsed();
+            Ok(format!("花费时间: {:?}", duration))
+        }
+        Err(e) => Err(format!("遍历目录失败: {}", e)),
+    }
 }
+/// 批量替换路径池文件名
 #[tauri::command]
-fn change_pool_file_name(rule: Vec<Value>, path: Vec<String>, mode: i32, old_to_new: bool, order_mode:i32) -> Result<(), String> {
-    replace_name_by_modify_time_pool(rule, path, mode, old_to_new, order_mode)
-        .map_err(|e| e.to_string())
+fn change_pool_file_name(
+    rule: Vec<Value>,
+    path: Vec<String>,
+    mode: i32,
+    old_to_new: bool,
+    order_mode: i32,
+) -> Result<String, String> {
+    let start = Instant::now();
+    match replace_name_by_modify_time_pool(rule, path, mode, old_to_new, order_mode) {
+        Ok(_) => {
+            let duration = start.elapsed();
+            Ok(format!("花费时间: {:?}", duration))
+        }
+        Err(e) => Err(format!("遍历目录失败: {}", e)),
+    }
 }
+/// 运行 EXE 文件
 #[tauri::command]
 fn run_exe(path: String) {
     // 使用系统命令启动 EXE 文件，并在新线程中执行
@@ -55,7 +86,7 @@ fn run_exe(path: String) {
         }
     });
 }
-// 打开 URL
+/// 打开 URL
 #[tauri::command]
 fn open_url(url: &str) -> Result<(), String> {
     match open::that(url) {
@@ -63,7 +94,7 @@ fn open_url(url: &str) -> Result<(), String> {
         Err(e) => Err(format!("无法打开 URL: {e}")),
     }
 }
-
+/// 获取当前活动窗口的目录路径
 #[tauri::command]
 fn active_explorer_path() -> Vec<(String, String)> {
     match get_active_explorer_path() {
@@ -75,6 +106,7 @@ fn active_explorer_path() -> Vec<(String, String)> {
     }
 }
 
+/// 替换所有文件名字段
 #[tauri::command]
 fn replace_all_name(
     dir_path: String,
@@ -112,13 +144,13 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            run_exe,
-            open_url,
-            active_explorer_path,
-            replace_all_name,
-            test_command,
-            change_file_name,
-            change_pool_file_name,
+            run_exe,               // 运行 EXE 文件
+            open_url,              // 打开 URL
+            active_explorer_path,  // 获取当前活动窗口的目录路径
+            replace_all_name,      // 替换所有文件名字段
+            test_command,          // 测试命令
+            change_file_name,      // 批量替换文件名
+            change_pool_file_name, // 批量替换路径池文件名
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
