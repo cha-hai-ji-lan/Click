@@ -66,24 +66,27 @@ const props = defineProps<{
 }
 
 .agree {
-
+    color: var(--negative-agree-color);
     border: 0.25vmin solid var(--normal-agree-color);
     background: var(--positive-agree-color);
 }
 
 .err1 {
+    color: var(--title-min-icon-active-shadow);
     border: 0.25vmin solid var(--title-min-icon-hover-shadow);
-    background: var(--title-min-icon-active-shadow);
+    background: var(--title-min-icon-shadow);
 }
 
 .err2 {
+    color: var(--title-max-icon-active-shadow);
     border: 0.25vmin solid var(--title-max-icon-hover-shadow);
-    background: var(--title-max-icon-active-shadow);
+    background: var(--title-max-icon-shadow);
 }
 
 .err3 {
+    color: var(--title-close-icon-active-shadow);
     border: 0.25vmin solid var(--title-close-icon-hover-shadow);
-    background: var(--title-close-icon-active-shadow);
+    background: var(--title-close-icon-shadow);
 }
 
 .msg-box-main span {

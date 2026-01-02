@@ -106,7 +106,8 @@
           :openFolderDialog="openFolderDialog"></DFPathPoolFW>
      <DFChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
      </DFChooseMethoadFW>
-     <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{'close-err-msg': closeerrorMsg ==='<__CLOSE__>'}" :msg="errorMsg" :errLevel="errorLevel"></Megbox>
+     <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{ 'close-err-msg': closeerrorMsg === '<__CLOSE__>' }"
+          :msg="errorMsg" :errLevel="errorLevel"></Megbox>
 
 </template>
 <script setup lang="ts">
@@ -374,14 +375,14 @@ const SubmitRepluceName = (tag: String) => {
                          selectedPaths.value.forEach((item, _) => {
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
-                                        alertMsg(errorMsg, closeerrorMsg,`已完成替换文件名${ok}`, errorLevel, 0);
+                                        alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名\t${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
                                         console.log(selectedPaths.value)
                                         console.error("无法处理文件:", err);
                                    });
                          });
-                    } else if (userSelectedPath.value?.length !== 0) {  // 添加对跳跃文件夹下的文件进行重命名
+                    } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                          userSelectedPath.value?.forEach((item, _) => { // TODO:: 写应对路径池的标志改名
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
@@ -392,11 +393,14 @@ const SubmitRepluceName = (tag: String) => {
                                    });
                          });
 
+                    } else {
+                         alertMsg(errorMsg, closeerrorMsg, `当前路径池中无注视路径`, errorLevel, 1);
+
                     }
 
 
                } else {
-                    alertMsg(errorMsg, closeerrorMsg,"请输入要替换的字段", errorLevel, 3)
+                    alertMsg(errorMsg, closeerrorMsg, "请输入要替换的字段", errorLevel, 2)
                }
 
                break;
