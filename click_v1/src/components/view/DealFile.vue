@@ -36,8 +36,6 @@
                               p-id="7193"></path>
                     </svg>
                </div>
-
-
           </div>
           <div class="explorer-act-path">
                <transition-group name="path-item" tag="div">
@@ -189,7 +187,7 @@ const get_explorer_active_path = async () => {
                active_path.value = data;
           }
      } catch (err) {
-          console.error("无法处理文件:", err);
+          alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
      }
 };
 
@@ -257,19 +255,17 @@ const openFolderDialog = async () => {
           userSelectedShortPath.value = []
 
           if (userSelectedPath.value === null) {
-               console.log('用户取消了选择');
           } else {
                if (userSelectedShortPath.value?.length === 0) {
                     userSelectedPath.value.forEach((single_path) => {
                          userSelectedShortPath.value?.push(getShortPath(single_path))
                     })
-                    console.log('选中的文件:', userSelectedPath.value);
                     // 在这里可以处理选中的文件，比如将其添加到 active_path 中
                }
 
           }
      } catch (error) {
-          console.error('打开文件对话框时出错:', error);
+          alertMsg(errorMsg, closeerrorMsg, `打开文件对话框时出错${error}`, errorLevel, 3);
      }
 };
 const openFileDialog = async () => {
@@ -292,19 +288,17 @@ const openFileDialog = async () => {
           userSelectedShortPath.value = []
 
           if (userSelectedPath.value === null) {
-               console.log('用户取消了选择');
           } else {
                if (userSelectedShortPath.value?.length === 0) {
                     userSelectedPath.value.forEach((single_path) => {
                          userSelectedShortPath.value?.push(getShortPath(single_path))
                     })
-                    console.log('选中的文件:', userSelectedPath.value);
                     // 在这里可以处理选中的文件，比如将其添加到 active_path 中
                }
 
           }
      } catch (error) {
-          console.error('打开文件对话框时出错:', error);
+          alertMsg(errorMsg, closeerrorMsg, `打开文件对话框时出错${error}`, errorLevel, 3);
      }
 };
 
@@ -367,7 +361,7 @@ const click = (whichOne: string, index: number = 0) => {
      }
 }
 
-const SubmitRepluceName = (tag: String) => {
+const SubmitRepluceName = (tag: string) => {
      switch (tag) {
           case 'replace-name':
                if (inputRefReplaceOldName.value !== "") {
@@ -378,129 +372,133 @@ const SubmitRepluceName = (tag: String) => {
                                         alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名\t${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
-                                        console.log(selectedPaths.value)
-                                        console.error("无法处理文件:", err);
+                                        alertMsg(errorMsg, closeerrorMsg, `无法处理文件\t${err}`, errorLevel, 3);
                                    });
                          });
                     } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                          userSelectedPath.value?.forEach((item, _) => { // TODO:: 写应对路径池的标志改名
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
-                                        console.log("成功替换文件名", ok);
+                                        alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名\t${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
-                                        console.error("无法处理文件:", err);
+                                        alertMsg(errorMsg, closeerrorMsg, `无法处理文件${err}`, errorLevel, 3);
                                    });
                          });
 
                     } else {
-                         alertMsg(errorMsg, closeerrorMsg, `当前路径池中无注视路径`, errorLevel, 1);
+                         alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
 
                     }
 
 
                } else {
-                    alertMsg(errorMsg, closeerrorMsg, "请输入要替换的字段", errorLevel, 2)
+                    alertMsg(errorMsg, closeerrorMsg, "您需要我替换谁？ 这让我很为难😟", errorLevel, 2)
                }
 
                break;
 
           case 'order-replace-name':
                const participle = parseStringToArray(inputRefSortName.value)
+               if (participle.toString() === '') {
+                    alertMsg(errorMsg, closeerrorMsg, `我不知道以什么规则进行改名，我可不会擅自行动的😖`, errorLevel, 2);
+                    return
+               }
+
                if (selectedPaths.value.length !== 0) {
                     switch (selectedValue.value) {
                          case 'by-name':
                               selectedPaths.value.forEach((item, _) => {
                                    invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 2 })
                                         .then((ok) => {
-                                             console.log("成功替换文件名", ok);
+                                             alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
                                         })
                                         .catch((err) => {
-                                             console.log(selectedPaths.value)
-                                             console.error("无法处理文件:", err);
+                                             alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                         });
                               });
                               break;
                          case 'by-time':
                               selectedPaths.value.forEach((item, _) => {
                                    invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
-                                        .then(() => {
-                                             console.log("成功替换文件名");
+                                        .then((ok) => {
+                                             alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
                                         })
                                         .catch((err) => {
-                                             console.log(selectedPaths.value)
-                                             console.error("无法处理文件:", err);
+                                             alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                         });
                                    userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                                    userSelectedShortPath.value = []
                               });
                               break;
                          case 'by-size':
-                              console.log("施工。。。")
+                              selectedPaths.value.forEach((item, _) => {
+                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 3 })
+                                        .then((ok) => {
+                                             alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
+                                        })
+                                        .catch((err) => {
+                                             alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
+                                        });
+                                   userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                                   userSelectedShortPath.value = []
+                              });
                               break;
                          case 'picture-sort':
-                              console.log("施工。。。")
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
                               break;
 
                          default:
-                              selectedPaths.value.forEach((item, _) => {
-                                   invoke("change_file_name", { rule: participle, path: item[0], mode: 1, oldToNew: true, orderMode: 1 })
-                                        .then(() => {
-                                             console.log("成功替换文件名");
-                                        })
-                                        .catch((err) => {
-                                             console.log(selectedPaths.value)
-                                             console.error("无法处理文件:", err);
-                                        });
-                              });
+                              alertMsg(errorMsg, closeerrorMsg, `当前没有选择排序方式我不知道以什么方式工作`, errorLevel, 1);
                               break;
                     }
-               } else if (userSelectedPath.value?.length !== 0) {  // 添加路径池中文件进行重命名
+               } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加路径池中文件进行重命名
+                    console.log(userSelectedPath.value?.length)
+
                     switch (selectedValue.value) {
                          case 'by-name':
-                              console.log(userSelectedPath.value)
                               invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 2 })
-                                   .then(() => {
-                                        console.log("成功替换文件名");
+                                   .then((ok) => {
+                                        alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
-                                        console.error("无法处理文件:", err);
+                                        alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                    });
                               userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                               userSelectedShortPath.value = []
                               break;
                          case 'by-time':
-                              console.log(userSelectedPath.value)
                               invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 1 })
-                                   .then(() => {
-                                        console.log("成功替换文件名");
+                                   .then((ok) => {
+                                        alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
-                                        console.error("无法处理文件:", err);
+                                        alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                    });
                               userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                               userSelectedShortPath.value = []
                               break;
                          case 'by-size':
-                              console.log("施工。。。")
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
                               break;
                          case 'picture-sort':
-                              console.log("施工。。。")
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
                               break;
 
                          default:
-                              console.log(userSelectedPath.value)
                               invoke("change_pool_file_name", { rule: participle, path: userSelectedPath.value, mode: 1, oldToNew: true, orderMode: 1 })
-                                   .then(() => {
-                                        console.log("成功替换文件名");
+                                   .then((ok) => {
+                                        alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名	${ok}`, errorLevel, 0);
                                    })
                                    .catch((err) => {
-                                        console.error("无法处理文件:", err);
+                                        alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                    });
                               userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                               userSelectedShortPath.value = []
                               break;
                     }
+               } else {
+                    alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
                }
 
                break

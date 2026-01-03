@@ -1,7 +1,17 @@
 <template>
   <div class="shutdown-main">
     <div class="shutdown-title">
-
+      <div class="tag-icon tooltip" data-tooltip="操作栏" @click="() => { }">
+        <svg t="1766718761251" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="7191" width="200" height="200">
+          <path
+            d="M802.864762 131.462095a97.52381 97.52381 0 0 1 97.523809 97.52381v547.84a97.52381 97.52381 0 0 1-97.523809 97.523809H188.025905a97.52381 97.52381 0 0 1-97.52381-97.523809V228.985905a97.52381 97.52381 0 0 1 97.52381-97.52381h614.887619z m0 73.142857H188.025905a24.380952 24.380952 0 0 0-24.380953 24.380953v547.84a24.380952 24.380952 0 0 0 24.380953 24.380952h614.887619a24.380952 24.380952 0 0 0 24.380952-24.380952V228.985905a24.380952 24.380952 0 0 0-24.380952-24.380953z"
+            p-id="7192"></path>
+          <path
+            d="M472.795429 147.456v707.047619h-73.142858v-707.047619zM354.889143 323.486476v73.142857h-170.666667v-73.142857zM354.889143 466.358857v73.142857h-170.666667v-73.142857z"
+            p-id="7193"></path>
+        </svg>
+      </div>
     </div>
     <div class="shutdown-contain">
       <form action="" class="timing-form">
@@ -37,10 +47,14 @@
       </form>
     </div>
   </div>
+  <!-- <MSDChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
+     </MSDChooseMethoadFW> -->
 </template>
 
 <script setup lang="ts">
 import { reactive } from 'vue';
+import MSDChooseMethoadFW from "./components-view/MSDChooseMethoadFW.vue"
+
 
 const timing = reactive({
   "h": null,
@@ -48,7 +62,7 @@ const timing = reactive({
   "s": null,
 })
 
-const takeTiming = ()=>{
+const takeTiming = () => {
   console.log(timing)
 }
 const cleanInputTiming = () => {
@@ -74,19 +88,29 @@ const cleanInputTiming = () => {
 .shutdown-title {
   width: 100%;
   margin-top: 3%;
-  height: 16%;
+  height: 4vmin;
   position: relative;
 
 }
 
 .shutdown-title::after {
-  position: absolute;
-  content: '';
-  bottom: 2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, var(--main-border), var(--title-bar-lg-1) var(--timing-schedule));
+ content: '';
+ position: absolute;
+bottom: -2px;
+ left: 0;
+ width: 100%;
+ height: 2px;
+ background: linear-gradient(to right, var(--normal-attention-color) 20%, var(--active-attention-color) 40%, var(--main-border) 60%, var(--main-back-ground) 80%);
+}
+
+
+.tag-icon {
+     width: 4vmin;
+     height: 4vmin;
+     display: flex;
+     position: relative;
+     justify-content: start;
+     align-items: center;
 }
 
 .shutdown-contain {
@@ -208,9 +232,8 @@ const cleanInputTiming = () => {
   }
 
   100% {
-    height: 78%;
+    height: 88%;
   }
 
 }
-
 </style>

@@ -1,7 +1,7 @@
 use crate::utils::files::file_object::{FileObject, FileSystemObject, FolderObject};
 use std::fs;
-use std::io::Error;
-use std::path::Path;
+use std::io::{Error, ErrorKind};
+use std::path::{Path, PathBuf};
 
 ///  # 分析父级文件夹下的所有文件夹与文件获取文件流对象
 /// ‘dir_path` - 要分析的目录路径
@@ -66,11 +66,13 @@ pub fn list_dir_com(
         }
     }
 
-    match mode {  // 文件排序
+    match mode {
+        // 文件排序
         // 按修改时间排序（从旧到新）
         1 => {
             files_with_time.sort_by_key(|f| f.modified_time);
         }
+        // 按名称排序
         2 => {
             files_with_time.sort_by(|a, b| {
                 let a_name = &a.name;
@@ -97,11 +99,16 @@ pub fn list_dir_com(
                 }
             });
         }
+        // 按文件大小
+        3 => {
+            files_with_time.sort_by_key(|f| f.size); // 按文件从小到大排序
+        }
         _ => {
             files_with_time.sort_by_key(|f| f.modified_time);
         }
     }
-    match mode {  // 文件夹排序
+    match mode {
+        // 文件夹排序
         1 => {
             folders_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -130,6 +137,11 @@ pub fn list_dir_com(
                     (false, false) => a_name.cmp(b_name),
                 }
             });
+        }
+        // 按文件大小 对于文件夹是极耗时操作
+        3 => {
+            folders_with_time = analyze_folder_size(folders_with_time).expect("分析失败");
+            folders_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
         }
         _ => {
             folders_with_time.sort_by_key(|f| f.modified_time);
@@ -236,6 +248,9 @@ pub fn list_dir_file(
                 }
             });
         }
+        3 => {
+            files_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
+        }
         _ => {
             files_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -326,6 +341,10 @@ pub fn list_dir_folder(
                 }
             });
         }
+        3 => {
+            folders_with_time = analyze_folder_size(folders_with_time).expect("分析失败");
+            folders_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
+        }
         _ => {
             folders_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -337,7 +356,6 @@ pub fn list_dir_folder(
         Ok(FileSystemObject::Folder(folders_with_time))
     }
 }
-
 
 ///  # 分析输入全部文件与文件夹路径获取文件流对象
 /// ‘dir_path` - 要分析的路径表
@@ -431,6 +449,9 @@ pub fn list_path_com(
                 }
             });
         }
+        3 => {
+            files_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
+        }
         _ => {
             files_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -465,6 +486,10 @@ pub fn list_path_com(
                 }
             });
         }
+        3 => {
+            folders_with_time = analyze_folder_size(folders_with_time).expect("分析失败");
+            folders_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
+        }
         _ => {
             folders_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -483,8 +508,6 @@ pub fn list_path_com(
         ))
     }
 }
-
-
 
 ///  # 分析输入全部文件路径获取文件流对象
 /// ‘dir_path` - 要分析的路径表
@@ -566,6 +589,9 @@ pub fn list_path_file(
                     (false, false) => a_name.cmp(b_name),
                 }
             });
+        }
+        3 => {
+            files_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
         }
         _ => {
             files_with_time.sort_by_key(|f| f.modified_time);
@@ -649,6 +675,10 @@ pub fn list_path_folder(
                 }
             });
         }
+        3 => {
+            folders_with_time = analyze_folder_size(folders_with_time).expect("分析失败");
+            folders_with_time.sort_by_key(|f| f.size);  // 按文件从小到大排序
+        }
         _ => {
             folders_with_time.sort_by_key(|f| f.modified_time);
         }
@@ -660,4 +690,60 @@ pub fn list_path_folder(
         folders_with_time.reverse();
         Ok(FileSystemObject::Folder(folders_with_time))
     }
+}
+
+#[allow(dead_code)]
+pub fn analyze_folder_size(mut folder_obj: Vec<FolderObject>) -> Result<Vec<FolderObject>, Error> {
+    for obj in &mut folder_obj {
+        let path = Path::new(&obj.path);
+        // 计算文件夹大小（递归计算所有文件）
+        let size = calculate_folder_size(path)?;
+        obj.size = size;
+    }
+    Ok(folder_obj)
+}
+
+// 辅助函数：计算文件夹总大小
+fn calculate_folder_size(path: &Path) -> Result<u64, Error> {
+    let mut total_size = 0;
+    let mut queue: std::collections::VecDeque<PathBuf> = std::collections::VecDeque::new();
+    let mut visited: std::collections::HashSet<PathBuf> = std::collections::HashSet::new(); // 防止循环引用
+
+    queue.push_back(path.to_path_buf());
+    visited.insert(path.to_path_buf());
+
+    while let Some(current_path) = queue.pop_front() {
+        let read_dir = match fs::read_dir(&current_path) {
+            Ok(dir) => dir,
+            Err(_) => continue, // 跳过无法读取的目录
+        };
+
+        for entry in read_dir {
+            let entry = match entry {
+                Ok(e) => e,
+                Err(_) => continue, // 跳过无法访问的条目
+            };
+
+            let path = entry.path();
+
+            // 检查是否为符号链接
+            if path.is_symlink() {
+                let canonical_path = match fs::canonicalize(&path) {
+                    Ok(cp) => cp,
+                    Err(_) => continue,
+                };
+                if !visited.insert(canonical_path) {
+                    continue; // 防止循环引用
+                }
+            } else if path.is_dir() {
+                if !visited.insert(path.clone()) {
+                    continue; // 防止重复访问
+                }
+                queue.push_back(path);
+            } else {
+                total_size += entry.metadata()?.len();
+            }
+        }
+    }
+    Ok(total_size)
 }

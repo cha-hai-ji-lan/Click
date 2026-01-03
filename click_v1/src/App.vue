@@ -11,7 +11,16 @@
         </div>
       </div>
       <div data-tauri-drag-region class="mid-button">
-        <div class="titlebar-button tooltip" data-tooltip="设置 施工ing🔨" @click="() => { openWindow('setting') }">
+        <div class="titlebar-button tooltip" data-tooltip="驻足 施工ing🔨" @click="() => { openWindow('setting') }">
+          <svg t="1767440149656" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="11317" width="200" height="200">
+            <path
+              d="M938.72128 582.59456l-158.72 300.35968c0 16.10752-13.04576 29.16352-29.16352 29.16352L705.6384 912.11776c-0.43008 0.01024-0.83968 0.13312-1.28 0.13312L128.60416 912.25088c-24.77056 0-44.92288-20.15232-44.92288-44.92288L83.68128 481.66912l0.11264-113.92c-0.03072-5.45792 2.10944-10.69056 5.94944-14.56128 3.85024-3.87072 9.08288-6.0416 14.53056-6.0416l71.68 0 0 40.96-51.34336 0 0.03072 93.44L124.64128 867.328c0 2.18112 1.78176 3.96288 3.96288 3.96288l48.11776 0 142.71488-288.68608c8.05888-16.14848 23.28576-29.16352 39.40352-29.16352l349.4912 0 0.11264-116.1728c22.82496 2.10944 40.84736 21.0432 40.84736 44.40064l0 71.77216 160.27648 0C925.66528 553.43104 948.21376 564.31616 938.72128 582.59456zM207.16544 731.05408c-2.22208-5.04832-3.35872-10.36288-3.35872-15.80032L203.80672 151.17312c0-21.73952 17.68448-39.424 39.424-39.424l323.59424 0 112.19968 121.9072 0 294.2976-33.10592 0L645.91872 257.29024l-86.35392 0c-9.13408 0-16.55808-7.424-16.55808-16.54784l0-95.87712L243.24096 144.86528c-3.4816 0-6.31808 2.82624-6.31808 6.30784l0 538.66496-25.33376 51.24096L207.16544 731.05408zM576.13312 224.19456l49.19296 0-49.19296-53.4528L576.13312 224.19456zM576.72704 294.69696 288.9728 294.69696c-11.23328 0-20.36736 9.14432-20.36736 20.36736s9.13408 20.36736 20.36736 20.36736l287.75424 0c11.23328 0 20.36736-9.14432 20.36736-20.36736S587.95008 294.69696 576.72704 294.69696zM597.0944 433.21344c0-11.23328-9.13408-20.35712-20.36736-20.35712L288.9728 412.85632c-11.23328 0-20.36736 9.13408-20.36736 20.35712s9.13408 20.35712 20.36736 20.35712l287.75424 0C587.95008 453.57056 597.0944 444.44672 597.0944 433.21344zM268.60544 549.45792c0 11.23328 9.13408 20.36736 20.36736 20.36736l7.3216 0 1.44384-2.74432c6.20544-11.83744 14.85824-21.73952 25.01632-28.63104l13.78304-9.35936L288.9728 529.09056C277.74976 529.09056 268.60544 538.22464 268.60544 549.45792z"
+              p-id="11318"></path>
+          </svg>
+        </div>
+        <div class="titlebar-button split-icon tooltip" data-tooltip="设置 施工ing🔨"
+          @click="() => { openWindow('setting') }">
           <svg t="1766646139964" class="icon" viewBox="0 0 1084 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="5350" width="200" height="200">
             <path
@@ -717,7 +726,6 @@ const stopResize = () => {
     transform: rotate(180deg);
   }
 }
-
 </style>
 <style>
 html {
@@ -768,32 +776,33 @@ body {
   animation: active-icon 0.25s forwards;
   animation-timing-function: linear;
 }
+
 /* --------------------------------------------------------小图标----------------------------------------------------- */
 
 
 .small-icon {
-    height: 2.5vmin;
-    width: 2.5vmin;
-    min-height: 2px;
-    max-height: 15px;
-    min-width: 2px;
-    max-width: 15px;
-    fill: var(--icon-color)
+  height: 2.5vmin;
+  width: 2.5vmin;
+  min-height: 2px;
+  max-height: 15px;
+  min-width: 2px;
+  max-width: 15px;
+  fill: var(--icon-color)
 }
 
 .small-icon:active {
-    animation: active-icon 0.25s forwards;
-    animation-timing-function: linear;
+  animation: active-icon 0.25s forwards;
+  animation-timing-function: linear;
 }
 
 /* --------------------------------------------------------错误提示----------------------------------------------------- */
-.show-err-msg{
-    animation: show-err 0.25s forwards;
+.show-err-msg {
+  animation: show-err 0.25s forwards;
 
 }
 
 .close-err-msg {
-    animation: hide-err 0.25s forwards;
+  animation: hide-err 0.25s forwards;
 
 }
 
@@ -836,81 +845,81 @@ body {
 
 
 .lt {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: nw-resize;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2.5%;
+  width: 2.5%;
+  cursor: nw-resize;
 }
 
 .lc {
-    position: absolute;
-    top: 2.5%;
-    left: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
+  position: absolute;
+  top: 2.5%;
+  left: 0;
+  height: 95%;
+  width: 2.5%;
+  cursor: e-resize;
 }
 
 .lb {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: sw-resize;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2.5%;
+  width: 2.5%;
+  cursor: sw-resize;
 
 
 }
 
 .ct {
-    position: absolute;
-    top: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: n-resize;
+  position: absolute;
+  top: 0;
+  left: 2.5%;
+  width: 95%;
+  height: 2.5%;
+  cursor: n-resize;
 
 
 }
 
 .cb {
-    position: absolute;
-    bottom: 0;
-    left: 2.5%;
-    width: 95%;
-    height: 2.5%;
-    cursor: s-resize;
+  position: absolute;
+  bottom: 0;
+  left: 2.5%;
+  width: 95%;
+  height: 2.5%;
+  cursor: s-resize;
 }
 
 .rt {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: ne-resize;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2.5%;
+  width: 2.5%;
+  cursor: ne-resize;
 
 }
 
 .rc {
-    position: absolute;
-    top: 2.5%;
-    right: 0;
-    height: 95%;
-    width: 2.5%;
-    cursor: e-resize;
+  position: absolute;
+  top: 2.5%;
+  right: 0;
+  height: 95%;
+  width: 2.5%;
+  cursor: e-resize;
 
 }
 
 .rb {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 2.5%;
-    width: 2.5%;
-    cursor: se-resize;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 2.5%;
+  width: 2.5%;
+  cursor: se-resize;
 
 }
 
@@ -930,6 +939,7 @@ body {
   }
 
 }
+
 @keyframes show-bubbles {
   0% {
     opacity: 0.25;
@@ -940,6 +950,7 @@ body {
   }
 
 }
+
 @keyframes show-err {
   0% {
     opacity: 0;
@@ -950,6 +961,7 @@ body {
   }
 
 }
+
 @keyframes hide-err {
   0% {
     opacity: 1;

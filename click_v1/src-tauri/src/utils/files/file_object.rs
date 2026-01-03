@@ -147,6 +147,7 @@ impl Drop for ComGuard {
 pub struct FolderObject {
     pub name: String,
     pub path: String,
+    pub size: u64,
     pub modified_time: time::SystemTime,
     pub father_name: String,
 }
@@ -179,6 +180,7 @@ impl FolderObject {
             name,
             path,
             modified_time,
+            size: 0,  // 默认为0 保证性能
             father_name,
         }
     }

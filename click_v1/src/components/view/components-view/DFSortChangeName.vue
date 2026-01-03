@@ -55,7 +55,7 @@ const emit = defineEmits<{
 }>()
 
 const combinedState = computed(() => ({
-    selectedValue: props.selectedValue,
+    selectedValue: selectedValueSon.value,
 }));
 
 // 监听组合状态的变化
