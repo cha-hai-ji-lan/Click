@@ -8,7 +8,8 @@
             </div>
         </div>
         <div class="detail">
-            <div class="storehouse tooltip" data-tooltip="跳转仓库" @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+            <div class="storehouse tooltip" data-tooltip="跳转仓库"
+                @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
                 <div class="msg">远程仓库</div>
                 <div class="titlebar-button">
                     <svg t="1765561345418" class="big-icon" viewBox="0 0 1024 1024" version="1.1"
@@ -19,10 +20,9 @@
                     </svg>
                 </div>
             </div>
-            <div class="about tooltip" data-tooltip="关于我 施工ing🔨">
+            <div class="about tooltip" data-tooltip="关于我 施工ing🔨" @click="() => { click('about') }">
                 <div class="about-msg">关于</div>
-                <div class="titlebar-button"
-                    @click="() => { opeanLinkling('https://github.com/cha-hai-ji-lan/Click') }">
+                <div class="titlebar-button">
                     <svg t="1766736987880" class="about-icon" viewBox="0 0 1024 1024" version="1.1"
                         xmlns="http://www.w3.org/2000/svg" p-id="12616" width="200" height="200">
                         <path
@@ -33,13 +33,34 @@
             </div>
 
         </div>
-
+        <div class="detail">
+            <div class="plung-in tooltip" data-tooltip="插件 🔨future version > 0.1.4"
+                @click="() => { click('plug-in') }">
+                <div class="plung-in-msg">插件</div>
+                <div class="titlebar-button">
+                    <svg t="1767526429118" class="plug-in-icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="5580" width="200" height="200">
+                        <path
+                            d="M640 932H256c-90.44 0-164-73.56-164-164v-96a36 36 0 0 1 36-36h32c33.08 0 60-26.92 60-60s-26.92-60-60-60h-32a36 36 0 0 1-36-36V384c0-90.44 73.56-164 164-164h60.04c2.12-70.96 60.48-128 131.96-128s129.8 57.04 131.96 128H640c90.44 0 164 73.56 164 164v60.08c70.96 2.12 128 60.48 128 131.92s-57.04 129.84-128 131.92V768c0 90.44-73.56 164-164 164zM164 707.92V768c0 50.72 41.28 92 92 92h384c50.72 0 92-41.28 92-92v-96a36 36 0 0 1 36-36h32c33.08 0 60-26.92 60-60s-26.92-60-60-60h-32a36 36 0 0 1-36-36V384c0-50.72-41.28-92-92-92h-96a36 36 0 0 1-36-36v-32c0-33.08-26.92-60-60-60s-60 26.92-60 60v32a36 36 0 0 1-36 36H256c-50.72 0-92 41.28-92 92v60.08c70.96 2.12 128 60.48 128 131.92s-57.04 129.84-128 131.92z"
+                            p-id="5581"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <Megbox v-show="errorMsg !== ''" class="show-err-msg"
+            :class="{ 'close-err-msg': closeerrorMsg === '<__CLOSE__>' }" :msg="errorMsg" :errLevel="errorLevel">
+        </Megbox>
     </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
 import { invoke } from "@tauri-apps/api/core";
+import Megbox from "../components/Megbox.vue"
+import { alertMsg } from '../../util/PluginObjects'
 const titleMessage = ref("咔嗒")
+const errorMsg = ref<string>('')
+const closeerrorMsg = ref<string>('')
+const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
 
 
 
@@ -48,6 +69,21 @@ const opeanLinkling = async (url: String) => {
         await invoke('open_url', { url });
     } catch (err) {
         console.error('无法打开链接:', err);
+    }
+}
+
+const click = (who: string) => {
+    switch (who) {
+        case 'about':
+            alertMsg(errorMsg, closeerrorMsg, `我想了很多，但是还没有想好如何向你介绍我自己，我感觉我还是有些羞涩。。。😳`, errorLevel, 1)
+
+            break;
+        case 'plug-in':
+            alertMsg(errorMsg, closeerrorMsg, `Clic还未实现插件功能（我猜要等到 0.1.3 ~ 0.1.4版本），请稍后在未来版本我一定会变得更强大😉`, errorLevel, 1)
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -134,6 +170,11 @@ const opeanLinkling = async (url: String) => {
 
 }
 
+.storehouse:active {
+    animation: active-icon 0.25s forwards;
+
+}
+
 .about {
     margin-top: 5vmin;
     margin-left: 2vmin;
@@ -149,6 +190,33 @@ const opeanLinkling = async (url: String) => {
     border-radius: 2vmin;
     border: 0.5vmin dashed var(--title-max-icon-hover-shadow);
     box-shadow: 1vmin 1vmin 1vmin var(--title-max-icon-active-shadow);
+}
+
+.about:active {
+    animation: active-icon 0.25s forwards;
+
+}
+
+.plung-in {
+    margin-top: 5vmin;
+    margin-left: 2vmin;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: fit-content;
+    /* 自适应内容大小 */
+    height: 14vmin;
+    background: var(--title-bar-lg-2);
+    border-radius: 2vmin;
+    border: 0.5vmin dashed var(--title-min-icon-hover-shadow);
+    box-shadow: 1vmin 1vmin 1vmin var(--title-min-icon-active-shadow);
+}
+
+.plung-in:active {
+    animation: active-icon 0.25s forwards;
+
 }
 
 .msg {
@@ -173,6 +241,17 @@ const opeanLinkling = async (url: String) => {
     color: var(--title-max-icon-shadow);
 }
 
+.plung-in-msg {
+    display: flex;
+    width: 20vmin;
+    height: 10vmin;
+    font-size: 4vmin;
+    font-weight: 900;
+    justify-content: center;
+    align-items: center;
+    color: var(--title-min-icon-shadow);
+}
+
 .titlebar-button {
     display: flex;
 
@@ -193,6 +272,12 @@ const opeanLinkling = async (url: String) => {
     width: 10vmin;
     height: 10vmin;
     fill: var(--title-max-icon-shadow);
+}
+
+.plug-in-icon {
+    width: 10vmin;
+    height: 10vmin;
+    fill: var(--title-min-icon-shadow);
 
 
 }

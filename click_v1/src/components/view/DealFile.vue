@@ -445,7 +445,7 @@ const SubmitRepluceName = (tag: string) => {
                               });
                               break;
                          case 'picture-sort':
-                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉我有点笨还没有学会这个技能，但是我会努力学习的！！！🥺`, errorLevel, 1);
                               break;
 
                          default:
@@ -479,10 +479,10 @@ const SubmitRepluceName = (tag: string) => {
                               userSelectedShortPath.value = []
                               break;
                          case 'by-size':
-                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉我有点笨还没有学会这个技能，但是我会努力学习的！！！🥺`, errorLevel, 1);
                               break;
                          case 'picture-sort':
-                              alertMsg(errorMsg, closeerrorMsg, `抱歉当前功能还未上线`, errorLevel, 1);
+                              alertMsg(errorMsg, closeerrorMsg, `抱歉我有点笨还没有学会这个技能，但是我会努力学习的！！！🥺`, errorLevel, 1);
                               break;
 
                          default:
