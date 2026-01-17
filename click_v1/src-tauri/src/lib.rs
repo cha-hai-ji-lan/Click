@@ -10,12 +10,15 @@ use std::process::Command;
 use std::thread;
 use std::time::Instant;
 // 引入 serde_json 库
-use utils::files::{
-    file_object::DataProcessor,
-    open_file_functions::{
-        get_active_explorer_path, replace_name_by_modify_time, replace_name_by_modify_time_pool,
+use utils::{
+    files::{
+        file_object::DataProcessor,
+        open_file_functions::{
+            get_active_explorer_path, replace_name_by_modify_time, replace_name_by_modify_time_pool,
+        },
+        path_operations::{replace_name, traverse_directory_all},
     },
-    path_operations::{replace_name, traverse_directory_all},
+    timing::wait_with_timer,
 };
 
 #[tauri::command]
@@ -71,20 +74,51 @@ fn change_pool_file_name(
         Err(e) => Err(format!("遍历目录失败: {}", e)),
     }
 }
-/// 运行 EXE 文件
+/// 运行 EXE 文件或 PowerShell 脚本
 #[tauri::command]
 fn run_exe(path: String) {
-    // 使用系统命令启动 EXE 文件，并在新线程中执行
+    // 检查文件扩展名来决定使用哪个命令
+    let extension = Path::new(&path)
+        .extension()
+        .and_then(std::ffi::OsStr::to_str)
+        .unwrap_or("")
+        .to_lowercase();
+
     thread::spawn(move || {
-        let output = Command::new("cmd")
-            .args(&["/C", "start", "", &path])
-            .output()
-            .expect("Failed to execute command");
+        let output = if extension == "ps1" {
+            Command::new("powershell")
+                .args(&["-WindowStyle", "Hidden", "-File", &path])
+                .output()
+                .expect("Failed to execute PowerShell command")
+        } else {
+            Command::new("cmd")
+                .args(&["/C", "start", "", &path])
+                .output()
+                .expect("Failed to execute command")
+        };
 
         if !output.status.success() {
-            eprintln!("Failed to run EXE: {:?}", output);
+            eprintln!("Failed to run file: {:?}", output);
         }
     });
+}
+
+#[tauri::command]
+fn during_time_do_something(
+    time: u64,
+    target_time: u64,
+    fn_mode: i32,
+    mode: i32,
+) -> Result<(), String> {
+    match fn_mode {
+        // 无执行函数， 执行函数作用范围大于 指定时间 所以指定时间也为 None
+        0 => { // 允许 mode in [None, 0, 1]
+            wait_with_timer(time, None, None, Option::from(mode));
+        }
+        1 => {}
+        _ => {}
+    }
+    Ok(())
 }
 /// 打开 URL
 #[tauri::command]
@@ -144,13 +178,14 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            run_exe,               // 运行 EXE 文件
-            open_url,              // 打开 URL
-            active_explorer_path,  // 获取当前活动窗口的目录路径
-            replace_all_name,      // 替换所有文件名字段
-            test_command,          // 测试命令
-            change_file_name,      // 批量替换文件名
-            change_pool_file_name, // 批量替换路径池文件名
+            run_exe,                  // 运行 EXE 文件
+            open_url,                 // 打开 URL
+            active_explorer_path,     // 获取当前活动窗口的目录路径
+            replace_all_name,         // 替换所有文件名字段
+            test_command,             // 测试命令
+            change_file_name,         // 批量替换文件名
+            change_pool_file_name,    // 批量替换路径池文件名
+            during_time_do_something  // 运行指定时间后执行指定命令
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

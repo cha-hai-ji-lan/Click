@@ -1,6 +1,6 @@
 use crate::utils::files::file_object::{FileObject, FileSystemObject, FolderObject};
 use std::fs;
-use std::io::{Error, ErrorKind};
+use std::io::{Error};
 use std::path::{Path, PathBuf};
 
 ///  # 分析父级文件夹下的所有文件夹与文件获取文件流对象
@@ -320,23 +320,18 @@ pub fn list_dir_folder(
                 let a_name = &a.name;
                 let b_name = &b.name;
 
-                // 判断是否为纯数字字符串
                 let a_is_numeric = a_name.chars().all(|c| c.is_ascii_digit());
                 let b_is_numeric = b_name.chars().all(|c| c.is_ascii_digit());
 
                 match (a_is_numeric, b_is_numeric) {
-                    // 两个都是数字：按数值大小排序
                     (true, true) => {
                         match (a_name.parse::<i64>(), b_name.parse::<i64>()) {
                             (Ok(num_a), Ok(num_b)) => num_a.cmp(&num_b),
-                            _ => a_name.cmp(b_name), // 如果解析失败则按字符串排序
+                            _ => a_name.cmp(b_name), //
                         }
                     }
-                    // 只有a是数字：数字排在后面
                     (true, false) => std::cmp::Ordering::Greater,
-                    // 只有b是数字：数字排在后面
                     (false, true) => std::cmp::Ordering::Less,
-                    // 两个都不是数字：按字符串排序
                     (false, false) => a_name.cmp(b_name),
                 }
             });

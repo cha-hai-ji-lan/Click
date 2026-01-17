@@ -1,5 +1,5 @@
 pub mod files;
-mod timing;
+pub mod timing;
 mod binary_analysis;
 mod format_conversion;
 

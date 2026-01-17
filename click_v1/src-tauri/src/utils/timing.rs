@@ -33,8 +33,34 @@ pub fn start_timer(duration_secs: u64) {
     state.is_running = true;
 }
 
-/// 等待指定时间（在后台运行）
-pub fn wait_with_timer(duration_secs: u64) {
+/// **等待指定时间（在后台运行）**
+///
+/// `duration_secs` : 需要计时的时间
+///
+/// `target_time` : 执行某操作的时间点 <可选>
+///
+/// `callback`: 某操作的回调函数 <可选>
+///
+/// `mode`:执行模式 <可选>
+/// > None: 不执行任何操作
+/// >
+/// > 0: 关闭计算机
+/// >
+/// > 1: 阻止计算机进入休眠 -> 关闭计算机
+/// >
+/// > 2: 执行 `callback` 函数
+/// >
+/// > 3: 执行 `callback` 函数 -> 关闭计算机
+/// >
+/// > 4: 阻止计算机进入休眠 -> 执行 `callback` 函数 -> 关闭计算机
+/// >
+/// > 5: 检查有无到达`target_time` -> 执行 `callback` 函数
+/// >
+/// > 6: 检查有无到达`target_time` -> 执行 `callback` 函数 --结束计时--> 阻止计算机进入休眠 -> 关闭计算机
+/// >
+/// > 7: 阻止计算机进入休眠 -> 检查有无到达`target_time` -> 执行 `callback` 函数 --结束计时--> 关闭计算机
+#[allow(dead_code)]
+pub fn wait_with_timer(duration_secs: u64, target_time: Option<u64>, callback:  Option<fn()>, mode:Option<i32>) {
     // 启动计时器
     start_timer(duration_secs);
 
@@ -65,7 +91,22 @@ pub fn wait_with_timer(duration_secs: u64) {
                     // 如果达到目标时间，停止计时
                     if elapsed >= target {
                         state.is_running = false;
-                        break;
+                        // 执行结束时函数
+                        match mode {
+                            //  未获得模式不执行任何操作
+                            None => {
+                                break;
+                            }
+                            Some(1) => {
+                                break;
+                            }
+                            Some(2) => {
+                                break;
+                            }
+                            Some(_) => {
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -83,12 +124,14 @@ pub fn wait_with_timer(duration_secs: u64) {
 }
 
 /// 获取当前计时进度
+#[allow(dead_code)]
 pub fn get_current_time() -> Duration {
     let state = TIMER_STATE.lock().unwrap();
     state.elapsed_time
 }
 
 /// 获取计时进度百分比
+#[allow(dead_code)]
 pub fn get_timer_progress_percentage() -> f64 {
     let state = TIMER_STATE.lock().unwrap();
 
@@ -106,6 +149,7 @@ pub fn get_timer_progress_percentage() -> f64 {
 }
 
 /// 检查计时是否完成
+#[allow(dead_code)]
 pub fn is_timer_finished() -> bool {
     let state = TIMER_STATE.lock().unwrap();
     let is_running = state.is_running;
@@ -120,12 +164,15 @@ pub fn is_timer_finished() -> bool {
 }
 
 /// 停止计时器
+#[allow(dead_code)]
 pub fn stop_timer() {
     let mut state = TIMER_STATE.lock().unwrap();
     state.is_running = false;
 }
 
 /// 重置计时器
+#[allow(dead_code)]
+///
 pub fn reset_timer() {
     let mut state = TIMER_STATE.lock().unwrap();
     state.start_time = None;
@@ -134,6 +181,8 @@ pub fn reset_timer() {
     state.is_running = false;
 }
 
+/// 阻止计算机进入休眠
+#[allow(dead_code)]
 fn prevent_sleep() {
     // Windows
     #[cfg(windows)]
@@ -150,4 +199,3 @@ fn prevent_sleep() {
         .output()
         .unwrap();
 }
-

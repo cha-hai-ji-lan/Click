@@ -1,7 +1,7 @@
 <template>
   <div class="shutdown-main">
     <div class="shutdown-title">
-      <div class="tag-icon tooltip" data-tooltip="操作栏" @click="() => { }">
+      <div class="tag-icon tooltip" data-tooltip="操作栏" @click="() => { click('choose-function') }">
         <svg t="1766718761251" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
           p-id="7191" width="200" height="200">
           <path
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="shutdown-contain">
-      <form action="" class="timing-form">
+      <form v-show="focusMethod === '0'" action="" class="timing-form">
         <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
           <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
             p-id="7054" width="200" height="200">
@@ -42,19 +42,24 @@
         <input v-model="timing.h" class="input-box" type="number" placeholder="时（h）" min="0" max="23">
         <input v-model="timing.m" class="input-box" type="number" placeholder="分（m）" min="0" max="59">
         <input v-model="timing.s" class="input-box" type="number" placeholder="秒（s）" min="0" max="59">
-        <div class="submin-time" @click="() => { takeTiming() }"><span>确定</span></div>
+        <div class="submin-time" @click="() => { takeTiming(-1 ,0, 0) }"><span>确定</span></div>
         <div class="reset-time" @click="() => { cleanInputTiming() }"><span>重置</span></div>
       </form>
     </div>
   </div>
-  <!-- <MSDChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
-     </MSDChooseMethoadFW> -->
+  <MSDChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
+  </MSDChooseMethoadFW>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref, reactive , onMounted } from 'vue';
 import MSDChooseMethoadFW from "./components-view/MSDChooseMethoadFW.vue"
-
+import { invoke } from "@tauri-apps/api/core";  
+const focusMethod = ref<string>("")
+const FloatingWindow = reactive({
+  "choose-function": false,
+  "choose-function-close": false,
+})
 
 const timing = reactive({
   "h": null,
@@ -62,7 +67,26 @@ const timing = reactive({
   "s": null,
 })
 
-const takeTiming = () => {
+onMounted(()=>{
+  click('choose-function'); // 默认打开操作窗口
+})
+const takeTiming = (target_time: number, fn_mode: number, mode: number) => {
+  
+  const measure_time = (timing.h !== null ? Number(timing.h) : 0) * 3600 + 
+                      (timing.m !== null ? Number(timing.m) : 0) * 60 + 
+                      (timing.s !== null ? Number(timing.s) : 0);
+  switch (mode) {
+    case 0:
+      invoke("wait_with_timer",{time:measure_time,targetTime:target_time ,fnMode:fn_mode, mode:mode}  )
+      break;
+    case 1:
+      
+      break;
+  
+    default:
+      break;
+  }
+  
   console.log(timing)
 }
 const cleanInputTiming = () => {
@@ -70,7 +94,28 @@ const cleanInputTiming = () => {
   timing.m = null
   timing.s = null
 }
+const changeMethod = (methodName: string) => {
+  focusMethod.value = methodName
+}
+const click = (whichOne: string, _: number = 0) => {
+  switch (whichOne) {
+    case 'choose-function':
+      if (FloatingWindow["choose-function"] === false) {
+        FloatingWindow["choose-function"] = true
+      } else {
+        FloatingWindow["choose-function-close"] = true;
+        setTimeout(() => {
+          FloatingWindow["choose-function"] = false;
+          FloatingWindow["choose-function-close"] = false;
+        }, 500)
+      }
+      break;
+    default:
+      break;
+  }
+}
 </script>
+
 
 <style scoped>
 .shutdown-main {
@@ -94,23 +139,23 @@ const cleanInputTiming = () => {
 }
 
 .shutdown-title::after {
- content: '';
- position: absolute;
-bottom: -2px;
- left: 0;
- width: 100%;
- height: 2px;
- background: linear-gradient(to right, var(--normal-attention-color) 20%, var(--active-attention-color) 40%, var(--main-border) 60%, var(--main-back-ground) 80%);
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--normal-attention-color) 20%, var(--active-attention-color) 40%, var(--main-border) 60%, var(--main-back-ground) 80%);
 }
 
 
 .tag-icon {
-     width: 4vmin;
-     height: 4vmin;
-     display: flex;
-     position: relative;
-     justify-content: start;
-     align-items: center;
+  width: 4vmin;
+  height: 4vmin;
+  display: flex;
+  position: relative;
+  justify-content: start;
+  align-items: center;
 }
 
 .shutdown-contain {
@@ -142,6 +187,8 @@ bottom: -2px;
   align-content: center;
   border-top: 1px dashed var(--unite-but-color);
   border-bottom: 1px dashed var(--unite-but-color);
+  animation: show-method 0.5s ease-in-out forwards;
+
 
 }
 
@@ -235,5 +282,17 @@ bottom: -2px;
     height: 88%;
   }
 
+}
+
+@keyframes show-method {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
 }
 </style>

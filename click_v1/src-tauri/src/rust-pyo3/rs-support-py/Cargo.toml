@@ -12,10 +12,10 @@ image = { version = "0.25.9", features = ["avif", "jpeg", "png", "webp", "tiff",
 icns = {version = "0.3.1"}
 # 缺少格式 "pnm", "hdr", "tga", "dds", "exr", "raw", "openexr", "jpeg-xl", "heif", "webp", "magick", "magick-sys", "magick-sys-v2", "magick-sys-v3"
 nvml-wrapper = "0.11.0"
-sysinfo = "0.37.2"
+sysinfo = "0.29.11"
 reqwest = "0.12.28"
 tokio = { version = "1", features = ["full"] }  #
 futures = "0.3.31"
 base64 = "0.22.1"
-
-scraper = "0.25.0"  # 获取网页内容
+scraper = "0.25.0"
+chrono = "0.4.42"

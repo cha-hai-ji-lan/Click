@@ -35,27 +35,11 @@
         <div class="static-contain">
             <div draggable="true" class="item" :class="{ 'active-item': focus[0] }"
                 @click="() => { changeFeedbackMethod('0') }">
-                <span>修改名字字段</span>
+                <span>定时关机</span>
             </div>
             <div draggable="true" class="item" :class="{ 'active-item': focus[1] }"
                 @click="() => { changeFeedbackMethod('1') }">
-                <span>改名排序</span>
-            </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[2] }"
-                @click="() => { changeFeedbackMethod('1') }">
-                <span>搜集存放</span>
-            </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[3] }"
-                @click="() => { changeFeedbackMethod('1') }">
-                <span>格式转化</span>
-            </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[4] }"
-                @click="() => { changeFeedbackMethod('1') }">
-                <span>音视频处理</span>
-            </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[5] }"
-                @click="() => { changeFeedbackMethod('1') }">
-                <span>文件解析</span>
+                <span>潮汐锁定</span>
             </div>
         </div>
 
