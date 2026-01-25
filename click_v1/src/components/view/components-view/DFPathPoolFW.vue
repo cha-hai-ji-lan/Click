@@ -1,3 +1,4 @@
+<!-- 用于DealFile 显示当前文件路径池 -->
 <template>
     <!-- 顶部悬浮活动栏 -->
     <div v-show="FloatingWindow['choose-path-pool']" class="choose-path-pool"

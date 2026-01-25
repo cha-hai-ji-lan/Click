@@ -12,6 +12,10 @@ export interface ComVisibility {
 
 export type AllowIconType = ".jpg" | ".jepg" | ".JPG" | ".JEPG" | ".png" | ".PNG"
 
+export interface SelectOption {
+  value: string | number
+  label: string
+}
 
 // 定义FloatingWindow的类型
 export interface FloatingWindowState {

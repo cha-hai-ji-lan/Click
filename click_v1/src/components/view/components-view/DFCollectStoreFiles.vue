@@ -1,7 +1,5 @@
-<!-- 用于 DealFile 修改文件及文件夹名称 -->
 <template>
-    <div v-if="active_path && active_path.length > 0" class="replace-name"
-        :class="{ 'hide-submit-replace-name': active_path && active_path.length <= 0 }">
+    <div v-if="active_path && active_path.length > 0" class="main-collect-store-files">
         <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
             <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 p-id="7054" width="200" height="200">
@@ -26,133 +24,166 @@
                     p-id="9297"></path>
             </svg>
         </div>
-        <input class="input-box" type="text" @input="updateValueOldName" placeholder="旧字段">
-        <input class="input-box" type="text" @input="updateValueNewName" placeholder="新字段">
-        <div class="submit-replace-name" @click="() => { SubmitRepluceName('replace-name') }">修改
+        <SelectorBar class="select-bar" v-model="selectedValueSon" :options="selectOptions" placeholder="搜集方式">
+        </SelectorBar>
+        <div class="submit-replace-name" @click="() => { SubmitRepluceName('collect-store-files') }">修改
         </div>
     </div>
     <div v-else class="place-holder">
         <span>🔎 当前无可观察路径...</span>
     </div>
+
+    <table v-if="selectedValueSon !== ''" class="collect-item">
+        <input v-if="selectedValueSon === 'by-name'" name="by-name" class="input-box" type="text" @input="updateValueCollectFile"
+            placeholder="名字需要包含的字段">
+        <input v-if="selectedValueSon === 'by-time'"  name="by-time" class="input-box" type="text" @input="updateValueCollectFile"
+            placeholder="时间范围 例如: 2005 03 03到2025-02-20">
+        <input v-if="selectedValueSon === 'by-size'"  name="by-size" class="input-box" type="text" @input="updateValueCollectFile"
+            placeholder="时间范围 例如: 2M到3GB">
+    </table>
 </template>
 <script setup lang="ts">
-// import { ref } from 'vue';
+import { ref, watch, computed } from 'vue';
+import SelectorBar from '../../components/SelectorBar.vue'
 import { type PathItem } from "../../../class/PathIndex"
-
 
 const props = defineProps<{
     active_path: PathItem[] | null,
-    inputRefReplaceOldName: string,
-    inputRefReplaceNewName: string,
+    selectedValue: string,
+    inputRefSortName: string,
+    selectOptions: { value: string; label: string; }[],
     SubmitRepluceName: (toolMethoad: string) => void
 }
 >()
-
+const selectedValueSon = ref(props.selectedValue)
 const emit = defineEmits<{
-    (e: 'update:inputRefReplaceNewName', value: string): void,
-    (e: 'update:inputRefReplaceOldName', value: string): void,
+    (e: 'update:selectedValue', value: string): void,
+    (e: 'update:inputRefSortName', value: string): void,
 }>()
 
-const updateValueNewName = (event: any) => {
-    emit('update:inputRefReplaceNewName', event.target.value);
-};
-const updateValueOldName = (event: any) => {
-    emit('update:inputRefReplaceOldName', event.target.value);
+const combinedState = computed(() => ({
+    selectedValue: selectedValueSon.value,
+}));
+
+// 监听组合状态的变化
+watch(
+    combinedState,
+    (newState, oldState) => {
+        // 检查具体是哪个值发生了变化
+        if (newState.selectedValue !== oldState.selectedValue) {
+            emit('update:selectedValue', newState.selectedValue);
+
+        }
+    }
+);
+
+const updateValueCollectFile = (event: any) => {
+    emit('update:inputRefSortName', event.target.value);
 };
 </script>
-<style scoped>
-.replace-name {
-     font-size: 2vmin;
-     display: grid;
-     width: 100%;
-     height: 4vmin;
-     grid-template-columns: 5% 5% 37.5% 37.5% 15%;
 
+<style scoped>
+.main-collect-store-files {
+    font-size: 2vmin;
+    display: grid;
+    width: 100%;
+    height: 4vmin;
+    grid-template-columns: 5% 5% 65%  25%;
+    border-bottom: 1px dashed var(--unite-but-color);
 }
 
 .item-title {
-     height: 4vmin;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     user-select: none;
-     /* 用户无法选择 */
-     -webkit-user-select: none;
-     /* Safari兼容性 */
-     -moz-user-select: none;
-     /* Firefox兼容性 */
-     -ms-user-select: none;
-     /* IE兼容性 */
-     border-bottom: 1px dashed var(--unite-but-color);
+    height: 4vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    /* 用户无法选择 */
+    -webkit-user-select: none;
+    /* Safari兼容性 */
+    -moz-user-select: none;
+    /* Firefox兼容性 */
+    -ms-user-select: none;
+    /* IE兼容性 */
+    border-bottom: 1px dashed var(--unite-but-color);
+}
+
+.select-bar {
+    height: 4vmin;
+
+}
+.collect-item{
+    height: 4vmin;
+    width: 100%;
 }
 
 .input-box {
-     font-family: "楷体", 'Courier New', Courier, monospace;
-     font-size: 2vmin;
-     text-align: center;
-     height: 4vmin;
-     padding: 0px 0px;
-     margin: auto 0;
-     background: transparent;
-     border-top: 0px dashed var(--unite-but-color);
-     border-bottom: 2px dashed var(--unite-but-color);
-     border-left: 0px dashed var(--unite-but-color);
-     border-right: 0px dashed var(--unite-but-color);
-     transition: all 0.3s ease;
+    font-family: "楷体", 'Courier New', Courier, monospace;
+    font-size: 2vmin;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    padding: 0px 0px;
+    margin: auto 0;
+    background: transparent;
+    border: 0px dashed var(--unite-but-color);
+    border-bottom: 2px dashed var(--unite-but-color);
+    transition: all 0.3s ease;
 }
+
 .input-box:hover {
-     border-color: var(--positive-show-color);
+    border-color: var(--positive-show-color);
 }
 
 .input-box:focus {
-     outline: none;
-     /* 取消默认的焦点轮廓 */
-     /* border: 1px solid var(--active-attention-color); */
-     border-bottom: 2px dashed var(--active-attention-color);
-     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+    /* 取消默认的焦点轮廓 */
+    /* border: 1px solid var(--active-attention-color); */
+    border-bottom: 2px dashed var(--active-attention-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
 }
 
 .submit-replace-name {
-     border-radius: 1vmin;
-     height: 4vmin;
-     border-left: 2px solid var(--active-attention-color);
-     border-right: 2px solid var(--active-attention-color);
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     user-select: none;
-     /* 用户无法选择 */
-     -webkit-user-select: none;
-     /* Safari兼容性 */
-     -moz-user-select: none;
-     /* Firefox兼容性 */
-     -ms-user-select: none;
-     /* IE兼容性 */
-     transition: 0.25s;
+    border-radius: 1vmin;
+    height: 4vmin;
+    border-left: 2px solid var(--active-attention-color);
+    border-right: 2px solid var(--active-attention-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    /* 用户无法选择 */
+    -webkit-user-select: none;
+    /* Safari兼容性 */
+    -moz-user-select: none;
+    /* Firefox兼容性 */
+    -ms-user-select: none;
+    /* IE兼容性 */
+    transition: 0.25s;
 }
 
 .submit-replace-name:hover {
-     box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
-     filter: drop-shadow(0 0 1em var(--title-min-icon-hover-shadow));
+    box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
+    filter: drop-shadow(0 0 1em var(--title-min-icon-hover-shadow));
 
 }
 
 .submit-replace-name:active {
-     background: var(--title-min-icon-shadow);
-     box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
-     animation: active-icon 0.25s forwards;
-     animation-timing-function: linear;
+    background: var(--title-min-icon-shadow);
+    box-shadow: 2px 2px var(--title-min-icon-hover-shadow);
+    animation: active-icon 0.25s forwards;
+    animation-timing-function: linear;
 }
 
 .place-holder {
-     width: 100%;
-     height: 4vmin;
-     font-size: medium;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     color: var(--font-color);
+    width: 100%;
+    height: 4vmin;
+    font-size: medium;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--font-color);
 
 }
 </style>

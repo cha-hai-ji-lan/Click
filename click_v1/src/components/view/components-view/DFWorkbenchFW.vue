@@ -1,3 +1,4 @@
+<!-- 用于 DealFile 工作台 -->
 <template>
     <div v-show="FloatingWindow['work-bench']" class="work-bench-mask"
         :class="{ 'work-bench-mask-close': FloatingWindow['work-bench-close'] }" @click="handleClickOutside">

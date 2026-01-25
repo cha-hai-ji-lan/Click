@@ -100,7 +100,8 @@ export const set_focus_color_palette = (mainColor: any) => {
   document.documentElement.style.setProperty("--main-border", `rgba(${mainColor.borderColorRGBA})`)  // 边框色
   document.documentElement.style.setProperty("--main-back-ground", `rgba(${mainColor.midGroundColorRGBA})`)  // 背景色
   document.documentElement.style.setProperty("--tool-bar-color", `rgba(${mainColor.toolBarColorRGBA})`)  // 背景色
-  document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.foreGroundColorRGBA})`)
+  document.documentElement.style.setProperty("--fore-ground", `rgba(${mainColor.foreGroundColorRGBA})`)
+  document.documentElement.style.setProperty("--icon-hover", `rgba(${mainColor.iconColorRGBA})`)
   document.documentElement.style.setProperty("--icon-hover-shadow", `rgba(${mainColor.iconHoverColorRGBA})`)
   document.documentElement.style.setProperty("--icon-active-shadow", `rgba(${mainColor.iconActiveColorRGBA})`)
 

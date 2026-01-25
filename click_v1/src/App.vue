@@ -529,7 +529,7 @@ const stopResize = () => {
 .left-call-icon {
   display: flex;
   position: relative;
-  background: var(--icon-hover);
+  background: var(--fore-ground);
   border-right: 1px solid var(--main-border);
   border-radius: 0 2vh 2vh 0;
   width: 2vh;

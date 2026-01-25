@@ -1,3 +1,4 @@
+<!-- 用于 DealFile 选择文件处理功能 -->
 <template>
     <div v-show="FloatingWindow['choose-function']" class="choose-function"
         :class="{ 'choose-function-close': FloatingWindow['choose-function-close'] }" ref="floatingWindowElement">
@@ -42,11 +43,11 @@
                 <span>改名排序</span>
             </div>
             <div draggable="true" class="item" :class="{ 'active-item': focus[2] }"
-                @click="() => { changeFeedbackMethod('1') }">
+                @click="() => { changeFeedbackMethod('2') }">
                 <span>搜集存放</span>
             </div>
             <div draggable="true" class="item" :class="{ 'active-item': focus[3] }"
-                @click="() => { changeFeedbackMethod('1') }">
+                @click="() => { changeFeedbackMethod('3') }">
                 <span>格式转化</span>
             </div>
             <div draggable="true" class="item" :class="{ 'active-item': focus[4] }"

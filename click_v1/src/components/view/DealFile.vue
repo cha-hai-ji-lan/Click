@@ -91,6 +91,21 @@
                               :SubmitRepluceName="SubmitRepluceName"></DFSortChangeName>
                     </transition>
                </div>
+               <div v-if="focusMethod === '2'" class="oper-1">
+                    <transition name="replace-name-transition" mode="out-in">
+                         <DFCollectStoreFiles :active_path="active_path" v-model:selectedValue="selectedValue"
+                              v-model:inputRefSortName="inputRefSortName" :selectOptions="collectSelectOptions"
+                              :SubmitRepluceName="SubmitRepluceName"></DFCollectStoreFiles>
+                    </transition>
+               </div>
+               <div v-if="focusMethod === '3'" class="oper-1">
+                    <transition name="replace-name-transition" mode="out-in">
+                         <DFFormatConversion :active_path="active_path"
+                              v-model:formatSelectedValue="formatSelectedValue"
+                              v-model:inputRefSortName="inputRefSortName" :SubmitRepluceName="SubmitRepluceName">
+                         </DFFormatConversion>
+                    </transition>
+               </div>
 
           </div>
      </div>
@@ -121,6 +136,8 @@ import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
 import DFChangeName from "./components-view/DFChangeName.vue"
 import DFSortChangeName from "./components-view/DFSortChangeName.vue"
+import DFCollectStoreFiles from "./components-view/DFCollectStoreFiles.vue"
+import DFFormatConversion from "./components-view/DFFormatConversion.vue"
 import Megbox from "../components/Megbox.vue"
 // import { B } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -145,10 +162,13 @@ const floatingWindowElement = ref<HTMLElement | null>(null);
 
 const selectFolder = ref(false)
 const selectedValue = ref('')
+const formatSelectedValue = ref(['', ''])
 const focusMethod = ref<string>("")
 const availableMethods = reactive({
      "0": "修改名字字段",
-     "1": "改名排序"
+     "1": "改名排序",
+     "2": "搜集存放",
+     "3": "格式转换",
 })
 
 const FloatingWindow = reactive<FloatingWindowState>({
@@ -164,6 +184,11 @@ const selectOptions = [
      { value: 'by-time', label: '按修改时间排序' },
      { value: 'by-size', label: '按大小排序' },
      { value: 'picture-sort', label: '图片排序' },
+]
+const collectSelectOptions = [
+     { value: 'by-name', label: '按名字字段' },
+     { value: 'by-time', label: '按修改时间范围' },
+     { value: 'by-size', label: '按文件大小' },
 ]
 
 
@@ -501,8 +526,14 @@ const SubmitRepluceName = (tag: string) => {
                     alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
                }
 
-               break
+               break;
 
+          case 'collect-store-files':
+               alertMsg(errorMsg, closeerrorMsg, `开始搜集文件。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。`, errorLevel, 1);
+               break;
+          case 'format-conversion':
+               alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value}`, errorLevel, 1);
+               break;
           default:
                break;
      }
@@ -818,7 +849,8 @@ h3 {
      margin: 0.75vh 0;
      text-align: center;
      display: flex;
-     height: 4vmin;
+     /* height: 4vmin; */
+     /* 去除高度限制 */
      width: 100%;
      font-size: 2.5vmin;
      /* border-radius: 1vmin; */

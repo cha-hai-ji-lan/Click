@@ -17,12 +17,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-
-interface SelectOption {
-  value: string | number
-  label: string
-}
-
+import{type SelectOption} from '@/class/PathIndex'
 const props = defineProps<{
   options: SelectOption[]
   modelValue?: string | number
@@ -116,8 +111,8 @@ document.addEventListener('click', (e) => {
   border: 1px dashed var(--unite-but-color);
   border-top: none;
   border-radius: 0 0 1vmin 1vmin;
-  background-color: rgb(0,0,0,0);
   backdrop-filter: blur(30px);
+  background-color: var(--title-bar-lg-2);
   z-index: 5;
   max-height: 20vmin;
   overflow-y: auto;
@@ -125,6 +120,8 @@ document.addEventListener('click', (e) => {
 
 .select-option {
   /* padding: 0px 15px; */
+  backdrop-filter: blur(30px);
+  /* background-color: rgba(255, 255, 255, 0.4); 添加半透明背景以增强模糊效果 */
   cursor: pointer;
   transition: background-color 0.2s ease;
 }

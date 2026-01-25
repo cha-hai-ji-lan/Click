@@ -168,7 +168,7 @@ const getIconComponent = (iconName: string) => {
     /* 多重阴影 */
     box-shadow: 0.5vmin 4px 20px 2px var(--positive-show-color);
     /* box-shadow: 1vmin 2px 30px  -2px var(--negative-show-color), 1.5vmin -2px 15px  var(--normal-show-color); */
-    background: linear-gradient(to left, var(--icon-hover), var(--main-back-ground));
+    background: linear-gradient(to left, var(--fore-ground), var(--main-back-ground));
 }
 
 .sub-left-contain {

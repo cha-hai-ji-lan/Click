@@ -1,4 +1,4 @@
-<!-- 用于 DealFile 修改文件名称并排序文件 -->
+<!-- 用于 DealFile 转换选定路径下的格式转换 -->
 <template>
     <div v-if="active_path && active_path.length > 0" class="order-and-replace-name">
         <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
@@ -25,34 +25,57 @@
                     p-id="9297"></path>
             </svg>
         </div>
-        <SelectorBar class="select-bar" v-model="selectedValueSon" :options="selectOptions" placeholder="排序方式">
-        </SelectorBar>
-        <input class="input-box" type="text" @input="updateValueInputRefSortName" placeholder="<起始标志>固定名称{原名}...">
-        <div class="submit-replace-name" @click="() => { SubmitRepluceName('order-replace-name') }">修改
+        <div class="item-title tooltip" data-tooltip="图片格式" @click="() => { chooseMode('img') }">
+            <svg t="1769356546322" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                p-id="5340" width="200" height="200">
+                <path
+                    d="M938.666667 553.92V768c0 64.8-52.533333 117.333333-117.333334 117.333333H202.666667c-64.8 0-117.333333-52.533333-117.333334-117.333333V256c0-64.8 52.533333-117.333333 117.333334-117.333333h618.666666c64.8 0 117.333333 52.533333 117.333334 117.333333v297.92z m-64-74.624V256a53.333333 53.333333 0 0 0-53.333334-53.333333H202.666667a53.333333 53.333333 0 0 0-53.333334 53.333333v344.48A290.090667 290.090667 0 0 1 192 597.333333a286.88 286.88 0 0 1 183.296 65.845334C427.029333 528.384 556.906667 437.333333 704 437.333333c65.706667 0 126.997333 16.778667 170.666667 41.962667z m0 82.24c-5.333333-8.32-21.130667-21.653333-43.648-32.917333C796.768 511.488 753.045333 501.333333 704 501.333333c-121.770667 0-229.130667 76.266667-270.432 188.693334-2.730667 7.445333-7.402667 20.32-13.994667 38.581333-7.68 21.301333-34.453333 28.106667-51.370666 13.056-16.437333-14.634667-28.554667-25.066667-36.138667-31.146667A222.890667 222.890667 0 0 0 192 661.333333c-14.464 0-28.725333 1.365333-42.666667 4.053334V768a53.333333 53.333333 0 0 0 53.333334 53.333333h618.666666a53.333333 53.333333 0 0 0 53.333334-53.333333V561.525333zM320 480a96 96 0 1 1 0-192 96 96 0 0 1 0 192z m0-64a32 32 0 1 0 0-64 32 32 0 0 0 0 64z"
+                    p-id="5341"></path>
+            </svg>
+        </div>
+        <div class="占位符"></div>
+        <div class="submit-replace-name" @click="() => { SubmitRepluceName('format-conversion') }">修改
         </div>
     </div>
     <div v-else class="place-holder">
         <span>🔎 当前无可观察路径...</span>
     </div>
+    <div v-if="formatMode === 'img'" class="conversion-item">
+        <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="sourceOption" placeholder="原始格式">
+        </SelectorBar>
+        <div>转成</div>
+        <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="aimOption" placeholder="目标格式">
+        </SelectorBar>
+    </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, } from 'vue';
 import SelectorBar from '../../components/SelectorBar.vue'
-import { type PathItem } from "../../../class/PathIndex"
-
+import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
     active_path: PathItem[] | null,
-    selectedValue: string,
+    formatSelectedValue: string[],
     inputRefSortName: string,
-    selectOptions: { value: string; label: string; }[],
     SubmitRepluceName: (toolMethoad: string) => void
 }
 >()
-const selectedValueSon = ref(props.selectedValue)
+const selectedValueSon = ref(props.formatSelectedValue)
+const formatMode = ref('')
+const sourceOption = [
+    { value: "JPG", label: "jpg|jprg" },
+    { value: "PNG", label: "png" },
+    { value: "ICO", label: "ico" },
+    { value: "WEBP", label: "webp" },
+]
+const aimOption = [
+    { value: "JPG", label: "jpg|jprg" },
+    { value: "PNG", label: "png" },
+    { value: "ICO", label: "ico" },
+    { value: "WEBP", label: "webp" },
+]
 
 const emit = defineEmits<{
-    (e: 'update:selectedValue', value: string): void,
-    (e: 'update:inputRefSortName', value: string): void,
+    (e: 'update:formatSelectedValue', value: string[]): void,
 }>()
 
 const combinedState = computed(() => ({
@@ -65,15 +88,14 @@ watch(
     (newState, oldState) => {
         // 检查具体是哪个值发生了变化
         if (newState.selectedValue !== oldState.selectedValue) {
-            emit('update:selectedValue', newState.selectedValue);
+            emit('update:formatSelectedValue', newState.selectedValue);
 
-        }       
+        }
     }
 );
-
-const updateValueInputRefSortName = (event: any) => {
-    emit('update:inputRefSortName', event.target.value);
-};
+const chooseMode = (input_formate: string) => {
+    formatMode.value = input_formate;
+}
 </script>
 <style scoped>
 .order-and-replace-name {
@@ -82,7 +104,8 @@ const updateValueInputRefSortName = (event: any) => {
     display: grid;
     width: 100%;
     height: 4vmin;
-    grid-template-columns: 5% 5% 37.5%  37.5% 15%;
+    grid-template-columns: 5% 5% 5% 70% 15%;
+    border-bottom: 1px dashed var(--unite-but-color);
 }
 
 
@@ -103,8 +126,17 @@ const updateValueInputRefSortName = (event: any) => {
 }
 
 .select-bar {
-     height: 4vmin;
+    height: 4vmin;
 
+}
+
+.conversion-item {
+    display: grid;
+    width: 100%;
+    height: 4vmin;
+    grid-template-columns: 45% 10% 45%;
+    height: 4vmin;
+    width: 100%;
 }
 
 .input-box {
