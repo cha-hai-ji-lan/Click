@@ -532,7 +532,7 @@ const SubmitRepluceName = (tag: string) => {
                alertMsg(errorMsg, closeerrorMsg, `开始搜集文件。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。`, errorLevel, 1);
                break;
           case 'format-conversion':
-               alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value}`, errorLevel, 1);
+               alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value[0]} 到 ${formatSelectedValue.value[1]}`, errorLevel, 1);
                break;
           default:
                break;

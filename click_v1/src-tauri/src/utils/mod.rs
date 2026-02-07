@@ -1,5 +1,6 @@
 pub mod files;
 pub mod timing;
 mod binary_analysis;
-mod format_conversion;
+pub mod format_conversion;
+pub mod win_native_command;
 

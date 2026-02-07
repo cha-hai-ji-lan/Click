@@ -1,5 +1,5 @@
 <template>
-  <div class="select-container">
+  <div class="select-container" ref="selectContainerRef">
     <div class="select-wrapper" @click="toggleOptions">
       <div class="select-selected">
         {{ selectedOption ? selectedOption.label : placeholder }}
@@ -16,8 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import{type SelectOption} from '@/class/PathIndex'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { type SelectOption } from '@/class/PathIndex'
+
 const props = defineProps<{
   options: SelectOption[]
   modelValue?: string | number
@@ -30,6 +31,7 @@ const emit = defineEmits<{
 
 const isOpen = ref(false)
 const selectedValue = computed(() => props.modelValue)
+const selectContainerRef = ref<HTMLElement | null>(null)
 
 const selectedOption = computed(() => {
   return props.options.find(option => option.value === selectedValue.value)
@@ -45,11 +47,18 @@ const selectOption = (option: SelectOption) => {
 }
 
 // 点击外部关闭选项列表
-document.addEventListener('click', (e) => {
-  const selectContainer = document.querySelector('.select-container')
-  if (selectContainer && !selectContainer.contains(e.target as Node)) {
+const handleClickOutside = (e: MouseEvent) => {
+  if (selectContainerRef.value && !selectContainerRef.value.contains(e.target as Node)) {
     isOpen.value = false
   }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 

@@ -42,7 +42,7 @@
         <input v-model="timing.h" class="input-box" type="number" placeholder="时（h）" min="0" max="23">
         <input v-model="timing.m" class="input-box" type="number" placeholder="分（m）" min="0" max="59">
         <input v-model="timing.s" class="input-box" type="number" placeholder="秒（s）" min="0" max="59">
-        <div class="submin-time" @click="() => { takeTiming(-1 ,0, 0) }"><span>确定</span></div>
+        <div class="submin-time" @click="() => { takeTiming(0 ,0, 0) }"><span>确定</span></div>
         <div class="reset-time" @click="() => { cleanInputTiming() }"><span>重置</span></div>
       </form>
     </div>
@@ -55,6 +55,7 @@
 import { ref, reactive , onMounted } from 'vue';
 import MSDChooseMethoadFW from "./components-view/MSDChooseMethoadFW.vue"
 import { invoke } from "@tauri-apps/api/core";  
+import { alertMsg } from '../../util/PluginObjects'
 const focusMethod = ref<string>("")
 const FloatingWindow = reactive({
   "choose-function": false,
@@ -67,17 +68,21 @@ const timing = reactive({
   "s": null,
 })
 
+const errorMsg = ref("")
+const closeerrorMsg = ref("")
+const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
+
 onMounted(()=>{
   click('choose-function'); // 默认打开操作窗口
 })
 const takeTiming = (target_time: number, fn_mode: number, mode: number) => {
-  
   const measure_time = (timing.h !== null ? Number(timing.h) : 0) * 3600 + 
                       (timing.m !== null ? Number(timing.m) : 0) * 60 + 
                       (timing.s !== null ? Number(timing.s) : 0);
+  alertMsg(errorMsg, closeerrorMsg, `预备关机剩余时间\t${measure_time}s`, errorLevel, 0);
   switch (mode) {
     case 0:
-      invoke("wait_with_timer",{time:measure_time,targetTime:target_time ,fnMode:fn_mode, mode:mode}  )
+      invoke("during_time_do_something",{time:measure_time,targetTime:target_time ,fnMode:fn_mode, mode:mode}  )
       break;
     case 1:
       
@@ -87,7 +92,6 @@ const takeTiming = (target_time: number, fn_mode: number, mode: number) => {
       break;
   }
   
-  console.log(timing)
 }
 const cleanInputTiming = () => {
   timing.h = null

@@ -110,9 +110,11 @@ fn during_time_do_something(
     fn_mode: i32,
     mode: i32,
 ) -> Result<(), String> {
+    println!("开启关机程序");
     match fn_mode {
         // 无执行函数， 执行函数作用范围大于 指定时间 所以指定时间也为 None
         0 => { // 允许 mode in [None, 0, 1]
+            println!("开始关机");
             wait_with_timer(time, None, None, Option::from(mode));
         }
         1 => {}

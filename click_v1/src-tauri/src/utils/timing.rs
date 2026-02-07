@@ -2,6 +2,7 @@ use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
+use win_native_command::shell::win_shutdown;
 
 // 全局计时状态结构体
 #[derive(Debug)]
@@ -14,6 +15,7 @@ pub struct TimerState {
 
 // 使用静态变量存储全局状态
 use std::sync::LazyLock;
+use crate::utils::win_native_command;
 
 pub static TIMER_STATE: LazyLock<Arc<Mutex<TimerState>>> = LazyLock::new(|| {
     Arc::new(Mutex::new(TimerState {
@@ -83,33 +85,6 @@ pub fn wait_with_timer(duration_secs: u64, target_time: Option<u64>, callback:  
             if let (Some(start), Some(target)) = (start_time, target_duration) {
                 let elapsed = start.elapsed();
 
-                // 更新全局状态
-                {
-                    let mut state = TIMER_STATE.lock().unwrap();
-                    state.elapsed_time = elapsed;
-
-                    // 如果达到目标时间，停止计时
-                    if elapsed >= target {
-                        state.is_running = false;
-                        // 执行结束时函数
-                        match mode {
-                            //  未获得模式不执行任何操作
-                            None => {
-                                break;
-                            }
-                            Some(1) => {
-                                break;
-                            }
-                            Some(2) => {
-                                break;
-                            }
-                            Some(_) => {
-                                break;
-                            }
-                        }
-                    }
-                }
-
                 // 每秒检查一次，避免过于频繁的检查
                 if elapsed < target {
                     thread::sleep(check_interval);
@@ -120,6 +95,9 @@ pub fn wait_with_timer(duration_secs: u64, target_time: Option<u64>, callback:  
                 break;
             }
         }
+        // 计时结束
+        execute_callback(mode);
+
     });
 }
 
@@ -198,4 +176,26 @@ fn prevent_sleep() {
         .arg("28800") // 8小时
         .output()
         .unwrap();
+}
+
+/// 计时结束后执行函数
+#[allow(dead_code)]
+fn execute_callback(mode:Option<i32>) {
+        // 执行结束时函数
+        match mode {
+            //  未获得模式不执行任何操作
+            None => {
+            }
+            Some(0) => {
+                stop_timer();
+                reset_timer();
+                win_shutdown();
+            }
+            Some(1) => {
+            }
+            Some(2) => {
+            }
+            Some(_) => {
+            }
+        }
 }
