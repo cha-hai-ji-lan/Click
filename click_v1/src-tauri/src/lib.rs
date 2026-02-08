@@ -18,7 +18,7 @@ use utils::{
         },
         path_operations::{replace_name, traverse_directory_all},
     },
-    timing::wait_with_timer,
+    timing::{timing_allocation, get_fmt_time, reset_timer_unnormal}
 };
 
 #[tauri::command]
@@ -110,18 +110,19 @@ fn during_time_do_something(
     fn_mode: i32,
     mode: i32,
 ) -> Result<(), String> {
-    println!("开启关机程序");
-    match fn_mode {
-        // 无执行函数， 执行函数作用范围大于 指定时间 所以指定时间也为 None
-        0 => { // 允许 mode in [None, 0, 1]
-            println!("开始关机");
-            wait_with_timer(time, None, None, Option::from(mode));
-        }
-        1 => {}
-        _ => {}
-    }
+    timing_allocation(time, target_time, fn_mode, mode);  // 传参进入计时分配器 启动计时器
     Ok(())
 }
+#[tauri::command]
+fn tc_get_fmt_time() -> String
+{
+    get_fmt_time()
+}
+#[tauri::command]
+fn tc_reset_timer_unnormal() {
+    reset_timer_unnormal()
+}
+
 /// 打开 URL
 #[tauri::command]
 fn open_url(url: &str) -> Result<(), String> {
@@ -176,9 +177,9 @@ fn replace_all_name(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_opener::init())
+        // .plugin(tauri_plugin_dialog::init())
+        // .plugin(tauri_plugin_shell::init())
+        // .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             run_exe,                  // 运行 EXE 文件
             open_url,                 // 打开 URL
@@ -187,7 +188,9 @@ pub fn run() {
             test_command,             // 测试命令
             change_file_name,         // 批量替换文件名
             change_pool_file_name,    // 批量替换路径池文件名
-            during_time_do_something  // 运行指定时间后执行指定命令
+            during_time_do_something, // 运行指定时间后执行指定命令
+            tc_get_fmt_time,          // 获取当前格式化好的字符串时间
+            tc_reset_timer_unnormal   // 重置计时器--非正常退出
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

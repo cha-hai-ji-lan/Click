@@ -121,11 +121,10 @@
 <script setup lang="ts">
 
 // TODO: JPG 动图显示
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
-import { TrayIcon } from '@tauri-apps/api/tray';
-import { defaultWindowIcon } from '@tauri-apps/api/app';
+import { createTrayIcon, safeDestroyTrayIcon, hasTrayNow, isCreatingTrayNow, trayInstance } from "./util/ClickTray"
 import { RouterView } from "vue-router"
 import { ColorCtr } from './util/Colors';
 import LeftContain from "./components/LeftContain.vue";
@@ -136,10 +135,8 @@ const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
 const isPin = ref(false)
 const leftContainer = ref<HTMLElement | null>(null)  // 左侧容器DOM元素
-let appIcon = null  //  在挂载组件时获取软件的图标
 let isResizing = false
 let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
-
 
 
 
@@ -150,13 +147,45 @@ onMounted(async () => {
   set_special_style()  // 设置特殊样式
 
   try {
-    appIcon = await defaultWindowIcon();
-    const options = appIcon ? { icon: appIcon } : {};
-    await TrayIcon.new(options);  // 加载小托盘图标 为默认图标
+    // 检查是否正在创建或已经存在托盘图标
+    const [hasTray, isCreating] = await Promise.all([
+      hasTrayNow(),
+      isCreatingTrayNow()
+    ]);
+
+    if (!hasTray && !isCreating) {  // 只有在没有托盘且不在创建中时才创建
+      if(trayInstance === null){
+        await createTrayIcon(); // 创建托盘图标
+      }
+    } else {
+      console.log('托盘图标已存在或正在创建中');
+    }
   } catch (error) {
-    console.error("Failed to create tray icon:", error);
+    console.warn('托盘图标初始化失败:', error);
+    // 不阻塞应用启动，继续运行
+  }
+  // 禁用 F5 和 Ctrl+R 刷新
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "F5" ||
+      (event.ctrlKey && event.key === "r") ||
+      (event.metaKey && event.key === "r") // macOS 支持 Cmd+R
+    ) {
+      event.preventDefault();
+    }
+  });
+})
+
+onUnmounted(async () => {
+  try {
+    console.log('应用即将卸载，安全销毁托盘图标...');
+    await safeDestroyTrayIcon();
+    console.log('托盘图标已安全销毁');
+  } catch (error) {
+    console.warn('销毁托盘图标时出现错误:', error);
   }
 })
+// ... existing code ...
 
 
 const title_bar_click = (mode: string) => {

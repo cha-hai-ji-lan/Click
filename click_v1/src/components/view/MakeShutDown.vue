@@ -42,20 +42,24 @@
         <input v-model="timing.h" class="input-box" type="number" placeholder="时（h）" min="0" max="23">
         <input v-model="timing.m" class="input-box" type="number" placeholder="分（m）" min="0" max="59">
         <input v-model="timing.s" class="input-box" type="number" placeholder="秒（s）" min="0" max="59">
-        <div class="submin-time" @click="() => { takeTiming(0 ,0, 0) }"><span>确定</span></div>
+        <div class="submin-time" @click="() => { takeTiming(0, 0, 0) }"><span>确定</span></div>
         <div class="reset-time" @click="() => { cleanInputTiming() }"><span>重置</span></div>
       </form>
     </div>
   </div>
   <MSDChooseMethoadFW v-model:FloatingWindow="FloatingWindow" :click="click" :changeMethod="changeMethod">
   </MSDChooseMethoadFW>
+  <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{ 'close-err-msg': closeerrorMsg === '<__CLOSE__>' }"
+    :msg="errorMsg" :errLevel="errorLevel"></Megbox>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive , onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import MSDChooseMethoadFW from "./components-view/MSDChooseMethoadFW.vue"
-import { invoke } from "@tauri-apps/api/core";  
+import { invoke } from "@tauri-apps/api/core";
 import { alertMsg } from '../../util/PluginObjects'
+import { updateTrayTooltip, resiteTrayTooltip } from "../../util/ClickTray"
+import Megbox from "../components/Megbox.vue"
 const focusMethod = ref<string>("")
 const FloatingWindow = reactive({
   "choose-function": false,
@@ -71,29 +75,56 @@ const timing = reactive({
 const errorMsg = ref("")
 const closeerrorMsg = ref("")
 const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
+let updateTimeIsRunning = true; // 倒计时停止检查器
 
-onMounted(()=>{
+onMounted(() => {
   click('choose-function'); // 默认打开操作窗口
 })
 const takeTiming = (target_time: number, fn_mode: number, mode: number) => {
-  const measure_time = (timing.h !== null ? Number(timing.h) : 0) * 3600 + 
-                      (timing.m !== null ? Number(timing.m) : 0) * 60 + 
-                      (timing.s !== null ? Number(timing.s) : 0);
+  const measure_time = (timing.h !== null ? Number(timing.h) : 0) * 3600 +
+    (timing.m !== null ? Number(timing.m) : 0) * 60 +
+    (timing.s !== null ? Number(timing.s) : 0);
   alertMsg(errorMsg, closeerrorMsg, `预备关机剩余时间\t${measure_time}s`, errorLevel, 0);
   switch (mode) {
     case 0:
-      invoke("during_time_do_something",{time:measure_time,targetTime:target_time ,fnMode:fn_mode, mode:mode}  )
+      invoke("during_time_do_something", { time: measure_time, targetTime: target_time, fnMode: fn_mode, mode: mode })
+      startTimer()
+      updateTime();
       break;
     case 1:
-      
       break;
-  
+
     default:
       break;
   }
-  
 }
+
+const updateTime = async () => {
+  try {
+    while (updateTimeIsRunning) {
+      // 调用后端获取当前时间
+      let time_fmt: string = await invoke("tc_get_fmt_time", {});
+      updateTrayTooltip(`关机剩余时间 ${time_fmt}`)
+      // 等待1秒后再进行下一次检查
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  } catch (error) {
+    console.error("时间更新出错:", error);
+    // 可以在这里添加错误处理逻辑
+  }
+};
+// 启动函数
+const startTimer = () => {
+  updateTimeIsRunning = true;
+};
+// 清理函数
+const stopTimer = () => {
+  updateTimeIsRunning = false;
+  resiteTrayTooltip()
+};
 const cleanInputTiming = () => {
+  invoke("tc_reset_timer_unnormal", {});
+  stopTimer()  // 停止定时器
   timing.h = null
   timing.m = null
   timing.s = null
