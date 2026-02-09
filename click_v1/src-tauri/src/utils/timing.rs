@@ -235,6 +235,7 @@ fn prevent_sleep() {
 fn execute_callback(mode: Option<i32>) {
     let mut state = TIMER_STATE.lock().unwrap();
     if state.exit_normally {
+        drop(state);
         // 执行结束时函数
         match mode {
             //  未获得模式不执行任何操作
@@ -248,6 +249,7 @@ fn execute_callback(mode: Option<i32>) {
             Some(_) => {}
         }
     } else {
+        drop(state);
         // 执行异常退出函数
         match mode {
             //  未获得模式不执行任何操作
@@ -257,6 +259,7 @@ fn execute_callback(mode: Option<i32>) {
             Some(2) => {}
             Some(_) => {}
         }
+        let mut state = TIMER_STATE.lock().unwrap();  // 再次拿锁 恢复状态
         state.exit_normally = true; // 恢复为正常退出状态
     }
 }

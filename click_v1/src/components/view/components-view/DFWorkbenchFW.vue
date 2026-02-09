@@ -3,9 +3,9 @@
     <div v-show="FloatingWindow['work-bench']" class="work-bench-mask"
         :class="{ 'work-bench-mask-close': FloatingWindow['work-bench-close'] }" @click="handleClickOutside">
         <div class="work-bench-main">
-            <div data-tauri-drag-region class="drag-window-icon" ref="dragCtrBut">
-                <div class=" move-icon-box tooltip" data-tooltip="拖动">
-                    <svg t="1766338639348" class="small-icon move-icon" @mousedown="startDrag" viewBox="0 0 1024 1024"
+            <div data-tauri-drag-region class="drag-window-icon tooltip" ref="dragCtrBut" data-tooltip="拖动页面">
+                <div class=" move-icon-box tooltip" data-tooltip="拖动工具块" @mouseenter.stop @mouseleave.stop>
+                    <svg t="1766338639348" class="small-icon move-icon"   @mousedown="startDrag" viewBox="0 0 1024 1024"
                         version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9788" width="200" height="200">
                         <path
                             d="M476.5 924V100c0-19.8 16.2-36 36-36s36 16.2 36 36v824c0 19.8-16.2 36-36 36s-36-16.2-36-36z"
@@ -21,8 +21,8 @@
                 </div>
 
             </div>
-            <div class="reset" @click="">
-                <svg t="1767188658699" class="icon" @click="() => { resetIcon() }" viewBox="0 0 1024 1024" version="1.1"
+            <div class="reset tooltip" data-tooltip="工具归位" @click="" >
+                <svg t="1767188658699" class="icon"  @click="() => { resetIcon() }" viewBox="0 0 1024 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="5438" width="200" height="200">
                     <path
                         d="M54.016 460.8A461.0048 461.0048 0 0 1 460.8 54.016V51.2a51.2 51.2 0 0 1 102.4 0v2.816A461.0048 461.0048 0 0 1 969.984 460.8H972.8a51.2 51.2 0 0 1 0 102.4h-2.816A461.0048 461.0048 0 0 1 563.2 969.984V972.8a51.2 51.2 0 0 1-102.4 0v-2.816A461.0048 461.0048 0 0 1 54.016 563.2H51.2a51.2 51.2 0 0 1 0-102.4h2.816zM157.184 460.8H204.8a51.2 51.2 0 0 1 0 102.4h-47.616A358.656 358.656 0 0 0 460.8 866.816V819.2a51.2 51.2 0 0 1 102.4 0v47.616A358.656 358.656 0 0 0 866.816 563.2H819.2a51.2 51.2 0 0 1 0-102.4h47.616A358.656 358.656 0 0 0 563.2 157.184V204.8a51.2 51.2 0 0 1-102.4 0v-47.616A358.656 358.656 0 0 0 157.184 460.8zM512 665.6a153.6 153.6 0 1 1 0-307.2 153.6 153.6 0 0 1 0 307.2z"
@@ -32,9 +32,11 @@
 
         </div>
     </div>
+    <RightMouseBar></RightMouseBar>
 </template>
 <script setup lang="ts">
 import { type FloatingWindowState } from '../../../class/PathIndex'
+import RightMouseBar from '../components-configuration/RightMouseBar.vue'
 import { ref, reactive } from 'vue';
 const dragCtrBut = ref<HTMLElement | null>(null);
 // const moveIconBox = ref<HTMLElement | null>(null);
@@ -169,10 +171,10 @@ const resetIcon = () => {
     cursor: grab;
 }
 
+
 .move-icon-box:active {
     cursor: grabbing;
 }
-
 
 .move-icon {
     cursor: grab;

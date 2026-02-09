@@ -4,6 +4,7 @@ import DealFile from '../components/view/DealFile.vue'
 import MakeShutDown from '../components/view/MakeShutDown.vue'
 import LivePicture from '../components/view/LivePicture.vue'
 import RecordScreen from '../components/view/RecordScreen.vue'
+import Document from '../components/view/Document.vue'
 // import Temp from '../components/view/Temp.vue'
 import Home from '../components/view/Home.vue'
 
@@ -26,6 +27,10 @@ const router = createRouter({
         {
             path: '/live-picture',
             component: LivePicture
+        },
+        {
+            path: '/document',
+            component: Document
         },
         // {
         //     path: '/child',

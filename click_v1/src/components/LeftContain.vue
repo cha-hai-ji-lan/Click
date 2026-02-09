@@ -47,6 +47,7 @@ const routeName: RouteNameMap = {
     "make-shutdown": "关机问询",
     "live-picture": "未分类",
     "record-screen": "屏幕录制",
+    "document": "文档",
     // 可以根据需要添加更多路由映射
 }
 // 在组件的 setup 函数中
