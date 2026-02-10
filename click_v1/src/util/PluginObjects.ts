@@ -24,7 +24,7 @@ export const comVisibility = reactive({
           "props": true,
         },
         {
-          "name": "未分类功能",
+          "name": "实况GO图",
           "index": 0,
           "is-focus": false,
           "icon": "LivePicture",

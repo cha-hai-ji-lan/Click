@@ -6,26 +6,7 @@
                 <ul>
                     <li>
                         <div class="index-item">
-                            <svg class="icon" width="32" height="32"  viewBox="0 0 32 32"  xmlns="http://www.w3.org/2000/svg">
-                                <g>
-                                    <circle r="15" cx="16" cy="16" stroke="black" fill-opacity="0.6" stroke-width="1.25"
-                                        opacity="1" fill="#ecfbff" />
-                                    <circle r="10" cx="16" cy="16" fill="#29fbf1" stroke-width="1.5" stroke="#90ebfd"
-                                        stroke-opacity="0.75" />
-                                </g>
-                                <path d="M9 24C0 40 40 0 24 9" fill="none" stroke="#28e9ff" stroke-opacity="1"
-                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                <polygon
-                                    points="15.76 4.501 16.492 4.751 16.776 5.522 17.005 4.779 17.758 4.527 16.995 4.259 16.755 3.508 16.521 4.232"
-                                    stroke="#bff8ff" fill="#58c3ff" stroke-width="0.2" stroke-linejoin="round" />
-                                <polygon
-                                    points="16.84 26.07 19.16 26.89 19.99 28.99 20.61 26.93 22.95 25.97 20.77 25.43 19.98 22.95 19.05 25.46"
-                                    stroke="#bff8ff" fill="#58c3ff" stroke-width="0.75" stroke-linejoin="round" />
-                                <polygon
-                                    points="3.456 10.513 4.992 11.01 5.508 12.518 6.009 11.01 7.503 10.497 6.001 10.004 5.497 8.513 4.996 9.982"
-                                    stroke="#bff8ff" fill="#58c3ff" stroke-width="0.5" stroke-linejoin="round" />
-                            </svg>
-
+                            <MeIcon></MeIcon>
                             <span class="item-text">关于我</span>
                         </div>
 
@@ -33,17 +14,202 @@
                 </ul>
             </div>
         </div>
-        <div class="doc-text">
-            正文
+        <div class="doc-text explorer-act-path">
+            <h1># 我?</h1>
+            <p class="click-say">
+                <span>咔嗒目前致力于学习更多的东西,目前其实并没有明确的专攻方向😶‍🌫️,我还需要不断地学习充实自己.</span>
+            </p>
+            <p class="click-say"><span>我目前会做什么呢?</span></p>
+            <p class="click-say"><span>我目前会:</span></p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <MeIcon></MeIcon>
+                            </th>
+                            <th>
+                                <IconFile></IconFile><br>文件处理
+                            </th>
+                            <th>
+                                <IconShutDown></IconShutDown><br>关机问询
+                            </th>
+                            <th>
+                                <LivePicture></LivePicture><br>实况GO图
+                            </th>
+                            <th>
+                                <RecordScreen></RecordScreen><br>屏幕录制
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="positive-dia">能做什么?</td>
+                            <td class="positive-dia">面向Explorer辅助功能</td>
+                            <td class="positive-dia">目前仅能处理因情况关机</td>
+                            <td class="positive-dia">用于编辑实况图片即(LivePhoto)</td>
+                            <td class="positive-dia">面对屏幕的延迟摄影</td>
+                        </tr>
+                        <tr>
+                            <td class="positive-dia">功能1</td>
+                            <td>@修改名字字段</td>
+                            <td>定时关机</td>
+                            <td style="color:red">作者太懒还没实现功能</td>
+                            <td style="color:red">作者太懒还没实现功能</td>
+                        </tr>
+                        <tr>
+                            <td class="positive-dia">功能2</td>
+                            <td>@改名排序</td>
+                            <td>潮汐锁定</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="positive-dia">功能3</td>
+                            <td>@搜集存放</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="positive-dia">功能4</td>
+                            <td>@格式转化</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="positive-dia">注意</td>
+                            <td class="positive-dia" colspan="4">@:表示功能支持批处理</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="click-say"><span>我不断进步,但并不是从零开始的,我也有自己的动力,赋予我能力驱动我前进的技术有:</span></p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">骨架</div></td>
+                        <td><img class="show-img" src="../../assets/tauri.svg" alt=""
+                                @click="() => { opeanLinkling('https://tauri.app/') }"></td>
+                        <td><img class="show-img" src="../../assets/vue.svg" alt=""
+                                @click="() => { opeanLinkling('https://cn.vuejs.org/') }"></td>
+                        <td><img class="show-img" src="../../assets/vite.svg" alt=""
+                                @click="() => { opeanLinkling('https://vite.org.cn/') }"></td>
+                    </tr>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">名称</div></td>
+                        <td @click="() => { opeanLinkling('https://tauri.app/') }"><div class="composition">Tauri</div></td>
+                        <td @click="() => { opeanLinkling('https://cn.vuejs.org/') }"><div class="composition">Vue3</div></td>
+                        <td @click="() => { opeanLinkling('https://vite.org.cn/') }"><div class="composition">Vite</div></td>
+                    </tr>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">血肉</div></td>
+                        <td><img class="show-img" src="../../assets/ffmpeg.webp" alt=""
+                                @click="() => { opeanLinkling('https://ffmpeg.org/') }"></td>
+                        <td><img class="show-img" src="../../assets/ImageMagick.webp" alt=""
+                                @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"></td>
+
+                    </tr>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">名称</div></td>
+                        <td @click="() => { opeanLinkling('https://ffmpeg.org/') }"><div class="composition">FFmpeg</div></td>
+                        <td @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"><div class="composition">ImageMagick</div></td>
+
+                    </tr>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">灵魂</div></td>
+                        <td>@格式转化</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="positive-dia"><div class="composition">名称</div></td>
+                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"><div class="composition">Rust</div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
 
     </div>
 </template>
 
 <script setup lang="ts">
+import { invoke } from "@tauri-apps/api/core";
+import IconFile from '../../icon/IconFile.vue';
+import MeIcon from '../../icon/MeIcon.vue';
+import IconShutDown from '../../icon/IconShutDown.vue';
+import LivePicture from '../../icon/LivePicture.vue';
+import RecordScreen from '../../icon/RecordScreen.vue';
+
+const opeanLinkling = async (url: String) => {
+    try {
+        await invoke('open_url', { url });
+    } catch (err) {
+        console.error('无法打开链接:', err);
+    }
+}
 
 </script>
 <style scoped>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--normal-agree-color);
+    text-shadow: 0.5px 0.5px 0.5px var(--negative-agree-color);
+    border-bottom: 2px dashed var(--active-attention-color);
+}
+
+.table-wrapper {
+    border: 2px solid var(--main-border);
+    border-radius: 1vmin;
+    /* 圆角 */
+    overflow: hidden;
+    /* 裁剪内容 */
+    display: inline-block;
+    /* 防止容器宽度塌陷 */
+
+}
+
+table {
+    user-select: none;
+    border-collapse: collapse;
+    /* 合并表格边框 */
+    border: 2px solid var(--main-border);
+    border-radius: 10px;
+    /* 设置圆角 */
+    overflow: hidden;
+    /* 确保圆角裁剪内容 */
+
+}
+
+tr,
+th,
+td {
+    border: 2px dashed var(--main-border);
+
+    text-align: center;
+    /* 水平居中 */
+    vertical-align: middle;
+    /* 垂直居中 */
+
+}
+
+.composition {
+    margin: 1vmin;
+    /* 垂直居中 */
+
+}
+
+
 .main-doc {
     display: flex;
     justify-content: center;
@@ -51,6 +217,7 @@
     flex-direction: row;
     width: 100%;
     height: 100%;
+    font-size: 2vmin;
 }
 
 .doc-index {
@@ -96,18 +263,92 @@
     align-items: center;
     flex-direction: row;
     margin: 0.5vmin;
+
 }
 
-.item-text{
+.index-item:active {
+    animation: an-index-item 0.1s forwards;
+    animation-timing-function: ease-in-out;
+
+}
+
+.item-text {
     user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .doc-text {
+    background: var(--title-bar-lg-1);
+    border-radius: 2vmin;
+    border: 2px solid var(--main-border);
+    margin: 1%;
+    padding: 1%;
     flex: 1;
-    width: 79%;
-    height: 100%;
+    height: 90vmin;
+    max-height: 90vmin;
+    overflow-y: auto;
+}
+
+.click-say span {
+    color: var(--normal-attention-color);
+    background: linear-gradient(to right, var(--normal-attention-color), var(--active-attention-color)) no-repeat left bottom;
+    background-size: 100% 1px;
+}
+
+.positive-dia {
+    color: var(--negative-show-color);
+    font-size: 2vmin;
+    font-weight: bold;
+}
+
+
+.explorer-act-path::-webkit-scrollbar {
+    width: 1vmin;
+    /* 垂直滚动条宽度 */
+    height: 1vmin;
+    /* 水平滚动条高度 */
+
+}
+
+.show-img {
+    width: 10vmin;
+    height: 10vmin;
+    margin: 1vmin;
+}
+
+.explorer-act-path::-webkit-scrollbar-track {
+    background: var(--title-bar-lg-1);
+    /* 滚动条轨道背景色 */
+    border-radius: 4px;
+}
+
+.explorer-act-path::-webkit-scrollbar-thumb {
+    background: var(--normal-attention-color);
+    /* 滚动条滑块颜色 */
+    border-radius: 4px;
+}
+
+.explorer-act-path::-webkit-scrollbar-thumb:hover {
+    background: var(--active-attention-color);
+    /* 滑块悬停时的颜色 */
+}
+
+
+
+@keyframes an-index-item {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.75);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
 }
 </style>
