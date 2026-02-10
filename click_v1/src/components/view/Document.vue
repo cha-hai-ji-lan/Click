@@ -105,9 +105,10 @@
                     </tr>
                     <tr>
                         <td class="positive-dia"><div class="composition">血肉</div></td>
-                        <td><img class="show-img" src="../../assets/ffmpeg.webp" alt=""
+                        <td><img class="show-img" src="../../assets/ffmpeg.svg
+                            " alt=""
                                 @click="() => { opeanLinkling('https://ffmpeg.org/') }"></td>
-                        <td><img class="show-img" src="../../assets/ImageMagick.webp" alt=""
+                        <td><img class="show-img" src="../../assets/ImageMagick.svg" alt=""
                                 @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"></td>
 
                     </tr>
@@ -115,24 +116,26 @@
                         <td class="positive-dia"><div class="composition">名称</div></td>
                         <td @click="() => { opeanLinkling('https://ffmpeg.org/') }"><div class="composition">FFmpeg</div></td>
                         <td @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"><div class="composition">ImageMagick</div></td>
-
                     </tr>
                     <tr>
                         <td class="positive-dia"><div class="composition">灵魂</div></td>
-                        <td>@格式转化</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td><img class="show-img" src="../../assets/rust.svg" alt=""
+                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
+                        <td><img class="show-img" src="../../assets/typescript.svg" alt=""
+                                @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"></td>
+                        <td><img class="show-img" src="../../assets/Python.svg" alt=""
+                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
                     </tr>
                     <tr>
                         <td class="positive-dia"><div class="composition">名称</div></td>
                         <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"><div class="composition">Rust</div></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"><div class="composition">TypeScript</div></td>
+                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"><div class="composition">Python</div></td>
                     </tr>
                 </tbody>
             </table>
+            <p class="click-say"><span>辅助工具:</span></p>
+
 
         </div>
 
@@ -286,8 +289,8 @@ td {
     margin: 1%;
     padding: 1%;
     flex: 1;
-    height: 90vmin;
-    max-height: 90vmin;
+    height: 85vmin;
+    max-height: 85vmin;
     overflow-y: auto;
 }
 
