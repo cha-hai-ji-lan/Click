@@ -19,7 +19,8 @@ use utils::{
         },
         path_operations::{replace_name, traverse_directory_all},
     },
-    timing::{timing_allocation, get_fmt_time, reset_timer_unnormal}
+    format_conversion::fm_cov,
+    timing::{get_fmt_time, reset_timer_unnormal, timing_allocation},
 };
 
 #[tauri::command]
@@ -127,12 +128,11 @@ fn during_time_do_something(
     fn_mode: i32,
     mode: i32,
 ) -> Result<(), String> {
-    timing_allocation(time, target_time, fn_mode, mode);  // 传参进入计时分配器 启动计时器
+    timing_allocation(time, target_time, fn_mode, mode); // 传参进入计时分配器 启动计时器
     Ok(())
 }
 #[tauri::command]
-fn tc_get_fmt_time() -> String
-{
+fn tc_get_fmt_time() -> String {
     get_fmt_time()
 }
 #[tauri::command]
@@ -206,8 +206,100 @@ fn replace_pool_all_name(
             let duration = start.elapsed();
             Ok(format!("花费时间: {:?}", duration))
         }
-        Err(e) => Err(format!("替换名称失败: {}", e))
+        Err(e) => Err(format!("替换名称失败: {}", e)),
     }
+}
+#[tauri::command]
+async fn format_conversion(
+    conversion_tool_path: String,
+    args_g1: Option<Vec<String>>,
+    input_dir_path: String,
+    args_g2: Option<Vec<String>>,
+    old_format: String,
+    new_format: String,
+) -> Result<String, String> {
+    // 在单独的线程中执行格式转换，避免阻塞主线程
+    let handle = tokio::task::spawn_blocking(move || {
+        let mut input_file_path: Vec<String> = Vec::new(); // 初始化为空向量
+        match traverse_directory_all(Box::new(Path::new(input_dir_path.as_str()))) {
+            Ok(mut all_paths) => {
+                all_paths.reverse(); // 倒序 保证不先修改父级目录的名称
+                for path in all_paths {
+                    // 获取路径的扩展名
+                    let extension = Path::new(&path)
+                        .extension()
+                        .and_then(|ext| ext.to_str()) // 转换为字符串
+                        .unwrap_or("") // 如果没有扩展名则返回空字符串
+                        .to_lowercase(); // 统一转为小写以忽略大小写差异
+                                         // 判断扩展名是否匹配 old_format
+                    if extension == old_format.to_lowercase() {
+                        // 扩展名匹配，执行后续操作
+                        input_file_path.push(path);
+                        // 在这里调用格式转换逻辑或其他处理
+                    } else {
+                        // 扩展名不匹配，跳过该文件
+                        continue;
+                    }
+                }
+            }
+            Err(e) => {
+                println!("遍历目录失败{e}");
+            }
+        }
+        let start = Instant::now();
+        match fm_cov(
+            conversion_tool_path,
+            args_g1,
+            input_file_path,
+            args_g2,
+            old_format,
+            new_format,
+        ) {
+            Ok(_) => {
+                let duration = start.elapsed();
+                Ok(format!("花费时间: {:?}", duration))
+            }
+            Err(e) => Err(format!("{}", e)),
+        }
+    });
+
+    // 等待异步任务完成
+    handle
+        .await
+        .unwrap_or_else(|e| Err(format!("异步任务执行失败: {}", e)))
+}
+#[tauri::command]
+async fn pool_format_conversion(
+    conversion_tool_path: String,
+    args_g1: Option<Vec<String>>,
+    input_file_path: Vec<String>,
+    args_g2: Option<Vec<String>>,
+    old_format: String,
+    new_format: String,
+) -> Result<String, String> {
+    // 在单独的线程中执行格式转换，避免阻塞主线程
+    let handle = tokio::task::spawn_blocking(move || {
+        let start = Instant::now();
+        match fm_cov(
+            conversion_tool_path,
+            args_g1,
+            input_file_path,
+            args_g2,
+            old_format,
+            new_format,
+        ) {
+            Ok(_) => {
+                let duration = start.elapsed();
+                Ok(format!("花费时间: {:?}", duration))
+            }
+            Err(e) => Err(format!("{}", e)),
+        }
+    });
+
+    // 等待异步任务完成
+    handle
+        .await
+        .unwrap_or_else(|e| Err(format!("异步任务执行失败: {}", e)))
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -226,7 +318,9 @@ pub fn run() {
             change_pool_file_name,    // 批量替换路径池文件名
             during_time_do_something, // 运行指定时间后执行指定命令
             tc_get_fmt_time,          // 获取当前格式化好的字符串时间
-            tc_reset_timer_unnormal   // 重置计时器--非正常退出
+            tc_reset_timer_unnormal,  // 重置计时器--非正常退出
+            format_conversion,
+            pool_format_conversion,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

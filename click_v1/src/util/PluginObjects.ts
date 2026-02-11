@@ -103,7 +103,7 @@ export const init_get_app_path = async () =>{
   appTempPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
   appI18nPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
   appConfigPathF =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
-  appMagickPathF =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.MAGICK_EXE);
+  appMagickPathF =  await PathUtils.buildResourcePath(appImageMagickPath, PATH_CONSTANTS.MAGICK_EXE);
   appFFmpegPathF =  await PathUtils.buildResourcePath(appFFmpegDIRPath, PATH_CONSTANTS.FFMPEG_EXE);
 
 }

@@ -78,6 +78,7 @@
                </div>
                <div v-if="focusMethod === '0'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
+                         <!-- 重命名 -->
                          <DFChangeName :active_path="active_path"
                               v-model:inputRefReplaceOldName="inputRefReplaceOldName"
                               v-model:inputRefReplaceNewName="inputRefReplaceNewName"
@@ -86,6 +87,7 @@
                </div>
                <div v-if="focusMethod === '1'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
+                         <!-- 排序重命名 -->
                          <DFSortChangeName :active_path="active_path" v-model:selectedValue="selectedValue"
                               v-model:inputRefSortName="inputRefSortName" :selectOptions="selectOptions"
                               :SubmitRepluceName="SubmitRepluceName"></DFSortChangeName>
@@ -93,6 +95,7 @@
                </div>
                <div v-if="focusMethod === '2'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
+                         <!-- 收集文件 -->
                          <DFCollectStoreFiles :active_path="active_path" v-model:selectedValue="selectedValue"
                               v-model:inputRefSortName="inputRefSortName" :selectOptions="collectSelectOptions"
                               :SubmitRepluceName="SubmitRepluceName"></DFCollectStoreFiles>
@@ -100,6 +103,7 @@
                </div>
                <div v-if="focusMethod === '3'" class="oper-1">
                     <transition name="replace-name-transition" mode="out-in">
+                         <!-- 格式转化 -->
                          <DFFormatConversion :active_path="active_path"
                               v-model:formatSelectedValue="formatSelectedValue"
                               v-model:inputRefSortName="inputRefSortName" :SubmitRepluceName="SubmitRepluceName">
@@ -128,9 +132,9 @@ import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于�
 import { open } from '@tauri-apps/plugin-dialog';
 import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { ref, reactive, watch, onMounted, onUnmounted } from "vue";
 import { parseStringToArray } from '../../util/DataTool'
-import { alertMsg } from '../../util/PluginObjects'
+import { alertMsg, appMagickPathF } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
@@ -191,6 +195,8 @@ const collectSelectOptions = [
      { value: 'by-size', label: '按文件大小' },
 ]
 
+let fm_cov_args_g1: string[] = []
+let fm_cov_args_g2: string[] = []
 
 
 defineProps({
@@ -402,7 +408,7 @@ const SubmitRepluceName = (tag: string) => {
                                    });
                          });
                     } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
-                         userSelectedPath.value?.forEach((item, _) => { 
+                         userSelectedPath.value?.forEach((item, _) => {
                               console.log(item)
                               invoke("replace_pool_all_name", { Mainpath: item, oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
@@ -535,8 +541,52 @@ const SubmitRepluceName = (tag: string) => {
           case 'collect-store-files':
                alertMsg(errorMsg, closeerrorMsg, `开始搜集文件。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。`, errorLevel, 1);
                break;
-          case 'format-conversion':
-               alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value[0]} 到 ${formatSelectedValue.value[1]}`, errorLevel, 1);
+          case 'img-format-conversion':
+               if (selectedPaths.value.length !== 0) {
+                    console.log("施工")
+                    if (formatSelectedValue.value[0] === "AUTO"){
+                         alertMsg(errorMsg, closeerrorMsg, `请注意亲,自行推导只适用于路径池下的文件转换格式,对于直接操作文件夹内文件是不可以用路径推导的哦!`, errorLevel, 2);
+                         return;
+                    }
+                    selectedPaths.value.forEach((item, _) => {
+                         invoke("format_conversion", {
+                         conversionToolPath: appMagickPathF,
+                         argsG1: fm_cov_args_g1,
+                         inputDirPath: item[0],
+                         argsG2: fm_cov_args_g2,
+                         oldFormat: formatSelectedValue.value[0],
+                         newFormat: formatSelectedValue.value[1]
+                    })
+                         .then((ok) => {
+                              alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                         })
+                         .catch((err) => {
+                              alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
+                         });
+                    });
+               } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
+                    invoke("pool_format_conversion", {
+                         conversionToolPath: appMagickPathF,
+                         argsG1: fm_cov_args_g1,
+                         inputFilePath: userSelectedPath.value,
+                         argsG2: fm_cov_args_g2,
+                         oldFormat: formatSelectedValue.value[0],
+                         newFormat: formatSelectedValue.value[1]
+                    })
+                         .then((ok) => {
+                              alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                         })
+                         .catch((err) => {
+                              alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
+                         });
+                    userSelectedPath.value = []  // 进行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                    userSelectedShortPath.value = []
+
+               } else {
+                    alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
+
+               }
+               // alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value[0]} 到 ${formatSelectedValue.value[1]}`, errorLevel, 1);
                break;
           default:
                break;

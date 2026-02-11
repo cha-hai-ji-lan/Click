@@ -58,7 +58,8 @@
       "icons/setupSide.bmp"
     ],
     "resources":[
-      "resources/**/*"
+      "resources/**/*",
+      "resources/*"
     ]
   }
 }
