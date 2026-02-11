@@ -40,7 +40,7 @@
 import { type PathItem } from "../../../class/PathIndex"
 
 
-const props = defineProps<{
+defineProps<{
     active_path: PathItem[] | null,
     inputRefReplaceOldName: string,
     inputRefReplaceNewName: string,

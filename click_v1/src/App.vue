@@ -116,7 +116,8 @@
     </main>
     <Setting :comVisibility="comVisibility" :openWindow="openWindow"></Setting>
   </div>
-
+  <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{ 'close-err-msg': closeerrorMsg === '<__CLOSE__>' }"
+          :msg="errorMsg" :errLevel="errorLevel"></Megbox>
 </template>
 <script setup lang="ts">
 
@@ -127,14 +128,21 @@ import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于�
 import { createTrayIcon, safeDestroyTrayIcon, hasTrayNow, isCreatingTrayNow, trayInstance } from "./util/ClickTray"
 import { RouterView } from "vue-router"
 import { ColorCtr } from './util/Colors';
+// import { alertMsg } from './util/PluginObjects'
 import LeftContain from "./components/LeftContain.vue";
+import Megbox from "./components/components/Megbox.vue";
 import Setting from "./components/Setting.vue";
-import { comVisibility, set_focus_color_palette, set_special_style } from "./util/PluginObjects"
+import { comVisibility, set_focus_color_palette, set_special_style, init_get_app_path } from "./util/PluginObjects"
 const mainColor = ref(ColorCtr());
 const appWindow = Window.getCurrent()
 const switchScreenSize = ref(true)
 const isPin = ref(false)
 const leftContainer = ref<HTMLElement | null>(null)  // 左侧容器DOM元素
+
+const errorMsg = ref("")  // 消息盒子参数1
+const closeerrorMsg = ref("") // 消息盒子参数2
+const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
+
 let isResizing = false
 let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
 
@@ -145,6 +153,7 @@ onMounted(async () => {
   mainColor.value.set_color_palette()
   set_focus_color_palette(mainColor.value)  // 设置调色板
   set_special_style()  // 设置特殊样式
+  init_get_app_path()  // 初始化获取应用路径
 
   try {
     // 检查是否正在创建或已经存在托盘图标
@@ -174,6 +183,7 @@ onMounted(async () => {
       event.preventDefault();
     }
   });
+
 })
 
 onUnmounted(async () => {

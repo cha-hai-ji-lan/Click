@@ -145,7 +145,7 @@ let dragBoxWidth = 0 // 拖动框宽度
 let dragBoxHeight = 0 // 拖动框高度
 let newWidth = 0 // 修改后的宽度
 let newHeight = 0  // 修改后的高度
-const props = defineProps<{
+defineProps<{
     userSelectedShortPath: string[] | null,
     selectFolder: boolean,
     FloatingWindow: FloatingWindowState,

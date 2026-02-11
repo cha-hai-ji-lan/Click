@@ -171,7 +171,7 @@ const availableMethods = reactive({
      "3": "格式转换",
 })
 
-const FloatingWindow = reactive<FloatingWindowState>({
+let FloatingWindow = reactive<FloatingWindowState>({
      "choose-path-pool": false,  // 设置双标志关闭窗口为了让关闭动画正常显示
      "choose-path-pool-close": false,
      "choose-function": false,
@@ -391,6 +391,7 @@ const SubmitRepluceName = (tag: string) => {
           case 'replace-name':
                if (inputRefReplaceOldName.value !== "") {
                     if (selectedPaths.value.length !== 0) {
+                         console.log("改名")
                          selectedPaths.value.forEach((item, _) => {
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
@@ -401,8 +402,9 @@ const SubmitRepluceName = (tag: string) => {
                                    });
                          });
                     } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
-                         userSelectedPath.value?.forEach((item, _) => { // TODO:: 写应对路径池的标志改名
-                              invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
+                         userSelectedPath.value?.forEach((item, _) => { 
+                              console.log(item)
+                              invoke("replace_pool_all_name", { Mainpath: item, oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
                                         alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名\t${ok}`, errorLevel, 0);
                                    })
@@ -410,6 +412,8 @@ const SubmitRepluceName = (tag: string) => {
                                         alertMsg(errorMsg, closeerrorMsg, `无法处理文件${err}`, errorLevel, 3);
                                    });
                          });
+                         userSelectedPath.value = []  // 进行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                         userSelectedShortPath.value = []
 
                     } else {
                          alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
@@ -452,7 +456,7 @@ const SubmitRepluceName = (tag: string) => {
                                         .catch((err) => {
                                              alertMsg(errorMsg, closeerrorMsg, `无法处理文件	${err}`, errorLevel, 3);
                                         });
-                                   userSelectedPath.value = []  // 经行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                                   userSelectedPath.value = []  // 进行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                                    userSelectedShortPath.value = []
                               });
                               break;

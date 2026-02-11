@@ -9,6 +9,7 @@ use std::path::Path;
 use std::process::Command;
 use std::thread;
 use std::time::Instant;
+use tauri::Manager;
 // 引入 serde_json 库
 use utils::{
     files::{
@@ -30,6 +31,22 @@ fn test_command(data: Vec<Value>) -> Result<String, String> {
         println!("{name_parts}")
     }
     Ok("处理完成".to_string())
+}
+
+#[tauri::command]
+async fn get_app_paths(app_handle: tauri::AppHandle) -> Result<String, String> {
+    let resource_dir = app_handle
+        .path()
+        .resource_dir()
+        .map_err(|e| e.to_string())?;
+    let resource_path_str = resource_dir.display().to_string();
+    // 修复：正确处理Option类型并返回Result
+    let resources_path = resource_path_str
+        .get(4..resource_path_str.len())
+        .ok_or_else(|| "Failed to extract resource path".to_string())?
+        .to_string();
+
+    Ok(resources_path)
 }
 
 /// 批量替换文件名
@@ -173,18 +190,37 @@ fn replace_all_name(
         Err(e) => Err(format!("遍历目录失败: {}", e)),
     }
 }
+#[tauri::command]
+fn replace_pool_all_name(
+    main_path: String,
+    old_name_sign: String,
+    new_name_sign: String,
+) -> Result<String, String> {
+    let start = Instant::now();
+    match replace_name(
+        Box::new(Path::new(main_path.as_str())),
+        &old_name_sign,
+        &new_name_sign,
+    ) {
+        Ok(_) => {
+            let duration = start.elapsed();
+            Ok(format!("花费时间: {:?}", duration))
+        }
+        Err(e) => Err(format!("替换名称失败: {}", e))
+    }
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        // .plugin(tauri_plugin_dialog::init())
-        // .plugin(tauri_plugin_shell::init())
-        // .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
+            get_app_paths,            // 获取应用路径
             run_exe,                  // 运行 EXE 文件
             open_url,                 // 打开 URL
             active_explorer_path,     // 获取当前活动窗口的目录路径
             replace_all_name,         // 替换所有文件名字段
+            replace_pool_all_name,    // 替换路径池所有文件名字段
             test_command,             // 测试命令
             change_file_name,         // 批量替换文件名
             change_pool_file_name,    // 批量替换路径池文件名

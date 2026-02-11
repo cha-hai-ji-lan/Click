@@ -1,8 +1,10 @@
+import { invoke } from "@tauri-apps/api/core";  
 import { reactive, shallowRef, markRaw, Ref } from "vue";
 import IconFile from '../icon/IconFile.vue'
 import IconShutdown from '../icon/IconShutDown.vue'
 import LivePicture from '../icon/LivePicture.vue'
 import RecordScreen from '../icon/RecordScreen.vue'
+
 export const comVisibility = reactive({
   "LeftContain": {
     "LeftContain-data": {
@@ -76,6 +78,33 @@ export const alertMsg = (errorMsg: Ref<string, string>, closeerrorMsg: Ref<strin
 }
 export const set_color_flag = (mainColor: any, flag: String) => {
   mainColor.set_theme_flag(flag)
+
+}
+
+import { PathUtils, PATH_CONSTANTS } from './PathUtils';
+
+export let appPath = ""
+export let appResourcesPath = ""
+export let appImageMagickPath = ""
+export let appFFmpegDIRPath = ""
+export let appTempPath = ""
+export let appI18nPath = ""
+export let appConfigPathF = ""
+export let appMagickPathF = ""
+export let appFFmpegPathF = ""
+
+
+export const init_get_app_path = async () =>{
+  appPath = await invoke("get_app_paths")
+  // 使用规范的路径拼接方式
+  appResourcesPath = await PathUtils.buildResourcePath(appPath, PATH_CONSTANTS.RESOURCES_DIR)
+  appImageMagickPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.IMAGE_MAGICK_DIR);
+  appFFmpegDIRPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.FFMPEG_DIR);
+  appTempPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
+  appI18nPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
+  appConfigPathF =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
+  appMagickPathF =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.MAGICK_EXE);
+  appFFmpegPathF =  await PathUtils.buildResourcePath(appFFmpegDIRPath, PATH_CONSTANTS.FFMPEG_EXE);
 
 }
 

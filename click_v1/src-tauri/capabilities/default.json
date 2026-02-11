@@ -6,6 +6,7 @@
     "main",
     "theUniqueLabel"
   ],
+
   "permissions": [
     "core:default",
     "opener:default",
@@ -20,7 +21,7 @@
     "core:window:allow-destroy",
     "core:window:allow-hide",
     "core:window:allow-show",
-    "shell:default",
-    "dialog:default"
+    "dialog:default",
+    "shell:default"
   ]
 }

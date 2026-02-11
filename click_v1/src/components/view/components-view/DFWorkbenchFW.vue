@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { type FloatingWindowState } from '../../../class/PathIndex'
 // import RightMouseBar from '../components-configuration/RightMouseBar.vue'
-import { ref, reactive } from 'vue';
+import { ref} from 'vue';
 const dragCtrBut = ref<HTMLElement | null>(null);
 // const moveIconBox = ref<HTMLElement | null>(null);
 // const dragCtrBut = ref<HTMLElement | null>(null);

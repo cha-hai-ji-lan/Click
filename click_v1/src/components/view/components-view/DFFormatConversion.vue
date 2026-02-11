@@ -33,6 +33,14 @@
                     p-id="5341"></path>
             </svg>
         </div>
+        <div class="item-title tooltip" data-tooltip="视频格式" @click="() => { chooseMode('vid') }">
+            <svg t="1770809708808" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                p-id="5343" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+                <path
+                    d="M387.398 325.052l308.427 178.843L387.398 684.32V325.05z m-1.707-72.642c-6.981-4.05-14.879-4.965-22.17-3.32-2.235-0.512-4.531-0.838-6.905-0.838-17.005 0-30.797 13.777-30.797 30.782v450.42c0 17.005 13.792 30.798 30.797 30.798 2.607 0 5.09-0.42 7.51-1.04a30.13 30.13 0 0 0 23.086-3.118l371.293-217.212c11.109-6.501 14.52-12.544 15.003-31.108 0.483-18.564 0.217-30.379-13.203-38.152L385.691 252.41zM527.39 960.764h-31.03C118.628 958.212 61.5 836.652 61.5 502.291c0-324.754 71.37-439.29 434.86-439.29h31.03c363.489 0 434.858 114.536 434.858 439.29 0 334.361-57.126 455.921-434.858 458.473M496.36 0C91.88 0-0.001 140.854-0.001 502.228c0 361.389 70.718 518.985 498.207 521.71h27.338c427.488-2.725 498.207-160.321 498.207-521.71C1023.751 140.854 931.87 0 527.39 0h-31.03z"
+                    fill="#333333" p-id="5344"></path>
+            </svg>
+        </div>
         <div class="占位符"></div>
         <div class="submit-replace-name" @click="() => { SubmitRepluceName('format-conversion') }">修改
         </div>
@@ -41,10 +49,17 @@
         <span>🔎 当前无可观察路径...</span>
     </div>
     <div v-if="formatMode === 'img'" class="conversion-item">
-        <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="sourceOption" placeholder="原始格式">
+        <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="img_sourceOption" placeholder="原始格式">
         </SelectorBar>
         <div>转成</div>
-        <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="aimOption" placeholder="目标格式">
+        <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="img_aimOption" placeholder="目标格式">
+        </SelectorBar>
+    </div>
+    <div v-if="formatMode === 'vid'" class="conversion-item">
+        <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="vid_sourceOption" placeholder="原始格式">
+        </SelectorBar>
+        <div>转成</div>
+        <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="vid_aimOption" placeholder="目标格式">
         </SelectorBar>
     </div>
 </template>
@@ -61,17 +76,25 @@ const props = defineProps<{
 >()
 const selectedValueSon = ref(props.formatSelectedValue)
 const formatMode = ref('')
-const sourceOption = [
+const img_sourceOption = [
     { value: "JPG", label: "jpg|jprg" },
     { value: "PNG", label: "png" },
     { value: "ICO", label: "ico" },
     { value: "WEBP", label: "webp" },
 ]
-const aimOption = [
+const img_aimOption = [
     { value: "JPG", label: "jpg|jprg" },
     { value: "PNG", label: "png" },
     { value: "ICO", label: "ico" },
     { value: "WEBP", label: "webp" },
+]
+const vid_sourceOption = [
+    { value: "AVI", label: "avi" },
+    { value: "MP4", label: "mp4" },
+]
+const vid_aimOption = [
+    { value: "AVI", label: "avi" },
+    { value: "MP4", label: "mp4" },
 ]
 
 const emit = defineEmits<{
@@ -104,7 +127,7 @@ const chooseMode = (input_formate: string) => {
     display: grid;
     width: 100%;
     height: 4vmin;
-    grid-template-columns: 5% 5% 5% 70% 15%;
+    grid-template-columns: 5% 5% 5% 5% 65% 15%;
     border-bottom: 1px dashed var(--unite-but-color);
 }
 

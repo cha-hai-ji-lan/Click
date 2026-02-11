@@ -89,48 +89,76 @@
             <table>
                 <tbody>
                     <tr>
-                        <td class="positive-dia"><div class="composition">骨架</div></td>
-                        <td><img class="show-img" src="../../assets/tauri.svg" alt=""
+                        <td class="positive-dia">
+                            <div class="composition">骨架</div>
+                        </td>
+                        <td><img class="show-img tauri" src="../../assets/tauri.svg" alt=""
                                 @click="() => { opeanLinkling('https://tauri.app/') }"></td>
-                        <td><img class="show-img" src="../../assets/vue.svg" alt=""
+                        <td><img class="show-img vue3" src="../../assets/vue.svg" alt=""
                                 @click="() => { opeanLinkling('https://cn.vuejs.org/') }"></td>
-                        <td><img class="show-img" src="../../assets/vite.svg" alt=""
+                        <td><img class="show-img vite" src="../../assets/vite.svg" alt=""
                                 @click="() => { opeanLinkling('https://vite.org.cn/') }"></td>
                     </tr>
                     <tr>
-                        <td class="positive-dia"><div class="composition">名称</div></td>
-                        <td @click="() => { opeanLinkling('https://tauri.app/') }"><div class="composition">Tauri</div></td>
-                        <td @click="() => { opeanLinkling('https://cn.vuejs.org/') }"><div class="composition">Vue3</div></td>
-                        <td @click="() => { opeanLinkling('https://vite.org.cn/') }"><div class="composition">Vite</div></td>
+                        <td class="positive-dia">
+                            <div class="composition">名称</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://tauri.app/') }">
+                            <div class="composition">Tauri</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://cn.vuejs.org/') }">
+                            <div class="composition">Vue3</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://vite.org.cn/') }">
+                            <div class="composition">Vite</div>
+                        </td>
                     </tr>
                     <tr>
-                        <td class="positive-dia"><div class="composition">血肉</div></td>
-                        <td><img class="show-img" src="../../assets/ffmpeg.svg
-                            " alt=""
-                                @click="() => { opeanLinkling('https://ffmpeg.org/') }"></td>
-                        <td><img class="show-img" src="../../assets/ImageMagick.svg" alt=""
-                                @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"></td>
+                        <td class="positive-dia">
+                            <div class="composition">血肉</div>
+                        </td>
+                        <td><img class="show-img ffmpeg" src="../../assets/ffmpeg.svg
+                            " alt="" @click="() => { opeanLinkling('https://ffmpeg.org/') }"></td>
+                        <td><img class="show-img image-magick" src="../../assets/ImageMagick.svg" alt=""
+                                @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
+                        </td>
 
                     </tr>
                     <tr>
-                        <td class="positive-dia"><div class="composition">名称</div></td>
-                        <td @click="() => { opeanLinkling('https://ffmpeg.org/') }"><div class="composition">FFmpeg</div></td>
-                        <td @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }"><div class="composition">ImageMagick</div></td>
+                        <td class="positive-dia">
+                            <div class="composition">名称</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://ffmpeg.org/') }">
+                            <div class="composition">FFmpeg</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
+                            <div class="composition">ImageMagick</div>
+                        </td>
                     </tr>
                     <tr>
-                        <td class="positive-dia"><div class="composition">灵魂</div></td>
-                        <td><img class="show-img" src="../../assets/rust.svg" alt=""
+                        <td class="positive-dia">
+                            <div class="composition">灵魂</div>
+                        </td>
+                        <td><img class="show-img rust" src="../../assets/rust.svg" alt=""
                                 @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
-                        <td><img class="show-img" src="../../assets/typescript.svg" alt=""
+                        <td><img class="show-img type-script" src="../../assets/typescript.svg" alt=""
                                 @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"></td>
-                        <td><img class="show-img" src="../../assets/Python.svg" alt=""
+                        <td><img class="show-img python" src="../../assets/Python.svg" alt=""
                                 @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
                     </tr>
                     <tr>
-                        <td class="positive-dia"><div class="composition">名称</div></td>
-                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"><div class="composition">Rust</div></td>
-                        <td @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"><div class="composition">TypeScript</div></td>
-                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"><div class="composition">Python</div></td>
+                        <td class="positive-dia">
+                            <div class="composition">名称</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }">
+                            <div class="composition">Rust</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://www.typescriptlang.org/') }">
+                            <div class="composition">TypeScript</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }">
+                            <div class="composition">Python</div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -172,17 +200,20 @@ h6 {
 }
 
 .table-wrapper {
+    margin: 0 auto;
+    width: fit-content;
     border: 2px solid var(--main-border);
     border-radius: 1vmin;
     /* 圆角 */
     overflow: hidden;
     /* 裁剪内容 */
-    display: inline-block;
+    /* display: inline-block; */
     /* 防止容器宽度塌陷 */
 
 }
 
 table {
+    margin: 0 auto;
     user-select: none;
     border-collapse: collapse;
     /* 合并表格边框 */
@@ -316,9 +347,39 @@ td {
 }
 
 .show-img {
-    width: 10vmin;
-    height: 10vmin;
+    width: 15vmin;
+    height: 15vmin;
     margin: 1vmin;
+    will-change: filter, background;
+    transition: 0.75s;
+}
+
+.tauri:hover {
+    filter: drop-shadow(0 0 0.75em rgba(36, 200, 219, 0.75));
+
+}
+.vue3:hover {
+    filter: drop-shadow(0 0 0.75em rgba(65, 184, 131, 0.75));
+
+}
+.vite:hover {
+    filter: drop-shadow(0 0 0.75em rgba(189, 52, 254, 0.75));
+
+}
+.ffmpeg:hover {
+    filter: drop-shadow(0 0 0.75em rgba(17, 106, 32, 0.75));
+}
+.image-magick:hover {
+    filter: drop-shadow(0 0 0.75em rgba(252, 252, 0, 0.75));
+}
+.rust:hover {
+    filter: drop-shadow(0 0 0.75em rgba(255, 112, 67, 0.75));
+}
+.type-script:hover {
+    filter: drop-shadow(0 0 0.75em rgba(0, 122, 204, 0.75));
+}
+.python:hover {
+    filter: drop-shadow(0 0 0.75em rgba(0, 117, 170, 0.75));
 }
 
 .explorer-act-path::-webkit-scrollbar-track {

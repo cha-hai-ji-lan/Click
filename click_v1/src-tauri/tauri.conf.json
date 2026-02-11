@@ -12,7 +12,7 @@
   "app": {
     "windows": [   
       {
-        "title": "Click v0.1.2",
+        "title": "Click v0.1.2.22.1",
         "width": 800,
         "height": 600,
         "minWidth": 400,
@@ -32,7 +32,9 @@
       "certificateThumbprint": null,
       "digestAlgorithm": null,
       "nsis": {
-        "installerIcon": "icons/setupClick.ico"
+        "installerIcon": "icons/setupClick.ico",
+        "headerImage": "icons/setupHead.bmp",           
+        "sidebarImage": "icons/setupSide.bmp"   
       },
       "signCommand": null,
       "timestampUrl": null,
@@ -51,8 +53,12 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico",
-      "icons/setupClick.ico"
+      "icons/setupClick.ico",
+      "icons/setupHead.bmp",
+      "icons/setupSide.bmp"
+    ],
+    "resources":[
+      "resources/**/*"
     ]
   }
-  
 }

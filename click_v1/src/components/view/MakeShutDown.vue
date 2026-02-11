@@ -61,7 +61,7 @@ import { alertMsg } from '../../util/PluginObjects'
 import { updateTrayTooltip, resiteTrayTooltip } from "../../util/ClickTray"
 import Megbox from "../components/Megbox.vue"
 const focusMethod = ref<string>("")
-const FloatingWindow = reactive({
+let FloatingWindow = reactive({
   "choose-function": false,
   "choose-function-close": false,
 })
