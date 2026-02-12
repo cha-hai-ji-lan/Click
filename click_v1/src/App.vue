@@ -117,7 +117,7 @@
     <Setting :comVisibility="comVisibility" :openWindow="openWindow"></Setting>
   </div>
   <Megbox v-show="errorMsg !== ''" class="show-err-msg" :class="{ 'close-err-msg': closeerrorMsg === '<__CLOSE__>' }"
-          :msg="errorMsg" :errLevel="errorLevel"></Megbox>
+    :msg="errorMsg" :errLevel="errorLevel"></Megbox>
 </template>
 <script setup lang="ts">
 
@@ -143,8 +143,10 @@ const errorMsg = ref("")  // 消息盒子参数1
 const closeerrorMsg = ref("") // 消息盒子参数2
 const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
 
-let isResizing = false
-let leftContainWidth = 0  // 左侧容器宽度 方便改写和关闭按钮调用
+let isHasTray = false;
+
+let isResizing = false;
+let leftContainWidth = 0 ; // 左侧容器宽度 方便改写和关闭按钮调用
 
 
 
@@ -161,28 +163,32 @@ onMounted(async () => {
       hasTrayNow(),
       isCreatingTrayNow()
     ]);
-
-    if (!hasTray && !isCreating) {  // 只有在没有托盘且不在创建中时才创建
-      if(trayInstance === null){
-        await createTrayIcon(); // 创建托盘图标
+    if (!hasTray && !isCreating && isHasTray === false) {  // 只有在没有托盘且不在创建中时才创建
+        if (trayInstance === null) {
+          isHasTray = true
+          createTrayIcon(); // 创建托盘图标
+        }
+      } else {
+        console.log('托盘图标已存在或正在创建中');
       }
-    } else {
-      console.log('托盘图标已存在或正在创建中');
-    }
+
   } catch (error) {
     console.warn('托盘图标初始化失败:', error);
     // 不阻塞应用启动，继续运行
   }
-  // 禁用 F5 和 Ctrl+R 刷新
-  document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "F5" ||
-      (event.ctrlKey && event.key === "r") ||
-      (event.metaKey && event.key === "r") // macOS 支持 Cmd+R
-    ) {
-      event.preventDefault();
-    }
-  });
+  if (sessionStorage.getItem('isRefreshing')) {
+    console.log("刷新页面")
+    sessionStorage.removeItem('isRefreshing');
+    console.log('检测到页面刷新');
+  }
+  window.addEventListener("beforeunload", async () => {
+  try {
+    console.log("页面即将刷新，清理异步任务...");
+    await safeDestroyTrayIcon(); // 销毁托盘图标
+  } catch (error) {
+    console.warn("清理异步任务失败:", error);
+  }
+});
 
 })
 
