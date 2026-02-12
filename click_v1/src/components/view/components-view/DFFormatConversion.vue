@@ -105,6 +105,7 @@ const img_sourceOption = [
     { value: "ppm", label: "ppm" },
     { value: "pgm", label: "pgm" },
     { value: "pnm", label: "pnm" },
+    { value: "tag", label: "tag" },
     { value: "arw", label: "arw(摄影)" },
     { value: "nef", label: "nef(摄影)" },
     { value: "cr2", label: "cr2(摄影)" },
@@ -132,6 +133,7 @@ const img_aimOption = [
     { value: "ppm", label: "ppm" },
     { value: "pgm", label: "pgm" },
     { value: "pnm", label: "pnm" },
+    { value: "tag", label: "tag" },
     { value: "eps", label: "eps" },
     { value: "ps", label: "ps" },
 

@@ -40,14 +40,16 @@
           <div class="explorer-act-path">
                <transition-group name="path-item" tag="div">
 
-                    <div class="index-path" v-for="item in active_path" :key="item[1]">
+                    <div class="index-path" v-for="item, index in active_path" :key="index">
                          <div class="choose">
                               <input type="checkbox" :value="item" :checked="isSelected(item)"
                                    @change="handleCheckboxChange(item)" />
 
                          </div>
-                         <div class="name">{{ item[1] }}</div>
-                         <div class="path">{{ item[0] }}</div>
+                         <div class="name"><span class="path-contain" :class="{ 'hover-scroll': overflowFlags[0] }"
+                                   @mouseenter="updateOverflowFlags">{{ item[1] }}</span></div>
+                         <div class="path"><span class="path-contain" :class="{ 'hover-scroll': overflowFlags[1] }"
+                                   @mouseenter="updateOverflowFlags">{{ item[0] }}</span></div>
                     </div>
                </transition-group>
           </div>
@@ -132,7 +134,7 @@ import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于�
 import { open } from '@tauri-apps/plugin-dialog';
 import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
-import { ref, reactive, watch, onMounted, onUnmounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
 import { parseStringToArray } from '../../util/DataTool'
 import { alertMsg, appMagickPathF } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
@@ -163,6 +165,9 @@ const inputRefSortName = ref("")
 const userSelectedPath = ref<string[] | null>(null)
 const userSelectedShortPath = ref<string[] | null>(null)
 const floatingWindowElement = ref<HTMLElement | null>(null);
+
+// 记录每个路径项是否溢出
+const overflowFlags = ref<boolean[]>([]);
 
 const selectFolder = ref(false)
 const selectedValue = ref('')
@@ -259,6 +264,9 @@ onMounted(() => {
      get_explorer_active_path();
      startPolling();
      click('choose-function'); // 默认打开操作窗口
+     nextTick(() => {
+          updateOverflowFlags();
+     });
 });
 
 onUnmounted(() => {
@@ -544,25 +552,25 @@ const SubmitRepluceName = (tag: string) => {
           case 'img-format-conversion':
                if (selectedPaths.value.length !== 0) {
                     console.log("施工")
-                    if (formatSelectedValue.value[0] === "AUTO"){
+                    if (formatSelectedValue.value[0] === "AUTO") {
                          alertMsg(errorMsg, closeerrorMsg, `请注意亲,自行推导只适用于路径池下的文件转换格式,对于直接操作文件夹内文件是不可以用路径推导的哦!`, errorLevel, 2);
                          return;
                     }
                     selectedPaths.value.forEach((item, _) => {
                          invoke("format_conversion", {
-                         conversionToolPath: appMagickPathF,
-                         argsG1: fm_cov_args_g1,
-                         inputDirPath: item[0],
-                         argsG2: fm_cov_args_g2,
-                         oldFormat: formatSelectedValue.value[0],
-                         newFormat: formatSelectedValue.value[1]
-                    })
-                         .then((ok) => {
-                              alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                              conversionToolPath: appMagickPathF,
+                              argsG1: fm_cov_args_g1,
+                              inputDirPath: item[0],
+                              argsG2: fm_cov_args_g2,
+                              oldFormat: formatSelectedValue.value[0],
+                              newFormat: formatSelectedValue.value[1]
                          })
-                         .catch((err) => {
-                              alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
-                         });
+                              .then((ok) => {
+                                   alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                              })
+                              .catch((err) => {
+                                   alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
+                              });
                     });
                } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                     invoke("pool_format_conversion", {
@@ -609,6 +617,20 @@ const getShortPath = (fullPath: string): string => {
 }
 
 
+// 检测文字是否溢出
+const checkOverflow = (element: HTMLElement): boolean => {
+     console.log("溢出")
+     return element.scrollWidth > element.offsetWidth;
+};
+
+// 更新所有路径项的溢出状态
+const updateOverflowFlags = () => {
+     const pathElements = document.querySelectorAll('.path-contain');
+     overflowFlags.value = Array.from(pathElements).map((el) =>
+          checkOverflow(el as HTMLElement)
+     );
+     console.log(overflowFlags.value)
+};
 
 </script>
 <style scoped>
@@ -828,6 +850,15 @@ h3 {
      -webkit-box-orient: vertical;
 }
 
+.path-contain{
+     width: 100%;
+     text-align: center;
+}
+.path-contain.hover-scroll:hover {
+     animation: slideLeftRight 8s linear;
+     /* 平滑过渡效果 */
+}
+
 .path {
      height: 4vh;
      max-height: 30px;
@@ -841,7 +872,9 @@ h3 {
      white-space: nowrap;
      -webkit-box-orient: vertical;
 
+
 }
+
 
 .path::before {
      content: "";
@@ -1089,5 +1122,32 @@ h3 {
           height: 78%;
      }
 
+}
+
+@keyframes slideLeftRight {
+     0% {
+          transform: translateX(0%);
+          /* 初始位置：向左滑动 */
+     }
+
+     25% {
+          transform: translateX(-50%);
+          /* 中间位置：向右滑动 */
+     }
+
+     50% {
+          transform: translateX(0%);
+          /* 中间位置：向右滑动 */
+     }
+
+     75% {
+          transform: translateX(50%);
+          /* 回到初始位置：向左滑动 */
+     }
+
+     100% {
+          transform: translateX(0%);
+          /* 回到初始位置：向左滑动 */
+     }
 }
 </style>
