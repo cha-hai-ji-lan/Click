@@ -27,11 +27,6 @@ pub fn fm_cov(
         // 添加输入文件路径
         cmd.arg(&file_path);
 
-        // 针对 ICO 格式的特殊处理：添加尺寸限制
-        if new_format.to_lowercase() == "ico" {
-            cmd.arg("-resize");
-            cmd.arg("256x256>");
-        }
 
         // 添加 args_g2 参数（如果存在）
         if let Some(ref args) = args_g2 {
@@ -40,7 +35,7 @@ pub fn fm_cov(
 
         // 添加输出文件路径
         cmd.arg(output_path.to_string_lossy().as_ref());
-
+        println!("{:?}",cmd);
         // 执行命令
         let output = cmd.output()?;
 

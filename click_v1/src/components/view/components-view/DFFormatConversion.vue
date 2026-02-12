@@ -3,22 +3,9 @@
     <div class="format-conversion-container">
         <div v-if="active_path && active_path.length > 0" class="order-and-replace-name">
             <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
-                <svg t="1766481043465" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg" p-id="7054" width="200" height="200">
-                    <path
-                        d="M512 145.92c201.728 0 366.08 164.352 366.08 366.08s-164.352 366.08-366.08 366.08S145.92 713.728 145.92 512 310.272 145.92 512 145.92M512 87.04c-234.496 0-424.96 190.464-424.96 424.96s189.952 424.96 424.96 424.96c234.496 0 424.96-190.464 424.96-424.96S746.496 87.04 512 87.04L512 87.04z"
-                        p-id="7055"></path>
-                    <path
-                        d="M578.56 721.92c-16.384 0-29.184-13.312-29.184-29.184l0-40.96c0-12.288 7.68-23.04 18.944-27.648 64-23.552 107.008-84.992 107.008-153.088 0-90.112-73.216-163.328-163.328-163.328-90.112 0-163.328 73.216-163.328 163.328 0 68.096 43.008 129.536 107.008 153.088 11.776 4.096 18.944 15.36 18.944 27.648l0 40.96c0 16.384-13.312 29.184-29.184 29.184-16.384 0-29.184-13.312-29.184-29.184L416.256 670.72c-76.288-36.352-126.464-114.688-126.464-200.192 0-122.368 99.328-221.696 221.696-221.696s221.696 99.328 221.696 221.696c0 85.504-50.176 163.328-126.464 200.192l0 21.504C607.744 708.608 594.432 721.92 578.56 721.92z"
-                        p-id="7056"></path>
-                    <path d="M578.56 742.912" p-id="7057"></path>
-                    <path d="M445.952 742.912" p-id="7058"></path>
-                    <path
-                        d="M559.104 818.688 465.408 818.688c-16.384 0-29.184-13.312-29.184-29.184s13.312-29.184 29.184-29.184l93.696 0c16.384 0 29.184 13.312 29.184 29.184S574.976 818.688 559.104 818.688z"
-                        p-id="7059"></path>
-                </svg>
+                <IconInfo></IconInfo>
             </div>
-            <div class="item-title tooltip" data-tooltip="配置 施工ing🔨">
+            <div class="item-title tooltip" data-tooltip="配置 施工ing🔨" @click="() => { open_configure() }">
                 <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
                     <path
@@ -44,7 +31,7 @@
                 </svg>
             </div>
             <div class="占位符"></div>
-            <div class="submit-replace-name" @click="() => { SubmitRepluceName(cov_type) }">转化
+            <div class="submit-replace-name" @click="() => { subCov() }">转化
             </div>
         </div>
         <div v-else class="place-holder">
@@ -66,11 +53,33 @@
             <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="vid_aimOption" placeholder="目标格式">
             </SelectorBar>
         </div>
+        <div v-if="open_configure_interface" class="configer">
+            <div class="item">
+                <div class="name">
+                    <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                        <IconInfo></IconInfo>
+
+                    </div>
+                    <div class="text">{{ args_item_title[0] }}</div>
+                </div>
+                <div v-if="args_mode[0] === 'nor-resize'" class="poer">
+                    <input v-model="args_g2[0]" type="text" placeholder="宽 例如:800">
+                    <input v-model="args_g2[1]" type="text" placeholder="高 例如:400">
+                    <div class="inline-button" @click="() => { changStyle('resize') }">% 表示</div>
+                </div>
+                <div v-if="args_mode[0] === 'percent-resize'" class="poer">
+                    <input v-model="args_g2[0]" type="text" placeholder="宽 例如:80%">
+                    <div class="inline-button" @click="() => { changStyle('resize') }">像素表示</div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, watch, computed, } from 'vue';
 import SelectorBar from '../../components/SelectorBar.vue'
+import IconInfo from '../../../icon/icons/IconInfo.vue'
+import { imgExpendArgs2 } from '../../../util/FormatCov'
 import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
     active_path: PathItem[] | null,
@@ -79,6 +88,8 @@ const props = defineProps<{
     SubmitRepluceName: (toolMethoad: string) => void
 }
 >()
+
+const open_configure_interface = ref(false)
 
 const cov_type = ref("format-conversion")
 const selectedValueSon = ref(props.formatSelectedValue)
@@ -136,11 +147,17 @@ const img_aimOption = [
     { value: "tag", label: "tag" },
     { value: "eps", label: "eps" },
     { value: "ps", label: "ps" },
-
-
-
-
 ]
+// const args_g1 :string[] = ["", ""]
+/**
+ * @constant args_g2 参数索引对应表
+ * img-----------------------------------------------
+ * 0: 照片宽度 || 1: 照片高度 ||
+ * ==================================================
+ */
+const args_g2: string[] = ["", ""]
+const args_mode = ref<string[]>(["nor-resize", ""])
+const args_item_title = ref<string[]>(["(横纵比🔒)调整图像尺寸(像素)", ""])
 const vid_sourceOption = [
     { value: "AUTO", label: "自行推导" },
     { value: "avi", label: "avi" },
@@ -174,19 +191,65 @@ watch(
         }
     }
 );
+
+const subCov = () => {
+    imgExpendArgs2(args_g2);
+    console.log(cov_type.value);
+    props.SubmitRepluceName(cov_type.value);
+}
 const chooseMode = (input_formate: string) => {
-    cov_type.value = input_formate + "-" + cov_type.value;
+    switch (input_formate) {
+        case 'img':
+            cov_type.value = "img-format-conversion";
+            break;
+        case "vid":
+            cov_type.value = "vid-format-conversion";
+            break;
+        default:
+            break;
+    }
     formatMode.value = input_formate;
+}
+
+const open_configure = () => {
+    if (open_configure_interface.value === false) {
+        open_configure_interface.value = true;
+    } else {
+        open_configure_interface.value = false;
+    }
+    console.log(open_configure_interface.value);
+
+}
+
+const changStyle = (mode: string) => {
+    switch (mode) {
+        case "resize":
+            if (args_mode.value[0] === "nor-resize") {
+                args_mode.value[0] = "percent-resize"
+                args_item_title.value[0] = "(横纵比🔒)调整图像尺寸(%)"
+            } else if (args_mode.value[0] === "percent-resize") {
+                args_mode.value[0] = "nor-resize"
+                args_item_title.value[0] = "(横纵比🔒)调整图像尺寸(像素)"
+            }
+            break;
+
+        default:
+            break;
+    }
+
 }
 </script>
 <style scoped>
 .format-conversion-container {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
 }
 
 .order-and-replace-name {
     font-size: 2vmin;
-    display: grid;
     display: grid;
     width: 100%;
     height: 4vmin;
@@ -268,13 +331,9 @@ const chooseMode = (input_formate: string) => {
     justify-content: center;
     align-items: center;
     user-select: none;
-    /* 用户无法选择 */
     -webkit-user-select: none;
-    /* Safari兼容性 */
     -moz-user-select: none;
-    /* Firefox兼容性 */
     -ms-user-select: none;
-    /* IE兼容性 */
     transition: 0.25s;
 }
 
@@ -300,5 +359,99 @@ const chooseMode = (input_formate: string) => {
     align-items: center;
     color: var(--font-color);
 
+}
+
+.configer {
+    flex: 1;
+    width: 100%;
+    border: 2px dashed var(--unite-but-color);
+    border-radius: 1vmin;
+    overflow-y: auto;
+
+}
+
+.item {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 4vmin;
+    border-bottom: 1px dashed var(--unite-but-color);
+
+
+
+}
+
+.poer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 4vmin;
+    border-bottom: 1px dashed var(--unite-but-color);
+
+    input {
+        flex: 1;
+        font-family: "楷体", 'Courier New', Courier, monospace;
+        font-size: 2vmin;
+        margin-left: auto;
+        height: 4vmin;
+        text-align: center;
+        background-color: transparent;
+        border: 0px dashed var(--unite-but-color);
+        border-bottom: 2px dashed var(--unite-but-color);
+
+        &:hover {
+            border-color: var(--positive-show-color);
+        }
+
+        &:focus {
+            outline: none;
+            /* 取消默认的焦点轮廓 */
+            /* border: 1px solid var(--active-attention-color); */
+            border-bottom: 2px dashed var(--active-attention-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        }
+    }
+}
+
+.inline-button {
+    width: 10%;
+    margin-right: 2vmin;
+    margin-left: auto;
+    padding: 0 0.5vmin;
+    border: 0.2vmin solid var(--normal-attention-color);
+    background-color: var(--main-back-ground);
+    border-radius: 1vmin;
+    transition: box-shadow 0.5s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    &:hover {
+        border: 0.15vmin solid var(--active-attention-color);
+        box-shadow: 0 0 2vmin var(--normal-attention-color);
+    }
+
+    &:active {
+        background-color: var(--normal-attention-color);
+        border: 0.15vmin solid var(--active-attention-color);
+        box-shadow: 0 0 2vmin var(--normal-attention-color);
+        animation: active-icon 0.25s forwards;
+        animation-timing-function: linear;
+    }
 }
 </style>

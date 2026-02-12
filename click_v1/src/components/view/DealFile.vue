@@ -132,10 +132,11 @@
 <script setup lang="ts">
 import { invoke } from "@tauri-apps/api/core";  // invoke：钩子方法 用于调用后端rust的函数
 import { open } from '@tauri-apps/plugin-dialog';
+import { ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
 import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
-import { ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
 import { parseStringToArray } from '../../util/DataTool'
+import { getArgs1, getArgs2, cleanArgs, securityReview } from '../../util/FormatCov'
 import { alertMsg, appMagickPathF } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
@@ -199,9 +200,6 @@ const collectSelectOptions = [
      { value: 'by-time', label: '按修改时间范围' },
      { value: 'by-size', label: '按文件大小' },
 ]
-
-let fm_cov_args_g1: string[] = []
-let fm_cov_args_g2: string[] = []
 
 
 defineProps({
@@ -405,7 +403,6 @@ const SubmitRepluceName = (tag: string) => {
           case 'replace-name':
                if (inputRefReplaceOldName.value !== "") {
                     if (selectedPaths.value.length !== 0) {
-                         console.log("改名")
                          selectedPaths.value.forEach((item, _) => {
                               invoke("replace_all_name", { dirPath: item[0], oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
@@ -417,7 +414,6 @@ const SubmitRepluceName = (tag: string) => {
                          });
                     } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                          userSelectedPath.value?.forEach((item, _) => {
-                              console.log(item)
                               invoke("replace_pool_all_name", { Mainpath: item, oldNameSign: inputRefReplaceOldName.value, newNameSign: inputRefReplaceNewName.value })
                                    .then((ok) => {
                                         alertMsg(errorMsg, closeerrorMsg, `已完成替换文件名\t${ok}`, errorLevel, 0);
@@ -496,7 +492,6 @@ const SubmitRepluceName = (tag: string) => {
                               break;
                     }
                } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加路径池中文件进行重命名
-                    console.log(userSelectedPath.value?.length)
 
                     switch (selectedValue.value) {
                          case 'by-name':
@@ -551,17 +546,17 @@ const SubmitRepluceName = (tag: string) => {
                break;
           case 'img-format-conversion':
                if (selectedPaths.value.length !== 0) {
-                    console.log("施工")
                     if (formatSelectedValue.value[0] === "AUTO") {
                          alertMsg(errorMsg, closeerrorMsg, `请注意亲,自行推导只适用于路径池下的文件转换格式,对于直接操作文件夹内文件是不可以用路径推导的哦!`, errorLevel, 2);
                          return;
                     }
+                    securityReview(formatSelectedValue.value)
                     selectedPaths.value.forEach((item, _) => {
                          invoke("format_conversion", {
                               conversionToolPath: appMagickPathF,
-                              argsG1: fm_cov_args_g1,
+                              argsG1: getArgs1(),
                               inputDirPath: item[0],
-                              argsG2: fm_cov_args_g2,
+                              argsG2: getArgs2(),
                               oldFormat: formatSelectedValue.value[0],
                               newFormat: formatSelectedValue.value[1]
                          })
@@ -572,12 +567,15 @@ const SubmitRepluceName = (tag: string) => {
                                    alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
                               });
                     });
+                    cleanArgs()  // 清理参数
                } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
+                    securityReview(formatSelectedValue.value)
+                    console.log("开始转换")
                     invoke("pool_format_conversion", {
                          conversionToolPath: appMagickPathF,
-                         argsG1: fm_cov_args_g1,
+                         argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
-                         argsG2: fm_cov_args_g2,
+                         argsG2: getArgs2(),
                          oldFormat: formatSelectedValue.value[0],
                          newFormat: formatSelectedValue.value[1]
                     })
@@ -589,6 +587,7 @@ const SubmitRepluceName = (tag: string) => {
                          });
                     userSelectedPath.value = []  // 进行了名称修改会消耗掉用户选择的文件，所以需要重新获取
                     userSelectedShortPath.value = []
+                    cleanArgs() // 清理参数
 
                } else {
                     alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
@@ -619,7 +618,6 @@ const getShortPath = (fullPath: string): string => {
 
 // 检测文字是否溢出
 const checkOverflow = (element: HTMLElement): boolean => {
-     console.log("溢出")
      return element.scrollWidth > element.offsetWidth;
 };
 
@@ -629,7 +627,6 @@ const updateOverflowFlags = () => {
      overflowFlags.value = Array.from(pathElements).map((el) =>
           checkOverflow(el as HTMLElement)
      );
-     console.log(overflowFlags.value)
 };
 
 </script>
@@ -850,10 +847,11 @@ h3 {
      -webkit-box-orient: vertical;
 }
 
-.path-contain{
+.path-contain {
      width: 100%;
      text-align: center;
 }
+
 .path-contain.hover-scroll:hover {
      animation: slideLeftRight 8s linear;
      /* 平滑过渡效果 */
@@ -944,7 +942,7 @@ h3 {
      justify-content: center;
      align-items: center;
      flex-direction: column;
-     border-top: 1px dashed var(--unite-but-color);
+     /* border-top: 1px dashed var(--unite-but-color); */
      border-bottom: 1px dashed var(--unite-but-color);
      animation: show-method 0.5s ease-in-out forwards;
 }
