@@ -5,7 +5,7 @@
             <div class="item-title tooltip" data-tooltip="------示例 施工ing🔨">
                 <IconInfo></IconInfo>
             </div>
-            <div class="item-title tooltip" data-tooltip="配置 施工ing🔨" @click="() => { open_configure() }">
+            <div class="item-title tooltip" data-tooltip="配置" @click="() => { open_configure() }">
                 <svg t="1766504502772" class="icon" viewBox="0 0 1024 1024" version="1.1"
                     xmlns="http://www.w3.org/2000/svg" p-id="9296" width="200" height="200">
                     <path
@@ -37,49 +37,122 @@
         <div v-else class="place-holder">
             <span>🔎 当前无可观察路径...</span>
         </div>
-        <div v-if="formatMode === 'img'" class="conversion-item">
-            <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="img_sourceOption"
-                placeholder="原始格式">
-            </SelectorBar>
-            <div class="text">转成</div>
-            <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="img_aimOption" placeholder="目标格式">
-            </SelectorBar>
-        </div>
-        <div v-if="formatMode === 'vid'" class="conversion-item">
-            <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="vid_sourceOption"
-                placeholder="原始格式">
-            </SelectorBar>
-            <div class="text">转成</div>
-            <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="vid_aimOption" placeholder="目标格式">
-            </SelectorBar>
-        </div>
-        <div v-if="open_configure_interface" class="configer">
-            <div class="item">
-                <div class="name">
-                    <div class="tooltip" data-tooltip="示例 施工ing🔨">
-                        <IconInfo></IconInfo>
-
-                    </div>
-                    <div class="text">{{ args_item_title[0] }}</div>
-                </div>
-                <div v-if="args_mode[0] === 'nor-resize'" class="poer">
-                    <input v-model="args_g2[0]" type="text" placeholder="宽 例如:800">
-                    <input v-model="args_g2[1]" type="text" placeholder="高 例如:400">
-                    <div class="inline-button" @click="() => { changStyle('resize') }">% 表示</div>
-                </div>
-                <div v-if="args_mode[0] === 'percent-resize'" class="poer">
-                    <input v-model="args_g2[0]" type="text" placeholder="宽 例如:80%">
-                    <div class="inline-button" @click="() => { changStyle('resize') }">像素表示</div>
-                </div>
+        <transition name="replace-name-transition" mode='out-in'>
+            <div v-if="formatMode === 'img'" class="conversion-item">
+                <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="img_sourceOption"
+                    placeholder="原始格式">
+                </SelectorBar>
+                <div class="text">转成</div>
+                <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="img_aimOption"
+                    placeholder="目标格式">
+                </SelectorBar>
             </div>
-        </div>
+            <div v-else-if="formatMode === 'vid'" class="conversion-item">
+                <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="vid_sourceOption"
+                    placeholder="原始格式">
+                </SelectorBar>
+                <div class="text">转成</div>
+                <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="vid_aimOption"
+                    placeholder="目标格式">
+                </SelectorBar>
+            </div>
+        </transition>
+        <transition name="replace-name-transition" mode='in-out'>
+            <div v-if="open_configure_interface" class="configer">
+                <div class="items-list">
+                    <ul>
+                        <li @click="addComponent('resize')">调整尺寸</li>
+                        <li @click="addComponent('crop')">裁剪大小</li>
+                        <li @click="addComponent('resize')">缩放</li>
+                        <li class="claen-oper" @click="clearComponents()">清空操作</li>
+                    </ul>
+                </div>
+                <div class="items-group">
+                    <div class="w-box" v-for="(comp, index) in componentList" :key="index">
+                        <div v-if="comp.type === 'resize'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @Click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <template v-if="args_mode[index as number] === 'nor-resize'">
+                                    <div class="poer">
+                                        <input v-model="args_g2_nest[index as number][1]" type="text"
+                                            placeholder="宽 例如:800">
+                                        <input v-model="args_g2_nest[index as number][2]" type="text"
+                                            placeholder="高 例如:400">
+                                        <div class="inline-button"
+                                            @click="() => { changStyle('resize', index as number) }">% 表示</div>
+                                    </div>
+                                </template>
+                                <template v-else-if="args_mode[index as number] === 'percent-resize'">
+                                    <div class="poer">
+                                        <input v-model="args_g2_nest[index as number][1]" type="text"
+                                            placeholder="宽 例如:80%">
+                                        <div class="inline-button"
+                                            @click="() => { changStyle('resize', index as number) }">像素表示</div>
+                                    </div>
+                                </template>
+                            </transition>
+                        </div>
+                        <div v-else-if="comp.type === 'crop'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                </div>
+                                <div class="tooltip" data-tooltip="关闭条目">
+                                    <CloseIcon @Click="() => { closeItem(index as number) }"></CloseIcon>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <template v-if="args_mode[index as number] === 'lt-crop' || 'ce-crop'">
+                                    <div class="w-box">
+                                        <div class="poer">
+                                            <input v-model="args_g2_nest[index as number][1]" type="text"
+                                                placeholder="宽 如:800">
+                                            <input v-model="args_g2_nest[index as number][2]" type="text"
+                                                placeholder="高 如:400">
+                                            <div v-if="args_mode[index as number] === 'lt-crop'" class="inline-button"
+                                                @click="() => { changStyle('crop', index as number) }">中心原点</div>
+                                            <div v-if="args_mode[index as number] === 'ce-crop'" class="inline-button"
+                                                @click="() => { changStyle('crop', index as number) }">左上原点</div>
+                                        </div>
+                                        <div class="poer">
+                                            <input v-model="args_g2_nest[index as number][3]" type="text"
+                                                placeholder="原点偏移x 如:10">
+                                            <input v-model="args_g2_nest[index as number][4]" type="text"
+                                                placeholder="原点偏移y 如:20">
+                                        </div>
+                                    </div>
+                                </template>
+                            </transition>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+ -->
+            </div>
+        </transition>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, watch, computed, } from 'vue';
 import SelectorBar from '../../components/SelectorBar.vue'
 import IconInfo from '../../../icon/icons/IconInfo.vue'
-import { imgExpendArgs2 } from '../../../util/FormatCov'
+import CloseIcon from '../../../icon/icons/CloseIcon.vue'
+import { imgExpendArgs2, cleanArgs } from '../../../util/FormatCov'
+import { img_sourceOption, img_aimOption, vid_sourceOption, vid_aimOption } from '../../../util/PluginObjects'
 import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
     active_path: PathItem[] | null,
@@ -93,81 +166,24 @@ const open_configure_interface = ref(false)
 
 const cov_type = ref("format-conversion")
 const selectedValueSon = ref(props.formatSelectedValue)
-const formatMode = ref('')
-const img_sourceOption = [
-    { value: "AUTO", label: "自行推导" },
-    { value: "jpg", label: "jpg|jpeg" },
-    { value: "png", label: "png" },
-    { value: "helf", label: "helf" },
-    { value: "ico", label: "ico" },
-    { value: "webp", label: "webp" },
-    { value: "gif", label: "gif" },
-    { value: "webm", label: "webm" },
-    { value: "avif", label: "avif" },
-    { value: "apng", label: "apng" },
-    { value: "bmp", label: "bmp" },
-    { value: "tif", label: "tif" },
-    { value: "tiff", label: "tiff" },
-    { value: "svg", label: "svg" },
-    { value: "pdf", label: "pdf" },
-    { value: "psd", label: "psd" },
-    { value: "ai", label: "ai" },
-    { value: "pbm", label: "pbm" },
-    { value: "ppm", label: "ppm" },
-    { value: "pgm", label: "pgm" },
-    { value: "pnm", label: "pnm" },
-    { value: "tag", label: "tag" },
-    { value: "arw", label: "arw(摄影)" },
-    { value: "nef", label: "nef(摄影)" },
-    { value: "cr2", label: "cr2(摄影)" },
-    { value: "eps", label: "eps" },
-    { value: "ps", label: "ps" },
-]
-const img_aimOption = [
-    { value: "jpg", label: "jpg|jpeg" },
-    { value: "png", label: "png" },
-    { value: "helf", label: "helf" },
-    { value: "ico", label: "ico" },
-    { value: "webp", label: "webp" },
-    { value: "gif", label: "gif" },
-    { value: "webm", label: "webm" },
-    { value: "avif", label: "avif" },
-    { value: "apng", label: "apng" },
-    { value: "bmp", label: "bmp" },
-    { value: "tif", label: "tif" },
-    { value: "tiff", label: "tiff" },
-    { value: "svg", label: "svg" },
-    { value: "pdf", label: "pdf" },
-    { value: "psd", label: "psd" },
-    { value: "ai", label: "ai" },
-    { value: "pbm", label: "pbm" },
-    { value: "ppm", label: "ppm" },
-    { value: "pgm", label: "pgm" },
-    { value: "pnm", label: "pnm" },
-    { value: "tag", label: "tag" },
-    { value: "eps", label: "eps" },
-    { value: "ps", label: "ps" },
-]
+const formatMode = ref('')  // img 代表图片格式转换  vid 代表视频格式转换
+const componentList = ref<any>([])  // 配置组件列表
+// let componentIndex = 0  // 配置组件索引数
 // const args_g1 :string[] = ["", ""]
 /**
- * @constant args_g2 参数索引对应表
- * img-----------------------------------------------
- * 0: 照片宽度 || 1: 照片高度 ||
- * ==================================================
+ * 
+ * args_g2 参数索引对应表
+ * img-----------------------------------------------------<br>
+ * 0: 照片宽度  ||1: 照片高度   ||2:保留字用于调整||3: 照片裁剪宽 ||  
+ * 4: 照片裁剪高||5: 左上角偏移x||6: 左上角偏移y||
+ * ===========================================================
  */
-const args_g2: string[] = ["", ""]
-const args_mode = ref<string[]>(["nor-resize", ""])
-const args_item_title = ref<string[]>(["(横纵比🔒)调整图像尺寸(像素)", ""])
-const vid_sourceOption = [
-    { value: "AUTO", label: "自行推导" },
-    { value: "avi", label: "avi" },
-    { value: "mp4", label: "mp4" },
-]
-const vid_aimOption = [
-    { value: "avi", label: "avi" },
-    { value: "mp4", label: "mp4" },
-]
-
+let args_g2_nest: any[] = []
+let args_g2: string[] = []
+// const args_mode = ref<string[]>(["nor-resize", "lt-crop", "", ""])
+const args_mode = ref<string[]>([])
+// const args_item_title = ref<string[]>(["(横纵比🔒)调整图像尺寸(像素)", "裁剪图像(左上角)"])
+const args_item_title = ref<string[]>([])
 
 
 const emit = defineEmits<{
@@ -193,7 +209,10 @@ watch(
 );
 
 const subCov = () => {
+    cleanArgs() // 执行前清除 过去可能存储的指令, 预防内存泄漏
+    argsUnpack(args_g2_nest);
     imgExpendArgs2(args_g2);
+    args_g2 = []
     console.log(cov_type.value);
     props.SubmitRepluceName(cov_type.value);
 }
@@ -221,23 +240,101 @@ const open_configure = () => {
 
 }
 
-const changStyle = (mode: string) => {
+const changStyle = (mode: string, index: number) => {
     switch (mode) {
         case "resize":
-            if (args_mode.value[0] === "nor-resize") {
-                args_mode.value[0] = "percent-resize"
-                args_item_title.value[0] = "(横纵比🔒)调整图像尺寸(%)"
-            } else if (args_mode.value[0] === "percent-resize") {
-                args_mode.value[0] = "nor-resize"
-                args_item_title.value[0] = "(横纵比🔒)调整图像尺寸(像素)"
+            if (args_mode.value[index] === "nor-resize") {
+                args_mode.value[index] = "percent-resize"
+                args_item_title.value[index] = "(横纵比🔒)调整图像尺寸(%)"
+                args_g2_nest[index] = ["-resize", "", ""]
+            } else if (args_mode.value[index] === "percent-resize") {
+                args_mode.value[index] = "nor-resize"
+                args_item_title.value[index] = "(横纵比🔒)调整图像尺寸(像素)"
+                args_g2_nest[index] = ["-resize", "", ""]
+
             }
             break;
+        case "crop":
+            if (args_mode.value[index] === "lt-crop") {
+                args_mode.value[index] = "ce-crop"
+                args_item_title.value[index] = "裁剪图像(中心)"
+                args_g2_nest[index] = ["-gravity center -crop", "", "", "", ""]
+            } else if (args_mode.value[index] === "ce-crop") {
+                args_mode.value[index] = "lt-crop"
+                args_item_title.value[index] = "裁剪图像(左上角)"
+                args_g2_nest[index] = ["-crop", "", "", "", ""]
 
+            }
+            break;
         default:
             break;
     }
 
 }
+const argsUnpack = (args: any[]) => {
+    console.log(args)
+    args.forEach(group => {
+        switch (group[0]) {
+            case "-resize":
+                if (group[1] !== "") {
+                    args_g2.push(...group)
+                }
+                break;
+            case "-crop":
+                if (group[1] !== "") {
+                    args_g2.push(...group)
+                }
+                break;
+            case "-gravity center -crop":
+                if (group[1] !== "") {
+                    args_g2.push(...group)
+                }
+                break;
+            default:
+                break;
+        }
+    })
+
+}
+// 添加组件的方法
+const addComponent = (type: string) => {
+    switch (type) {
+        case "resize":
+            args_item_title.value.push("(横纵比🔒)调整图像尺寸(像素)")
+            args_mode.value.push("nor-resize")
+            args_g2_nest.push(["-resize", "", ""])
+            break;
+        case "crop":
+            args_item_title.value.push("裁剪图像(左上角)")
+            args_mode.value.push("lt-crop")
+            args_g2_nest.push(["-crop", "", "", "", ""])
+            break;
+
+        default:
+            break;
+    }
+    // 创建组件对象并添加到列表
+    const newComponent = {
+        type: type,
+    };
+    componentList.value.push(newComponent);
+}
+
+const closeItem = (index: number) => {
+    args_g2_nest.splice(index, 1)
+    args_item_title.value.splice(index, 1)
+    args_mode.value.splice(index, 1)
+    componentList.value.splice(index, 1) // 直接从数组中移除该项
+}
+
+// 清空所有操作
+const clearComponents = () => {
+    args_g2_nest = [];
+    args_item_title.value = [];
+    args_mode.value = [];
+    componentList.value = [];
+}
+
 </script>
 <style scoped>
 .format-conversion-container {
@@ -363,11 +460,99 @@ const changStyle = (mode: string) => {
 
 .configer {
     flex: 1;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: row;
     width: 100%;
     border: 2px dashed var(--unite-but-color);
     border-radius: 1vmin;
-    overflow-y: auto;
+    overflow-y: hidden;
 
+    &::-webkit-scrollbar {
+        width: 1vmin;
+        /* 垂直滚动条宽度 */
+        height: 1vmin;
+        /* 水平滚动条高度 */
+
+    }
+}
+
+.items-list {
+    width: 20%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--title-bar-lg-1);
+    border-right: 0.5vmin dashed var(--main-border);
+
+    & ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        & li {
+            padding: 0;
+            height: 3vmin;
+            margin: 1vmin 2vmin;
+            border: 0.2vmin solid var(--normal-attention-color);
+            background-color: var(--main-back-ground);
+            border-radius: 1vmin;
+            transition: box-shadow 0.5s ease-in-out;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+
+            &:hover {
+                border: 0.15vmin solid var(--active-attention-color);
+                box-shadow: 0 0 2vmin var(--normal-attention-color);
+            }
+
+            &:active {
+                background-color: var(--normal-attention-color);
+                border: 0.15vmin solid var(--active-attention-color);
+                box-shadow: 0 0 2vmin var(--normal-attention-color);
+                animation: active-icon 0.25s forwards;
+                animation-timing-function: linear;
+            }
+        }
+
+        & .claen-oper {
+            padding: 0;
+            height: 3vmin;
+            margin: 1vmin 2vmin;
+            border: 0.2vmin solid var(--title-close-icon-hover-shadow);
+            background-color: var(--title-close-icon-shadow);
+            border-radius: 1vmin;
+            transition: box-shadow 0.5s ease-in-out;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+
+            &:hover {
+                border: 0.15vmin solid var(--title-close-icon-active-shadow);
+                box-shadow: 0 0 2vmin var(--title-close-icon-shadow);
+            }
+
+            &:active {
+                background-color: var(--title-close-icon-hover-shadow);
+                border: 0.15vmin solid var(--title-close-icon-active-shadow);
+                box-shadow: 0 0 2vmin var(--title-close-icon-shadow);
+                animation: active-icon 0.25s forwards;
+                animation-timing-function: linear;
+            }
+        }
+    }
+
+}
+
+.items-group {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
 }
 
 .item {
@@ -390,6 +575,10 @@ const changStyle = (mode: string) => {
 
 
 
+}
+
+.w-box {
+    width: 100%;
 }
 
 .poer {
@@ -428,7 +617,7 @@ const changStyle = (mode: string) => {
 }
 
 .inline-button {
-    width: 10%;
+    width: 15%;
     margin-right: 2vmin;
     margin-left: auto;
     padding: 0 0.5vmin;
@@ -453,5 +642,22 @@ const changStyle = (mode: string) => {
         animation: active-icon 0.25s forwards;
         animation-timing-function: linear;
     }
+}
+
+
+
+/* 替换名称区域的过渡动画 */
+.replace-name-transition-leave-active {
+    transition: all 0.25s ease;
+}
+
+.replace-name-transition-leave-from {
+    opacity: 1;
+    filter: blur(0px);
+}
+
+.replace-name-transition-leave-to {
+    opacity: 0;
+    filter: blur(10px);
 }
 </style>

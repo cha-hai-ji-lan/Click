@@ -551,6 +551,7 @@ const SubmitRepluceName = (tag: string) => {
                          return;
                     }
                     securityReview(formatSelectedValue.value)
+                    console.log(getArgs2())
                     selectedPaths.value.forEach((item, _) => {
                          invoke("format_conversion", {
                               conversionToolPath: appMagickPathF,
@@ -570,7 +571,7 @@ const SubmitRepluceName = (tag: string) => {
                     cleanArgs()  // 清理参数
                } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                     securityReview(formatSelectedValue.value)
-                    console.log("开始转换")
+                    console.log(getArgs2())
                     invoke("pool_format_conversion", {
                          conversionToolPath: appMagickPathF,
                          argsG1: getArgs1(),
@@ -647,6 +648,7 @@ h3 {
 }
 
 .main-contain {
+     position: relative;
      width: 100%;
      display: flex;
      justify-content: start;
@@ -719,9 +721,9 @@ h3 {
 }
 
 .explorer-act-path {
-     margin-top: 2%;
+     margin-top: 1%;
      width: 100%;
-     height: 22%;
+     height: 20%;
      overflow-y: auto;
      /* scrollbar-width: thin; "auto" 或 "thin" */
      /* scrollbar-color: var(--unite-but-color) var(--title-bar-lg-2); 滑块颜色 轨道颜色 */
@@ -888,9 +890,10 @@ h3 {
 }
 
 .oper {
+     position: absolute;
+     top: 30%;
      display: flex;
      width: 100%;
-     /* flex:1; */
      box-sizing: border-box;
      border-radius: 1vmin;
      justify-content: start;
@@ -907,6 +910,31 @@ h3 {
      overflow-y: auto;
      overflow-x: hidden;
      animation: show-paper 0.5s ease-in-out forwards;
+
+     &::-webkit-scrollbar {
+          width: 1vmin;
+          /* 垂直滚动条宽度 */
+          height: 1vmin;
+          /* 水平滚动条高度 */
+
+     }
+
+     &::-webkit-scrollbar-track {
+          background: var(--title-bar-lg-1);
+          /* 滚动条轨道背景色 */
+          border-radius: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+          background: var(--normal-attention-color);
+          /* 滚动条滑块颜色 */
+          border-radius: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb:hover {
+          background: var(--active-attention-color);
+          /* 滑块悬停时的颜色 */
+     }
 
 }
 
@@ -1117,7 +1145,8 @@ h3 {
      }
 
      100% {
-          height: 78%;
+          height: 70%;
+
      }
 
 }
