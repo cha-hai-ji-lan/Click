@@ -61,15 +61,33 @@
             <div v-if="open_configure_interface" class="configer">
                 <div class="items-list">
                     <ul>
+                        <li @click="addComponent('__bash__')">命令行</li>
                         <li @click="addComponent('resize')">调整尺寸</li>
                         <li @click="addComponent('crop')">裁剪大小</li>
-                        <li @click="addComponent('resize')">缩放</li>
                         <li class="claen-oper" @click="clearComponents()">清空操作</li>
                     </ul>
                 </div>
                 <div class="items-group">
                     <div class="w-box" v-for="(comp, index) in componentList" :key="index">
-                        <div v-if="comp.type === 'resize'" draggable="true" class="item">
+                        <div v-if="comp.type === '__bash__'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @Click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <input class="single-input" v-model="args_g2_nest[index as number][1]" type="text"
+                                    placeholder='直接输入magick命令 如: -gravity southeast -pointsize 36 -fill white -annotate +20+20 "水印"'>
+                            </transition>
+                        </div>
+                        <div v-else-if="comp.type === 'resize'" draggable="true" class="item">
                             <div class="name">
                                 <div class="tooltip" data-tooltip="示例 施工ing🔨">
                                     <IconInfo></IconInfo>
@@ -275,6 +293,14 @@ const argsUnpack = (args: any[]) => {
     console.log(args)
     args.forEach(group => {
         switch (group[0]) {
+            case "__bash__":
+                if (group[1] !== "") {
+                    args_g2.push("__bash__")
+                    const result = group[1].split(' ');
+                    args_g2.push(...result)
+                    args_g2.push("__end_bash__")
+                }
+                break;
             case "-resize":
                 if (group[1] !== "") {
                     args_g2.push(...group)
@@ -285,7 +311,7 @@ const argsUnpack = (args: any[]) => {
                     args_g2.push(...group)
                 }
                 break;
-            case "-gravity center -crop":
+            case "-gravity center -crop": // TODO:: 分开 -gravity命令
                 if (group[1] !== "") {
                     args_g2.push(...group)
                 }
@@ -299,6 +325,11 @@ const argsUnpack = (args: any[]) => {
 // 添加组件的方法
 const addComponent = (type: string) => {
     switch (type) {
+        case "__bash__":
+            args_item_title.value.push("命令行")
+            args_mode.value.push("__bash__")
+            args_g2_nest.push(["__bash__", ""])
+            break;
         case "resize":
             args_item_title.value.push("(横纵比🔒)调整图像尺寸(像素)")
             args_mode.value.push("nor-resize")
@@ -613,6 +644,32 @@ const clearComponents = () => {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
         }
+    }
+}
+
+.single-input {
+    width: 100%;
+    font-family: "楷体", 'Courier New', Courier, monospace;
+    font-size: 1.5vmin;
+    margin-left: auto;
+    height: 4vmin;
+    text-align: center;
+    background-color: transparent;
+    border: 0px dashed var(--unite-but-color);
+    border-bottom: 2px dashed var(--unite-but-color);
+
+    &:hover {
+        border-color: var(--positive-show-color);
+    }
+
+    &:focus {
+        font-size: 2vmin;
+        outline: none;
+        /* 取消默认的焦点轮廓 */
+        /* border: 1px solid var(--active-attention-color); */
+        border-bottom: 2px dashed var(--active-attention-color);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
     }
 }
 

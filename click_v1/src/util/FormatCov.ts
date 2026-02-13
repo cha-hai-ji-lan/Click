@@ -91,6 +91,15 @@ export class FCArgs {
                     continue;
                 } else {
                     switch (this.pre_args) {
+                        case '__bash__':
+                            if (arg !== "__end_bash__") {
+                                this.args_g2.push(arg)
+                                continue;
+                            } else {
+                                this.additional_parameters = 0 // 遇见结束符表示命令行指令结束
+                                continue;
+                            }
+                            break;
                         case '-resize':
                             if (arg.includes("%")) {
                                 this.args_g2.push(arg)
@@ -148,6 +157,10 @@ export class FCArgs {
                 this.additional_parameters -= 1
             }
             switch (arg) {
+                case '__bash__':
+                    this.pre_args = "__bash__";
+                    this.additional_parameters = 1000;  // '-resize'应该有两个附加传参
+                    break;
                 case '-resize':
                     this.combiner = "" // 以防过去组合器出现内存泄露问题
                     this.additional_parameters = 2;  // '-resize'应该有两个附加传参
