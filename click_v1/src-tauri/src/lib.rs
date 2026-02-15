@@ -319,7 +319,7 @@ pub fn run() {
             during_time_do_something, // 运行指定时间后执行指定命令
             tc_get_fmt_time,          // 获取当前格式化好的字符串时间
             tc_reset_timer_unnormal,  // 重置计时器--非正常退出
-            format_conversion,
+            format_conversion,        // 格式转换
             pool_format_conversion,
         ])
         .run(tauri::generate_context!())

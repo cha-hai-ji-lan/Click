@@ -87,12 +87,19 @@ pub fn traverse_directory_all_dfs(dir_path: Box<Path>) -> Result<Vec<String>, Er
     Ok(paths)
 }
 
+/// 标准化文件名，处理路径分隔符问题
+fn normalize_filename(filename: &str) -> String {
+    // 移除文件名开头的路径分隔符
+    let clean_name = filename.trim_start_matches(|c| c == '/' || c == '\\');
+    // 统一使用正斜杠
+    clean_name.replace("\\", "/")
+}
 /// 修改文件名（保留扩展名）
 ///   * `path` - 要修改的文件路径
 ///   * `new_name` - 新的文件名（不包含扩展名）
 ///   * `返回值` - 修改结果
 pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
-    let old_path = *path;
+    let old_path = path.to_path_buf();
     let new_path;
     // 检查原路径是否存在
     if !old_path.exists() {
@@ -136,7 +143,11 @@ pub fn change_name(path: Box<&Path>, new_name: String) -> Result<(), Error> {
     }
 
     // 执行重命名操作
-    fs::rename(old_path, &new_path)?;
+    let old_path = PathBuf::from( old_path.to_string_lossy().replace("\\", "/"));
+    let new_path = PathBuf::from( new_path.to_string_lossy().replace("\\", "/"));
+    println!("旧路径:{:?}\n新路径:{:?}", old_path, &new_path);
+    fs::rename(old_path.as_path(), new_path.as_path())?;
+    println!("文件名已修改");
     Ok(())
 }
 
@@ -180,9 +191,10 @@ pub fn replace_name(
     if new_path.exists() {
         return Err(Error::new(io::ErrorKind::AlreadyExists, "目标文件名已存在"));
     }
-
+    let old_path = PathBuf::from( old_path.to_string_lossy().replace("\\", "/"));
+    let new_path = PathBuf::from( new_path.to_string_lossy().replace("\\", "/"));
     // 执行重命名操作
-    fs::rename(old_path, &new_path)?;
+    fs::rename(old_path.as_path(), new_path.as_path())?;
     Ok(())
 }
 
@@ -193,10 +205,12 @@ pub fn replace_name_by_modify_time_1(
     old_to_new: bool,
     order_mode: i32,
 ) -> Result<(), Error> {
+    println!("replace_name_by_modify_time_1");
     let mut name_obj = DataProcessor::new(rule, 0);
     if let Ok(dir_list) = list_dir_file(path, old_to_new, order_mode) {
         match dir_list {
             FileSystemObject::File(files) => {
+                println!("文件数量{}, 文件有{:?}", files.len(), files);
                 for a_file in files {
                     let mut name = name_obj.next();
                     name = name
@@ -311,11 +325,13 @@ pub fn replace_name_by_modify_time_pool_1(
     old_to_new: bool,
     order_mode: i32,
 ) -> Result<(), Error> {
+    println!("replace_name_by_modify_time_pool_1");
     let mut name_obj = DataProcessor::new(rule, 0);
     let path_obj = path.iter().map(|p| Path::new(p)).collect::<Vec<&Path>>();
     if let Ok(path_list) = list_path_file(path_obj, old_to_new, order_mode) {
         match path_list {
             FileSystemObject::File(files) => {
+                println!("文件数量{}, 文件有{:?}", files.len(), files);
                 for a_file in files {
                     let mut name = name_obj.next();
                     name = name

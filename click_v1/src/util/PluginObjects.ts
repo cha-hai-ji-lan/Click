@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";  
+import { invoke } from "@tauri-apps/api/core";
 import { reactive, shallowRef, markRaw, Ref } from "vue";
 import IconFile from '../icon/IconFile.vue'
 import IconShutdown from '../icon/IconShutDown.vue'
@@ -96,19 +96,19 @@ export let appFFmpegPathF = ""
 export let app7ZipPathF = ""
 
 
-export const init_get_app_path = async () =>{
+export const init_get_app_path = async () => {
   appPath = await invoke("get_app_paths")
   // 使用规范的路径拼接方式
   appResourcesPath = await PathUtils.buildResourcePath(appPath, PATH_CONSTANTS.RESOURCES_DIR)
-  appImageMagickPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.IMAGE_MAGICK_DIR);
-  appFFmpegPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.FFMPEG_DIR);
-  app7ZipPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.SEVEN_ZIP_DIR);
-  appTempPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
-  appI18nPath =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
-  appConfigPathF =  await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
-  appMagickPathF =  await PathUtils.buildResourcePath(appImageMagickPath, PATH_CONSTANTS.MAGICK_EXE);
-  appFFmpegPathF =  await PathUtils.buildResourcePath(appFFmpegPath, PATH_CONSTANTS.FFMPEG_EXE);
-  app7ZipPathF =  await PathUtils.buildResourcePath(app7ZipPath, PATH_CONSTANTS.SEVEN_ZIP_EXE);
+  appImageMagickPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.IMAGE_MAGICK_DIR);
+  appFFmpegPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.FFMPEG_DIR);
+  app7ZipPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.SEVEN_ZIP_DIR);
+  appTempPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
+  appI18nPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
+  appConfigPathF = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
+  appMagickPathF = await PathUtils.buildResourcePath(appImageMagickPath, PATH_CONSTANTS.MAGICK_EXE);
+  appFFmpegPathF = await PathUtils.buildResourcePath(appFFmpegPath, PATH_CONSTANTS.FFMPEG_EXE);
+  app7ZipPathF = await PathUtils.buildResourcePath(app7ZipPath, PATH_CONSTANTS.SEVEN_ZIP_EXE);
 
 }
 
@@ -151,8 +151,8 @@ export const set_focus_color_palette = (mainColor: any) => {
 
   document.documentElement.style.setProperty("--positive-show-color", `rgba(${mainColor.positiveShowRGBA})`)                      // 积极显示颜色
   document.documentElement.style.setProperty("--normal-show-color", `rgba(${mainColor.normalShowRGBA})`)                          // 一般显示颜色
-  document.documentElement.style.setProperty("--negative-show-color", `rgba(${mainColor.negativeShowRGBA})`) 
-                       // 消极显示颜色
+  document.documentElement.style.setProperty("--negative-show-color", `rgba(${mainColor.negativeShowRGBA})`)
+  // 消极显示颜色
   document.documentElement.style.setProperty("--positive-agree-color", `rgba(${mainColor.positiveAgreeRGBA})`)                      // 积极显示颜色
   document.documentElement.style.setProperty("--normal-agree-color", `rgba(${mainColor.normalAgreeRGBA})`)                          // 一般显示颜色
   document.documentElement.style.setProperty("--negative-agree-color", `rgba(${mainColor.negativeAgreeRGBA})`)                      // 消极显示颜色
@@ -175,9 +175,10 @@ export const set_special_style = () => {
 }
 export const img_sourceOption = [
   { value: "AUTO", label: "自行推导" },
-  { value: "jpg", label: "jpg|jpeg" },
+  { value: "jpg", label: "jpg|jpe|jpeg" },
   { value: "png", label: "png" },
   { value: "helf", label: "helf" },
+  { value: "heic", label: "heic" },
   { value: "ico", label: "ico" },
   { value: "webp", label: "webp" },
   { value: "gif", label: "gif" },
@@ -203,7 +204,7 @@ export const img_sourceOption = [
   { value: "ps", label: "ps" },
 ]
 export const img_aimOption = [
-  { value: "jpg", label: "jpg|jpeg" },
+  { value: "jpg", label: "jpg|jpe|jpeg" },
   { value: "png", label: "png" },
   { value: "helf", label: "helf" },
   { value: "ico", label: "ico" },
@@ -231,8 +232,59 @@ export const vid_sourceOption = [
   { value: "AUTO", label: "自行推导" },
   { value: "avi", label: "avi" },
   { value: "mp4", label: "mp4" },
+  { value: "mov", label: "mov" },
+  { value: "flv", label: "flv" },
+  { value: "mkv", label: "mkv" },
+  { value: "wmv", label: "wmv" },
+  { value: "webm", label: "webm" },
+  { value: "ts", label: "ts" },
+  { value: "m2ts", label: "m2ts" },
+  { value: "mpg", label: "mpg" },
+  { value: "mpeg", label: "mpeg" },
+  { value: "asf", label: "asf" },
+  { value: "ogg", label: "ogg" },
+  { value: "ogv", label: "ogv" },
+  // { value: "3g2", label: "3g2" },
+  { value: "rm", label: "rm" },
 ]
 export const vid_aimOption = [
   { value: "avi", label: "avi" },
   { value: "mp4", label: "mp4" },
+  { value: "mov", label: "mov" },
+  { value: "flv", label: "flv" },
+  { value: "mkv", label: "mkv" },
+  { value: "wmv", label: "wmv" },
+  { value: "webm", label: "webm" },
+  { value: "ts", label: "ts" },
+  { value: "m2ts", label: "m2ts" },
+  { value: "mpg", label: "mpg" },
+  { value: "mpeg", label: "mpeg" },
+  { value: "asf", label: "asf" },
+  { value: "ogg", label: "ogg" },
+  { value: "ogv", label: "ogv" },
+  // { value: "3g2", label: "3g2" },
+  { value: "rm", label: "rm" },
+
+]
+
+export const aud_sourceOption = [
+  { value: "AUTO", label: "自行推导" },
+  { value: "mp3", label: "mp3" },
+  { value: "wav", label: "wav" },
+  { value: "wma", label: "wma" },
+  { value: "ape", label: "ape" },
+  { value: "flac", label: "flac" },
+  { value: "ogg", label: "ogg" },
+  { value: "aac", label: "aac" },
+  { value: "oga", label: "oga" },
+]
+export const aud_aimOption = [
+  { value: "mp3", label: "mp3" },
+  { value: "wav", label: "wav" },
+  { value: "wma", label: "wma" },
+  { value: "flac", label: "flac" },
+  { value: "ogg", label: "ogg" },
+  { value: "aac", label: "aac" },
+  { value: "oga", label: "oga" },
+
 ]

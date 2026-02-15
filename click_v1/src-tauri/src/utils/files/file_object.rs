@@ -82,24 +82,6 @@ impl DataProcessor {
                                             ori_str.push(new_ascii as char);
                                         }
 
-                                        // // 处理跨越大小写边界的逻辑 A- Z a - z
-                                        // if base_ascii < 90 && base_ascii + up_num as u8 > 90 { // 大写字母 A-Z
-                                        //     new_ascii = 97 + (base_ascii + up_num as u8 - 91);
-                                        //     if new_ascii >= 122 {
-                                        //         ori_str.push('z');
-                                        //         new_ascii =  65 + new_ascii - 122
-                                        //     }
-                                        // } else if base_ascii < 122 && base_ascii + up_num as u8 > 122 { // 小写字母 a-z
-                                        //     new_ascii = 65 + (base_ascii + up_num as u8 - 123);
-                                        //     if new_ascii >= 97 {
-                                        //         new_ascii = 97 + new_ascii - 90
-                                        //     }
-                                        //     ori_str.push('z');
-                                        // } else {
-                                        //     // 非字母字符的处理
-                                        //     new_ascii = (base_ascii as i32 + up_num) as u8;
-                                        // }
-
                                         ori_str
                                     }
 

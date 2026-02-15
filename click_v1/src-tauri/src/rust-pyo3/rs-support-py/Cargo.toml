@@ -4,18 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-pyo3 = { version = "0.27.2", features = ["extension-module"]}
-windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_System_Com", "Win32_UI_Shell", "Win32_System_Ole", "Win32_System_Variant", "Win32_UI_WindowsAndMessaging"] }
-winapi = { version = "0.3.9", features = ["processthreadsapi", "handleapi", "winnt"] }
-image = { version = "0.25.9", features = ["avif", "jpeg", "png", "webp", "tiff", "dds", "gif", "hdr", "ico", "bmp"] }
+docx-rs = "0.4.19"          # DOCX 处理
+calamine = "0.33.0"        # Excel 处理
+pptx-rs = "0.1.0"          # PPTX 处理
 
-icns = {version = "0.3.1"}
-# 缺少格式 "pnm", "hdr", "tga", "dds", "exr", "raw", "openexr", "jpeg-xl", "heif", "webp", "magick", "magick-sys", "magick-sys-v2", "magick-sys-v3"
-nvml-wrapper = "0.11.0"
-sysinfo = "0.29.11"
-reqwest = "0.12.28"
-tokio = { version = "1", features = ["full"] }  #
-futures = "0.3.31"
-base64 = "0.22.1"
-scraper = "0.25.0"
-chrono = "0.4.42"
+# 如果需要更多格式支持
+zip = "8.0.0"              # ZIP 格式处理（Office 文件本质是ZIP）
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

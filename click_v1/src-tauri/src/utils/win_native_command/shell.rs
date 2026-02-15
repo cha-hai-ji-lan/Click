@@ -1,4 +1,5 @@
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::io::{BufReader, Write};
 
 pub fn win_shutdown() {
     // 调用 Windows 的 shutdown 命令
@@ -55,5 +56,49 @@ pub fn win_calc_md5(file_path: String) -> Result<String, String> {
         }
     } else {
         Err(format!("计算 MD5 失败: {}", String::from_utf8_lossy(&output.stderr)))
+    }
+}
+
+
+
+pub struct CmdSession {
+    child: std::process::Child,
+    stdin: std::process::ChildStdin,
+    #[allow(dead_code)]
+    stdout_reader: BufReader<std::process::ChildStdout>,
+}
+
+impl CmdSession {
+    pub fn new() -> Result<Self, String> {
+        let mut child = Command::new("cmd")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .map_err(|e| format!("启动cmd失败: {}", e))?;
+
+        let stdin = child.stdin.take().ok_or("无法获取stdin".to_string())?;
+        let stdout = child.stdout.take().ok_or("无法获取stdout".to_string())?;
+        let stdout_reader = BufReader::new(stdout);
+
+        Ok(CmdSession {
+            child,
+            stdin,
+            stdout_reader,
+        })
+    }
+
+    pub fn execute(&mut self, command: &str)  {
+        // 发送命令
+        writeln!(self.stdin, "{}", command)
+            .map_err(|e| format!("写入命令失败: {}", e)).expect("TODO: panic message");
+    }
+
+    pub fn close(mut self) -> Result<(), String> {
+        // 发送 exit 命令
+        writeln!(self.stdin, "exit")
+            .map_err(|e| format!("发送退出命令失败: {}", e))?;
+        self.child.wait().map_err(|e| format!("等待进程结束失败: {}", e))?;
+        Ok(())
     }
 }

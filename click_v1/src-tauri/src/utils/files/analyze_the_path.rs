@@ -1,6 +1,6 @@
 use crate::utils::files::file_object::{FileObject, FileSystemObject, FolderObject};
 use std::fs;
-use std::io::{Error};
+use std::io::Error;
 use std::path::{Path, PathBuf};
 
 // 定义公共 trait
@@ -50,7 +50,7 @@ fn sort_by_name<T: NamedObject>(objects: &mut Vec<T>) {
     });
 }
 
-fn match_file_sort_mode(mode: i32, objects: &mut Vec<FileObject>){
+fn match_file_sort_mode(mode: i32, objects: &mut Vec<FileObject>) {
     match mode {
         // 文件排序
         // 按修改时间排序（从旧到新）
@@ -58,9 +58,7 @@ fn match_file_sort_mode(mode: i32, objects: &mut Vec<FileObject>){
             objects.sort_by_key(|f| f.modified_time);
         }
         // 按名称排序
-        2 => {
-            sort_by_name(objects)
-        }
+        2 => sort_by_name(objects),
         // 按文件大小
         3 => {
             objects.sort_by_key(|f| f.size); // 按文件从小到大排序
@@ -69,7 +67,8 @@ fn match_file_sort_mode(mode: i32, objects: &mut Vec<FileObject>){
             objects.sort_by_key(|f| f.modified_time);
         }
     }
-}fn match_folder_sort_mode(mode: i32, objects: &mut Vec<FolderObject>){
+}
+fn match_folder_sort_mode(mode: i32, objects: &mut Vec<FolderObject>) {
     match mode {
         // 文件夹排序
         1 => {
@@ -81,14 +80,13 @@ fn match_file_sort_mode(mode: i32, objects: &mut Vec<FileObject>){
         // 按文件大小 对于文件夹是极耗时操作
         3 => {
             analyze_folder_size(objects);
-            objects.sort_by_key(|f| f.size);  // 按文件从小到大排序
+            objects.sort_by_key(|f| f.size); // 按文件从小到大排序
         }
         _ => {
             objects.sort_by_key(|f| f.modified_time);
         }
     }
 }
-
 
 ///  # 分析父级文件夹下的所有文件夹与文件获取文件流对象
 /// ‘dir_path` - 要分析的目录路径
@@ -120,7 +118,9 @@ pub fn list_dir_com(
 
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
-        let path = entry.path();
+        let path = entry.path().to_string_lossy().replace("/", "\\");
+        let path = PathBuf::from(path);
+
         let metadata = entry.metadata()?;
         let mut name = match path.file_name() {
             Some(n) => n.to_string_lossy().to_string().replace(".*", ""),
@@ -199,7 +199,8 @@ pub fn list_dir_file(
 
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
-        let path = entry.path();
+        let path = entry.path().to_string_lossy().replace("\\", "/");
+        let path = PathBuf::from(path);
 
         if path.is_file() {
             let metadata = entry.metadata()?;
@@ -264,7 +265,8 @@ pub fn list_dir_folder(
 
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
-        let path = entry.path();
+        let path = entry.path().to_string_lossy().replace("\\", "/");
+        let path = PathBuf::from(path);
 
         if !path.is_file() {
             let metadata = entry.metadata()?;
@@ -391,6 +393,7 @@ pub fn list_path_file(
     old_to_new: bool,
     mode: i32,
 ) -> Result<FileSystemObject, Error> {
+    println!("{:?}",dir_path);
     let parent_name = match dir_path[0].file_name() {
         Some(name) => name.to_string_lossy().to_string(),
         None => String::from("NULL_NAME"),
@@ -480,7 +483,6 @@ pub fn list_path_folder(
         Ok(FileSystemObject::Folder(folders_with_time))
     }
 }
-
 
 ///  # 获取文件夹大小
 /// ‘folder_obj` - 要分析的文件夹对象
