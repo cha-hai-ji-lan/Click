@@ -61,14 +61,39 @@
             <div v-if="open_configure_interface" class="configer">
                 <div class="items-list">
                     <ul>
-                        <li @click="addComponent('__bash__')">命令行</li>
-                        <li @click="addComponent('resize')">调整尺寸</li>
-                        <li @click="addComponent('crop')">裁剪大小</li>
+                        <li class="choose-item bubble" data-bubtip="直接书写magick指令参数" :class="{}"
+                            @click="addComponent('__bash__')">命令行</li>
+                        <li class="choose-item bubble" data-bubtip="设置图片极限尺寸" :class="{}"
+                            @click="addComponent('-resize')">调整尺寸
+                        </li>
+                        <li class="choose-item bubble" data-bubtip="修剪图片(需要锚点)"
+                            :class="{ 'anchor-point': anchor_point }" @click="addComponent('-crop')">
+                            裁剪大小</li>
+                        <li class="choose-item bubble" data-bubtip="如果有指令需要锚点,应先设置锚点" :class="{}"
+                            @click="addComponent('-gravity')">基准锚点</li>
+                        <li class="choose-item bubble" data-bubtip="缩放图片尺寸" :class="{}"
+                            @click="addComponent('-scale')">缩放图片</li>
+                        <!-- <li class="choose-item bubble" data-bubtip="扩展画布的指令可能需要先设置我" :class="{}"
+                            @click="addComponent('-background')">设背景色</li> -->
+                        <li class="choose-item bubble" data-bubtip="可能会扩展画布,如有需要应先设置背景颜色" :class="{}"
+                            @click="addComponent('-rotate')">旋转图片</li>
+                        <li class="choose-item bubble" data-bubtip="左右翻转或上下翻转" :class="{}"
+                            @click="addComponent('-flip')">翻转图片</li>
+
+
                         <li class="claen-oper" @click="clearComponents()">清空操作</li>
                     </ul>
                 </div>
                 <div class="items-group">
-                    <div class="w-box" v-for="(comp, index) in componentList" :key="index">
+                    <div class="title">
+                        <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                            <IconInfo></IconInfo>
+                        </div>
+                        <div class="text">
+                            配置参数
+                        </div>
+                    </div>
+                    <div class="w-box" v-for="(comp, index) in componentList" :key="comp.id">
                         <div v-if="comp.type === '__bash__'" draggable="true" class="item">
                             <div class="name">
                                 <div class="tooltip" data-tooltip="示例 施工ing🔨">
@@ -77,7 +102,7 @@
                                 <div class="text">
                                     {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
                                     <div class="tooltip" data-tooltip="关闭条目">
-                                        <CloseIcon @Click="() => { closeItem(index as number) }">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
                                         </CloseIcon>
                                     </div>
                                 </div>
@@ -87,7 +112,7 @@
                                     placeholder='直接输入magick命令 如: -gravity southeast -pointsize 36 -fill white -annotate +20+20 "水印"'>
                             </transition>
                         </div>
-                        <div v-else-if="comp.type === 'resize'" draggable="true" class="item">
+                        <div v-else-if="comp.type === '-resize'" draggable="true" class="item">
                             <div class="name">
                                 <div class="tooltip" data-tooltip="示例 施工ing🔨">
                                     <IconInfo></IconInfo>
@@ -95,33 +120,118 @@
                                 <div class="text">
                                     {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
                                     <div class="tooltip" data-tooltip="关闭条目">
-                                        <CloseIcon @Click="() => { closeItem(index as number) }">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
                                         </CloseIcon>
                                     </div>
                                 </div>
                             </div>
                             <transition name="replace-name-transition" mode='out-in'>
-                                <template v-if="args_mode[index as number] === 'nor-resize'">
-                                    <div class="poer">
-                                        <input v-model="args_g2_nest[index as number][1]" type="text"
-                                            placeholder="宽 例如:800">
-                                        <input v-model="args_g2_nest[index as number][2]" type="text"
-                                            placeholder="高 例如:400">
-                                        <div class="inline-button"
-                                            @click="() => { changStyle('resize', index as number) }">% 表示</div>
-                                    </div>
-                                </template>
-                                <template v-else-if="args_mode[index as number] === 'percent-resize'">
-                                    <div class="poer">
-                                        <input v-model="args_g2_nest[index as number][1]" type="text"
-                                            placeholder="宽 例如:80%">
-                                        <div class="inline-button"
-                                            @click="() => { changStyle('resize', index as number) }">像素表示</div>
-                                    </div>
-                                </template>
+                                <div class="poer" v-if="args_mode[index as number] === 'nor-resize'">
+                                    <input v-model="args_g2_nest[index as number][1]" type="text"
+                                        placeholder="宽 例如:800 强制转化:800!">
+                                    <input v-model="args_g2_nest[index as number][2]" type="text"
+                                        placeholder="高 例如:400 强制转化:400!">
+                                    <div class="inline-button" @click="() => { changStyle('-resize', index as number) }">
+                                        % 表示</div>
+                                </div>
+                                <div class="poer" v-else-if="args_mode[index as number] === 'percent-resize'">
+                                    <input v-model="args_g2_nest[index as number][1]" type="text"
+                                        placeholder="例如:80%">
+                                    <div class="inline-button" @click="() => { changStyle('-resize', index as number) }">
+                                        像素表示</div>
+                                </div>
                             </transition>
                         </div>
-                        <div v-else-if="comp.type === 'crop'" draggable="true" class="item">
+                        <div v-else-if="comp.type === '-scale'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <div class="poer" v-if="args_mode[index as number] === 'nor-scale'">
+                                    <input v-model="args_g2_nest[index as number][1]" type="text"
+                                        placeholder="宽 例如:800 强制转化:800!">
+                                    <input v-model="args_g2_nest[index as number][2]" type="text"
+                                        placeholder="高 例如:400 强制转化:400!">
+                                    <div class="inline-button" @click="() => { changStyle('-scale', index as number) }">
+                                        % 表示</div>
+                                </div>
+                                <div class="poer" v-else-if="args_mode[index as number] === 'percent-scale'">
+                                    <input v-model="args_g2_nest[index as number][1]" type="text"
+                                        placeholder="例如:80%">
+                                    <div class="inline-button" @click="() => { changStyle('-sacle', index as number) }">
+                                        像素表示</div>
+                                </div>
+                            </transition>
+                        </div>
+                        <div v-else-if="comp.type === '-gravity'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <transition name="replace-name-transition" mode='out-in'>
+                                    <div class="choose-anchor-point">
+                                        <div class="gravity-item">
+                                            <span>顶部:</span>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'NorthWest' }"
+                                                @click="updateGravity(index as number, 'NorthWest')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'North' }"
+                                                @click="updateGravity(index as number, 'North')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'NorthEast' }"
+                                                @click="updateGravity(index as number, 'NorthEast')"></div>
+                                        </div>
+                                        <div class="gravity-item">
+                                            <span>中部:</span>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'West' }"
+                                                @click="updateGravity(index as number, 'West')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'Center' }"
+                                                @click="updateGravity(index as number, 'Center')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'East' }"
+                                                @click="updateGravity(index as number, 'East')"></div>
+                                        </div>
+                                        <div class="gravity-item">
+                                            <span>底部:</span>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'SouthWest' }"
+                                                @click="updateGravity(index as number, 'SouthWest')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'South' }"
+                                                @click="updateGravity(index as number, 'South')"></div>
+                                            <div type="radio" :name="`radio-item${index}`" class="div-g-ele"
+                                                :class="{ 'choose-radio': args_g2_nest[index as number][1] === 'SouthEast' }"
+                                                @click="updateGravity(index as number, 'SouthEast')"></div>
+                                        </div>
+                                    </div>
+                                </transition>
+
+                                <!-- <input class="single-input" v-model="args_g2_nest[index as number][1]" type="text"
+                                    placeholder='直接输入magick命令 如: -gravity southeast -pointsize 36 -fill white -annotate +20+20 "水印"'> -->
+                            </transition>
+                        </div>
+                        <div v-else-if="comp.type === '-crop'" draggable="true" class="item">
                             <div class="name">
                                 <div class="tooltip" data-tooltip="示例 施工ing🔨">
                                     <IconInfo></IconInfo>
@@ -130,7 +240,7 @@
                                     {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
                                 </div>
                                 <div class="tooltip" data-tooltip="关闭条目">
-                                    <CloseIcon @Click="() => { closeItem(index as number) }"></CloseIcon>
+                                    <CloseIcon @click="() => { closeItem(index as number) }"></CloseIcon>
                                 </div>
                             </div>
                             <transition name="replace-name-transition" mode='out-in'>
@@ -141,10 +251,10 @@
                                                 placeholder="宽 如:800">
                                             <input v-model="args_g2_nest[index as number][2]" type="text"
                                                 placeholder="高 如:400">
-                                            <div v-if="args_mode[index as number] === 'lt-crop'" class="inline-button"
+                                            <!-- <div v-if="args_mode[index as number] === 'lt-crop'" class="inline-button"
                                                 @click="() => { changStyle('crop', index as number) }">中心原点</div>
                                             <div v-if="args_mode[index as number] === 'ce-crop'" class="inline-button"
-                                                @click="() => { changStyle('crop', index as number) }">左上原点</div>
+                                                @click="() => { changStyle('crop', index as number) }">左上原点</div> -->
                                         </div>
                                         <div class="poer">
                                             <input v-model="args_g2_nest[index as number][3]" type="text"
@@ -156,20 +266,60 @@
                                 </template>
                             </transition>
                         </div>
+                        <div v-if="comp.type === '-rotate'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <input class="single-input" v-model="args_g2_nest[index as number][1]" type="text"
+                                    placeholder='输入旋转角度 如1顺时针旋转45°: 45  如2逆时针旋转45°: -45"'>
+                            </transition>
+                        </div>
+                        <div v-else-if="comp.type === '-flip'" draggable="true" class="item">
+                            <div class="name">
+                                <div class="tooltip" data-tooltip="示例 施工ing🔨">
+                                    <IconInfo></IconInfo>
+                                </div>
+                                <div class="text">
+                                    {{ args_item_title[index as number] ?? '__NAN_TITLE__' }}
+                                    <div class="tooltip" data-tooltip="关闭条目">
+                                        <CloseIcon @click="() => { closeItem(index as number) }">
+                                        </CloseIcon>
+                                    </div>
+                                </div>
+                            </div>
+                            <transition name="replace-name-transition" mode='out-in'>
+                                <div class="poer" v-if="args_g2_nest[index as number][0] === '-flip'">
+                                    <div class="inline-button" @click="() => { changStyle('-flip', index as number) }">
+                                        左右翻转</div>
+                                </div>
+                                <div class="poer" v-else-if="args_g2_nest[index as number][0] === '-flop'">
+                                    <div class="inline-button" @click="() => { changStyle('-flip', index as number) }">
+                                        上下翻转</div>
+                                </div>
+                            </transition>
+                        </div>
                     </div>
                 </div>
-                <!-- 
- -->
             </div>
         </transition>
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed, } from 'vue';
+import { ref, watch, computed } from 'vue';
 import SelectorBar from '../../components/SelectorBar.vue'
 import IconInfo from '../../../icon/icons/IconInfo.vue'
 import CloseIcon from '../../../icon/icons/CloseIcon.vue'
-import { imgExpendArgs2, cleanArgs } from '../../../util/FormatCov'
+import { imgExpendArgs2, cleanArgs, getAt, magick_args } from '../../../util/FormatCov'
 import { img_sourceOption, img_aimOption, vid_sourceOption, vid_aimOption } from '../../../util/PluginObjects'
 import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
@@ -196,12 +346,11 @@ const componentList = ref<any>([])  // 配置组件列表
  * 4: 照片裁剪高||5: 左上角偏移x||6: 左上角偏移y||
  * ===========================================================
  */
-let args_g2_nest: any[] = []
+const args_g2_nest = ref<any[]>([])
 let args_g2: string[] = []
-// const args_mode = ref<string[]>(["nor-resize", "lt-crop", "", ""])
 const args_mode = ref<string[]>([])
-// const args_item_title = ref<string[]>(["(横纵比🔒)调整图像尺寸(像素)", "裁剪图像(左上角)"])
 const args_item_title = ref<string[]>([])
+const anchor_point = ref<boolean>(false)
 
 
 const emit = defineEmits<{
@@ -228,7 +377,7 @@ watch(
 
 const subCov = () => {
     cleanArgs() // 执行前清除 过去可能存储的指令, 预防内存泄漏
-    argsUnpack(args_g2_nest);
+    argsUnpack(args_g2_nest.value);
     imgExpendArgs2(args_g2);
     args_g2 = []
     console.log(cov_type.value);
@@ -260,27 +409,35 @@ const open_configure = () => {
 
 const changStyle = (mode: string, index: number) => {
     switch (mode) {
-        case "resize":
+        case "-scale":
+            if (args_mode.value[index] === "nor-scale") {
+                args_mode.value[index] = "percent-scale"
+                args_item_title.value[index] = "(横纵比🔒)缩放图像(%)"
+                args_g2_nest.value[index] = ["-scale", "", ""]
+            } else if (args_mode.value[index] === "percent-scale") {
+                args_mode.value[index] = "nor-scale"
+                args_item_title.value[index] = "(横纵比🔒)缩放图像(像素)"
+                args_g2_nest.value[index] = ["-scale", "", ""]
+            }
+            break;
+        case "-resize":
             if (args_mode.value[index] === "nor-resize") {
                 args_mode.value[index] = "percent-resize"
                 args_item_title.value[index] = "(横纵比🔒)调整图像尺寸(%)"
-                args_g2_nest[index] = ["-resize", "", ""]
+                args_g2_nest.value[index] = ["-resize", "", ""]
             } else if (args_mode.value[index] === "percent-resize") {
                 args_mode.value[index] = "nor-resize"
                 args_item_title.value[index] = "(横纵比🔒)调整图像尺寸(像素)"
-                args_g2_nest[index] = ["-resize", "", ""]
-
+                args_g2_nest.value[index] = ["-resize", "", ""]
             }
             break;
-        case "crop":
-            if (args_mode.value[index] === "lt-crop") {
-                args_mode.value[index] = "ce-crop"
-                args_item_title.value[index] = "裁剪图像(中心)"
-                args_g2_nest[index] = ["-gravity center -crop", "", "", "", ""]
-            } else if (args_mode.value[index] === "ce-crop") {
-                args_mode.value[index] = "lt-crop"
-                args_item_title.value[index] = "裁剪图像(左上角)"
-                args_g2_nest[index] = ["-crop", "", "", "", ""]
+        case "-flip":
+            if (args_g2_nest.value[index][0] === "-flip") {
+                args_g2_nest.value[index][0] = "-flop"
+                args_item_title.value[index] = "翻转图片(左右翻转)"
+            } else if (args_g2_nest.value[index][0] === "-flop") {
+                args_g2_nest.value[index][0] = "-flip"
+                args_item_title.value[index] = "翻转图片(上下翻转)"
 
             }
             break;
@@ -301,22 +458,11 @@ const argsUnpack = (args: any[]) => {
                     args_g2.push("__end_bash__")
                 }
                 break;
-            case "-resize":
-                if (group[1] !== "") {
-                    args_g2.push(...group)
-                }
-                break;
-            case "-crop":
-                if (group[1] !== "") {
-                    args_g2.push(...group)
-                }
-                break;
-            case "-gravity center -crop": // TODO:: 分开 -gravity命令
-                if (group[1] !== "") {
-                    args_g2.push(...group)
-                }
-                break;
             default:
+            const subList = group.slice(1, -1);
+            if (!subList.every((str: string) => str === "")) {
+                    args_g2.push(...group)
+                }
                 break;
         }
     })
@@ -324,47 +470,144 @@ const argsUnpack = (args: any[]) => {
 }
 // 添加组件的方法
 const addComponent = (type: string) => {
+    if (componentList.value.length > 0) {
+        if (getAt(componentList.value, -1).type === "-gravity" && magick_args["before-need-gravity"].includes(type)) {
+            anchor_point.value = false;
+        } else if (getAt(componentList.value, -1).type === "-gravity") {
+            anchor_point.value = false;
+            args_g2_nest.value.pop()
+            args_item_title.value.pop()
+            args_mode.value.pop()
+            componentList.value.pop()
+        }
+        // if (getAt(componentList.value, -1).type === "-background" && magick_args["before-need-background"].includes(type)) {
+        //     anchor_point.value = false;
+        // } else if (getAt(componentList.value, -1).type === "-background") {
+        //     anchor_point.value = false;
+        //     args_g2_nest.value.pop()
+        //     args_item_title.value.pop()
+        //     args_mode.value.pop()
+        //     componentList.value.pop()
+        // }
+    }
     switch (type) {
         case "__bash__":
             args_item_title.value.push("命令行")
             args_mode.value.push("__bash__")
-            args_g2_nest.push(["__bash__", ""])
+            args_g2_nest.value.push(["__bash__", ""])
             break;
-        case "resize":
+        case "-resize":
             args_item_title.value.push("(横纵比🔒)调整图像尺寸(像素)")
             args_mode.value.push("nor-resize")
-            args_g2_nest.push(["-resize", "", ""])
+            args_g2_nest.value.push(["-resize", "", ""])
             break;
-        case "crop":
-            args_item_title.value.push("裁剪图像(左上角)")
+        case "-scale":
+            args_item_title.value.push("(横纵比🔒)缩放图像(像素)")
+            args_mode.value.push("nor-scale")
+            args_g2_nest.value.push(["-scale", "", ""])
+            break;
+        case "-gravity":
+            anchor_point.value = true
+            args_item_title.value.push("设置基准锚点(左上角)")
+            args_mode.value.push("lt-gravity")
+            args_g2_nest.value.push(["-gravity", ""])
+            break;
+        case "-rotate":
+            args_item_title.value.push("旋转图片(顺时针|-逆时针)")
+            args_mode.value.push("-rotate")
+            args_g2_nest.value.push(["-rotate", ""])
+            break;
+        case "-crop":
+            if (componentList.value.length > 0 && getAt(componentList.value, -1).type === "-gravity") {
+                args_item_title.value.push("裁剪图像")
+            }
+            else {
+                args_item_title.value.push("裁剪图像(无锚点:默认左上角)")
+            }
             args_mode.value.push("lt-crop")
-            args_g2_nest.push(["-crop", "", "", "", ""])
+            args_g2_nest.value.push(["-crop", "", "", "", ""])
             break;
-
+        case "-flip":
+            args_item_title.value.push("翻转图片(上下翻转)")
+            args_mode.value.push("-flip")
+            args_g2_nest.value.push(["-flip"])
+            break;
         default:
             break;
     }
+
     // 创建组件对象并添加到列表
     const newComponent = {
         type: type,
+        id: Date.now() // 使用时间戳作为唯一 ID
     };
     componentList.value.push(newComponent);
 }
 
 const closeItem = (index: number) => {
-    args_g2_nest.splice(index, 1)
+    if (getAt(componentList.value, -1).type === "-gravity") {
+        anchor_point.value = false;
+    }
+    args_g2_nest.value.splice(index, 1)
     args_item_title.value.splice(index, 1)
     args_mode.value.splice(index, 1)
     componentList.value.splice(index, 1) // 直接从数组中移除该项
+    if (getAt(componentList.value, -1).type === "-gravity") {
+        anchor_point.value = true;
+    }
 }
 
 // 清空所有操作
 const clearComponents = () => {
-    args_g2_nest = [];
+    args_g2_nest.value = [];
     args_item_title.value = [];
     args_mode.value = [];
     componentList.value = [];
+    anchor_point.value = false;
 }
+
+const updateGravity = (index: number, value: string) => {
+    // 更新 args_g2_nest 对应位置的值
+    args_g2_nest.value[index][1] = value;
+    switch (value) {
+        case "NorthWest":
+            args_item_title.value[index] = "设置基准锚点(左上角)"
+            break;
+        case "North":
+            args_item_title.value[index] = "设置基准锚点(顶部居中)"
+            break;
+        case "NorthEast":
+            args_item_title.value[index] = "设置基准锚点(右上角)"
+            break;
+        case "West":
+            args_item_title.value[index] = "设置基准锚点(左侧居中)"
+            break;
+        case "Center":
+            args_item_title.value[index] = "设置基准锚点(正中心)"
+            break;
+        case "East":
+            args_item_title.value[index] = "设置基准锚点(右侧居中)"
+            break;
+        case "SouthWest":
+            args_item_title.value[index] = "设置基准锚点(左下角)"
+            break;
+        case "South":
+            args_item_title.value[index] = "设置基准锚点(底部居中)"
+            break;
+        case "SouthEast":
+            args_item_title.value[index] = "设置基准锚点(右下角)"
+            break;
+        default:
+            break;
+
+    }
+    // nextTick(() => {
+    //     // 强制刷新组件
+    // });
+
+    // 可以在这里做其他操作，比如记录日志或者触发其他逻辑
+    console.log(`${args_g2_nest.value[index]} --- ${index}:`, value);
+};
 
 </script>
 <style scoped>
@@ -513,6 +756,7 @@ const clearComponents = () => {
     width: 20%;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: var(--title-bar-lg-1);
     border-right: 0.5vmin dashed var(--main-border);
 
@@ -521,7 +765,7 @@ const clearComponents = () => {
         padding: 0;
         margin: 0;
 
-        & li {
+        & .choose-item {
             padding: 0;
             height: 3vmin;
             margin: 1vmin 2vmin;
@@ -546,6 +790,12 @@ const clearComponents = () => {
                 animation: active-icon 0.25s forwards;
                 animation-timing-function: linear;
             }
+        }
+
+        & .anchor-point {
+            border: 0.2vmin solid var(--title-max-icon-hover-shadow);
+            background-color: var(--title-max-icon-shadow);
+
         }
 
         & .claen-oper {
@@ -578,6 +828,8 @@ const clearComponents = () => {
 
 }
 
+
+
 .items-group {
     flex: 1;
     display: flex;
@@ -595,7 +847,7 @@ const clearComponents = () => {
     flex-direction: column;
 }
 
-.name {
+.title {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -603,10 +855,19 @@ const clearComponents = () => {
     width: 100%;
     height: 4vmin;
     border-bottom: 1px dashed var(--unite-but-color);
-
-
-
 }
+
+.name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 4vmin;
+    border-top: 2px dashed var(--main-border);
+    border-bottom: 1px dashed var(--unite-but-color);
+}
+
 
 .w-box {
     width: 100%;
@@ -646,6 +907,86 @@ const clearComponents = () => {
         }
     }
 }
+
+.choose-anchor-point {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.gravity-item {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    height: 4vmin;
+    border-bottom: 1px dashed var(--unite-but-color);
+}
+
+.div-g-ele {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 3vmin;
+    margin: 0 1vmin;
+    height: 3vmin;
+    border: 0.2vmin solid var(--normal-attention-color);
+    border-radius: 50%;
+    background-color: var(--main-back-ground);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    &:hover {
+        border: 0.15vmin solid var(--active-attention-color);
+        box-shadow: 0 0 2vmin var(--normal-attention-color);
+    }
+
+    &:active {
+        background-color: var(--normal-attention-color);
+        border: 0.15vmin solid var(--active-attention-color);
+        box-shadow: 0 0 2vmin var(--normal-attention-color);
+        animation: active-icon 0.25s forwards;
+        animation-timing-function: linear;
+    }
+
+    &.choose-radio {
+        background-color: var(--normal-attention-color);
+        border: 0.15vmin solid var(--active-attention-color);
+    }
+
+    &.choose-radio::before {
+        content: '';
+        position: absolute;
+        top: 1.2vmin;
+        left: 0.15vmin;
+        width: 0.4vmin;
+        height: 0.4vmin;
+        border-radius: 1vmin;
+        background-color: #fff;
+    }
+
+    &.choose-radio::after {
+        content: '';
+        position: absolute;
+        top: 0.3vmin;
+        left: 0.3vmin;
+        width: 0.75vmin;
+        height: 0.5vmin;
+        border-radius: 1vmin;
+        background-color: #fff;
+        transform: rotate(-45deg);
+
+    }
+}
+
 
 .single-input {
     width: 100%;

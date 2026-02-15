@@ -87,11 +87,14 @@ export const PATH_CONSTANTS = {
   RESOURCES_DIR: 'resources',
   IMAGE_MAGICK_DIR: 'imageMagick',
   FFMPEG_DIR: 'ffmpeg',
+  SEVEN_ZIP_DIR: '7zip',
   TEMP_DIR: 'temp',
   LANG_DIR: 'i18n',
   CONFIG_FILE: 'config.json',
   MAGICK_EXE: 'magick.exe',
   FFMPEG_EXE: 'ffmpeg.exe',
+  SEVEN_ZIP_EXE: '7zr.exe',
+
 
   
 } as const;

@@ -1,15 +1,20 @@
+export const magick_args = {
+    "need-args": ["-resize", "-crop",],
+    "before-need-gravity": ["-crop",],
+    "before-need-background": ["-rotate",],
+
+}  // magick 需要附件参数的关键参数
 export class FCArgs {
     private static instance: FCArgs;
     public args_g1: string[] = []
     public args_g2: string[] = []
     public combiner: string = ""
     public additional_parameters: number = 0  // 关键参数后的附加传参数目
-    public magick_args = { "need-args": ["-resize", "-crop", "-gravity center -crop"] }  // magick 需要附件参数的关键参数
     public pre_args: string = ""  // 上一个关键参数
 
     private constructor() { }
 
-    private getAt<T>(arr: T[], index: number): T | undefined {
+    public getAt<T>(arr: T[], index: number): T | undefined {
         if (index < 0) {
             // 负索引：从后往前计算
             return arr[arr.length + index];
@@ -80,13 +85,7 @@ export class FCArgs {
             const arg = args[index];
             console.log(arg, index)
             if (this.additional_parameters > 0) {
-                if (arg === "" && this.pre_args in this.magick_args["need-args"]) {
-                    console.log(this.combiner)
-                    this.args_g2.pop()  // 如果输入了需要附加参数的关键参数,但是关键参数没有后接附加参数 ,则消除这个关键参数组
-                    this.additional_parameters -= 1
-                    this.pre_args = ""
-                    continue;
-                } else if (this.pre_args === "") {
+                if (this.pre_args === "") {
                     this.additional_parameters -= 1
                     continue;
                 } else {
@@ -99,7 +98,7 @@ export class FCArgs {
                                 this.additional_parameters = 0 // 遇见结束符表示命令行指令结束
                                 continue;
                             }
-                            break;
+                        case '-scale':
                         case '-resize':
                             if (arg.includes("%")) {
                                 this.args_g2.push(arg)
@@ -114,7 +113,11 @@ export class FCArgs {
                                 this.combiner = ""
                             }
                             break;
-                        case '-gravity center -crop':
+                        case '-gravity':
+                            this.args_g2.push(arg)
+                            this.pre_args = ""
+                            this.combiner = ""
+                            break;
                         case '-crop':
                             switch (this.additional_parameters) {
                                 case 4:
@@ -150,6 +153,12 @@ export class FCArgs {
                                     break;
                             }
                             break;
+
+                        case '-rotate':
+                            this.args_g2.push(arg)
+                            this.pre_args = ""
+                            this.combiner = ""
+                            break;
                         default:
                             break;
                     }
@@ -167,12 +176,16 @@ export class FCArgs {
                     this.args_g2.push(arg)
                     this.pre_args = arg
                     break;
-                case '-gravity center -crop':
+                case '-scale':
+                    this.combiner = "" // 以防过去组合器出现内存泄露问题
+                    this.additional_parameters = 2;  // '-resize'应该有两个附加传参
+                    this.args_g2.push(arg)
+                    this.pre_args = arg
+                    break;
+                case '-gravity':
                     console.log("获取关键参数", arg)
-                    this.combiner = ""
-                    this.additional_parameters = 4;  // '-crop'应该有两个附加传参
-                    const result = arg.split(' ');
-                    this.args_g2.push(...result);
+                    this.additional_parameters = 1;
+                    this.args_g2.push(arg);
                     this.pre_args = arg
                     break;
                 case '-crop':
@@ -181,6 +194,21 @@ export class FCArgs {
                     this.additional_parameters = 4;  // '-crop'应该有两个附加传参
                     this.args_g2.push(arg);
                     this.pre_args = arg
+                    break;
+                case '-rotate':
+                    console.log("获取关键参数", arg)
+                    this.combiner = ""
+                    this.additional_parameters = 1;
+                    this.args_g2.push(arg);
+                    this.pre_args = arg
+                    break;
+                case '-flop':
+                case '-flip':
+                    console.log("获取关键参数", arg)
+                    this.combiner = ""
+                    this.additional_parameters = 0;  // '-crop'应该有两个附加传参
+                    this.args_g2.push(arg);
+                    this.pre_args = ""
                     break;
                 default:
                     break;
@@ -238,4 +266,8 @@ export function getArgs1(): string[] {
 export function getArgs2(): string[] {
     const manager = FCArgs.getInstance();
     return manager.args_g2;
+}
+export function getAt(arr: any[], index: number): any {
+    const manager = FCArgs.getInstance();
+    return manager.getAt(arr, index);
 }

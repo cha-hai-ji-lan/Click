@@ -146,7 +146,7 @@ const errorLevel = ref<number>(0) // 初始化为 0，确保类型为 number
 let isHasTray = false;
 
 let isResizing = false;
-let leftContainWidth = 0 ; // 左侧容器宽度 方便改写和关闭按钮调用
+let leftContainWidth = 0; // 左侧容器宽度 方便改写和关闭按钮调用
 
 
 
@@ -164,13 +164,13 @@ onMounted(async () => {
       isCreatingTrayNow()
     ]);
     if (!hasTray && !isCreating && isHasTray === false) {  // 只有在没有托盘且不在创建中时才创建
-        if (trayInstance === null) {
-          isHasTray = true
-          createTrayIcon(); // 创建托盘图标
-        }
-      } else {
-        console.log('托盘图标已存在或正在创建中');
+      if (trayInstance === null) {
+        isHasTray = true
+        createTrayIcon(); // 创建托盘图标
       }
+    } else {
+      console.log('托盘图标已存在或正在创建中');
+    }
 
   } catch (error) {
     console.warn('托盘图标初始化失败:', error);
@@ -182,13 +182,13 @@ onMounted(async () => {
     console.log('检测到页面刷新');
   }
   window.addEventListener("beforeunload", async () => {
-  try {
-    console.log("页面即将刷新，清理异步任务...");
-    await safeDestroyTrayIcon(); // 销毁托盘图标
-  } catch (error) {
-    console.warn("清理异步任务失败:", error);
-  }
-});
+    try {
+      console.log("页面即将刷新，清理异步任务...");
+      await safeDestroyTrayIcon(); // 销毁托盘图标
+    } catch (error) {
+      console.warn("清理异步任务失败:", error);
+    }
+  });
 
 })
 
@@ -854,37 +854,68 @@ body {
 
 
 /* --------------------------------------------------------气泡区提示----------------------------------------------------- */
+.bubble {
+  position: static;
+  animation: show-bubbles 0.5s forwards;
+  animation-timing-function: ease-in-out;
+
+  &:hover::after {
+    content: attr(data-bubtip);
+    position: fixed;
+    top: 4vmin;
+    right: 0;
+    /* transform: translateX(-50%); */
+    border: 0.25vmin dashed var(--main-border);
+    background-color: var(--main-back-ground);
+    color: var(--font-color);
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 1.5vmin;
+    opacity: 1;
+    margin-bottom: 5px;
+  }
+  &:active:after{
+    content: attr("");
+    border: 0.25vmin dashed transparent;
+    background-color:  transparent;
+    color:  transparent;
+  }
+}
 
 .tooltip {
   position: relative;
   cursor: pointer;
 
-}
+  &:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-color);
+    color: var(--font-color);
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 1.5vmin;
+    opacity: 1;
+    margin-bottom: 5px;
 
-.tooltip:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 103%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--button-color);
-  color: var(--font-color);
-  text-align: center;
-  padding: 6px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  z-index: 1000;
-  font-size: 1.5vmin;
-  opacity: 1;
-  margin-bottom: 5px;
-
-}
+  }
 
 
-/* 为气泡添加过渡效果 */
-.tooltip::after {
-  animation: show-bubbles 0.5s forwards;
-  animation-timing-function: ease-in-out;
+  /* 为气泡添加过渡效果 */
+  &::after {
+    animation: show-bubbles 0.5s forwards;
+    animation-timing-function: ease-in-out;
+  }
+
+
 }
 
 /* --------------------------------------------------------可拖缩放动框----------------------------------------------------- */

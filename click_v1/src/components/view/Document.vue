@@ -122,6 +122,9 @@
                         <td><img class="show-img image-magick" src="../../assets/ImageMagick.svg" alt=""
                                 @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
                         </td>
+                        <td><img class="show-img seven-zip" src="../../assets/7zip.svg" alt=""
+                                @click="() => { opeanLinkling('https://www.7-zip.org/') }">
+                        </td>
 
                     </tr>
                     <tr>
@@ -133,6 +136,9 @@
                         </td>
                         <td @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
                             <div class="composition">ImageMagick</div>
+                        </td>
+                        <td @click="() => { opeanLinkling('https://www.7-zip.org/') }">
+                            <div class="composition">7zip</div>
                         </td>
                     </tr>
                     <tr>
@@ -350,7 +356,7 @@ td {
     width: 15vmin;
     height: 15vmin;
     margin: 1vmin;
-    will-change: filter, background;
+    will-change: filter;
     transition: 0.75s;
 }
 
@@ -371,6 +377,9 @@ td {
 }
 .image-magick:hover {
     filter: drop-shadow(0 0 0.75em rgba(252, 252, 0, 0.75));
+}
+.seven-zip:hover {
+    filter: drop-shadow(0 0 0.75em rgba(3, 3, 3, 0.75));
 }
 .rust:hover {
     filter: drop-shadow(0 0 0.75em rgba(255, 112, 67, 0.75));
