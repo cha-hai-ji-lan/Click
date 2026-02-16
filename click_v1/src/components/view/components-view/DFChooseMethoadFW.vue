@@ -53,8 +53,8 @@
             <!-- <div draggable="true" class="item" :class="{ 'active-item': focus[4] }"
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>音视频处理</span>
-            </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[5] }"
+            </div> -->
+            <!-- <div draggable="true" class="item" :class="{ 'active-item': focus[5] }"
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>文件解析</span>
             </div> -->

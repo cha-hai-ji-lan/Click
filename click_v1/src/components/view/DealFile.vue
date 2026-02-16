@@ -112,6 +112,15 @@
                          </DFFormatConversion>
                     </transition>
                </div>
+               <!-- <div v-if="focusMethod === '5'" class="oper-1">
+                    <transition name="replace-name-transition" mode="out-in">
+                         文件解析
+                         <DFFormatConversion :active_path="active_path"
+                              v-model:formatSelectedValue="formatSelectedValue"
+                              v-model:inputRefSortName="inputRefSortName" :SubmitRepluceName="SubmitRepluceName">
+                         </DFFormatConversion>
+                    </transition>
+               </div> -->
 
           </div>
      </div>

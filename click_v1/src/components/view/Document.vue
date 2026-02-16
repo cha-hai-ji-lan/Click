@@ -5,17 +5,25 @@
             <div class="index-contain">
                 <ul>
                     <li>
-                        <div class="index-item">
+                        <div class="index-item" @click="rollTo('doc-h1-0')">
                             <MeIcon></MeIcon>
-                            <span class="item-text">关于我</span>
+                            <span  class="item-text">关于我</span>
                         </div>
+                        <div class="index-item" @click="rollTo('doc-h1-1')">
+                            <SaftyIcon></SaftyIcon>
+                            <span  class="item-text">安全&更新</span>
+                        </div>
+                        <!-- <div class="index-item" @click="rollTo('doc-h1-1')">
+                            <FunctionIcon></FunctionIcon>
+                            <span  class="item-text">功能概览</span>
+                        </div> -->
 
                     </li>
                 </ul>
             </div>
         </div>
         <div class="doc-text explorer-act-path">
-            <h1># 我?</h1>
+            <h1 id="doc-h1-0"># 我?</h1>
             <p class="click-say">
                 <span>咔嗒目前致力于学习更多的东西,目前其实并没有明确的专攻方向😶‍🌫️,我还需要不断地学习充实自己.</span>
             </p>
@@ -34,10 +42,10 @@
                             <th>
                                 <IconShutDown></IconShutDown><br>关机问询
                             </th>
-                            <th>
+                            <th class="l-through">
                                 <LivePicture></LivePicture><br>实况GO图
                             </th>
-                            <th>
+                            <th class="l-through">
                                 <RecordScreen></RecordScreen><br>屏幕录制
                             </th>
                         </tr>
@@ -54,19 +62,19 @@
                             <td class="positive-dia">功能1</td>
                             <td>@修改名字字段</td>
                             <td>定时关机</td>
-                            <td style="color:red">作者太懒还没实现功能</td>
+                            <td class="l-through">提取实况图片音视频轨道</td>
                             <td style="color:red">作者太懒还没实现功能</td>
                         </tr>
                         <tr>
                             <td class="positive-dia">功能2</td>
                             <td>@改名排序</td>
-                            <td>潮汐锁定</td>
+                            <td class="l-through">潮汐锁定</td>
                             <td></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="positive-dia">功能3</td>
-                            <td>@搜集存放</td>
+                            <td class="l-through">@搜集存放</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -79,8 +87,19 @@
                             <td></td>
                         </tr>
                         <tr>
+                            <td class="positive-dia">功能5</td>
+                            <td class="l-through">@文件解析</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td class="positive-dia">注意</td>
-                            <td class="positive-dia" colspan="4">@:表示功能支持批处理</td>
+                            <td class="positive-dia" colspan="4">
+                                @:表示功能支持批处理<br>
+                                <span class="l-through">**功能</span>:表示功能将在该版本的Beta版本前加入,但当前释放版本还未实现此功能
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -168,7 +187,23 @@
                     </tr>
                 </tbody>
             </table>
-            <p class="click-say"><span>辅助工具:</span></p>
+            <!-- <p class="click-say"><span>辅助工具:</span></p> -->
+            <h1 id="doc-h1-1" ># 安全</h1>
+            <h2>## 潜在BUG</h2>
+            <h2>### OGG文件改名时可能导致软件进程崩溃</h2>
+            <p class="click-say"><span>
+                    ogg文件和ogv文件在Windows系统中删除、修改、移动时可能会遇到困难，尤其是在Windows 10更
+                    新后，ogg文件在重命名、删除、剪切等操作时可能会有严重延迟，甚至删除时间长达
+                    数分钟。这可能是由于Windows系统中的某些服务或程序导致的。解决此问题的方法
+                    包括卸载网页媒体扩展应用，以解决ogg文件无法删除的问题，或者在安全模式下进行
+                    操作以避免延迟.
+                </span></p>
+            <p class="click-say"><span>具体详见:</span></p>
+            <p class="click-link"
+                @click="opeanLinkling('https://learn.microsoft.com/zh-cn/answers/questions/3252150/win10-ogg')">
+                <Link></Link><span>Win10更新后OGG文件在重命名，删除，剪切等更改操作有严重延迟</span>
+            </p>
+
 
 
         </div>
@@ -180,15 +215,28 @@
 import { invoke } from "@tauri-apps/api/core";
 import IconFile from '../../icon/IconFile.vue';
 import MeIcon from '../../icon/MeIcon.vue';
+import SaftyIcon from '../../icon/SaftyIcon.vue';
+import FunctionIcon from '../../icon/FunctionIcon.vue';
 import IconShutDown from '../../icon/IconShutDown.vue';
 import LivePicture from '../../icon/LivePicture.vue';
 import RecordScreen from '../../icon/RecordScreen.vue';
+import Link from '../../icon/icons/Link.vue';
 
 const opeanLinkling = async (url: String) => {
     try {
         await invoke('open_url', { url });
     } catch (err) {
         console.error('无法打开链接:', err);
+    }
+}
+
+const rollTo = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({
+            block: 'start',
+            behavior: 'smooth'
+        });
     }
 }
 
@@ -200,8 +248,11 @@ h3,
 h4,
 h5,
 h6 {
-    color: var(--normal-agree-color);
-    text-shadow: 0.5px 0.5px 0.5px var(--negative-agree-color);
+    background:linear-gradient( to right, var(--title-min-icon-active-shadow), var(--title-min-icon-hover-shadow), var(--title-min-icon-shadow), var(--title-bar-lg-1));
+    border-radius: 1vmin;
+    padding-left: 2vmin;
+    color: var(--title-bar-lg-2);
+    text-shadow: 0.5px 0.5px 0.5px var(--negative-agree-color), -0.5px -0.5px 0.5px var(--title-bar-lg-1);
     border-bottom: 2px dashed var(--active-attention-color);
 }
 
@@ -216,6 +267,10 @@ h6 {
     /* display: inline-block; */
     /* 防止容器宽度塌陷 */
 
+}
+
+.l-through {
+    text-decoration: line-through;
 }
 
 table {
@@ -330,11 +385,21 @@ td {
     max-height: 85vmin;
     overflow-y: auto;
 }
-
 .click-say span {
     color: var(--normal-attention-color);
     background: linear-gradient(to right, var(--normal-attention-color), var(--active-attention-color)) no-repeat left bottom;
     background-size: 100% 1px;
+}
+
+.click-link span {
+    font-weight: bold;
+    color: var(--normal-attention-color);
+    background: linear-gradient(to right, var(--title-max-icon-shadow), var(--title-max-icon-hover-shadow), var(--title-max-icon-active-shadow)) no-repeat left bottom;
+    background-size: 100% 3px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .positive-dia {
@@ -364,29 +429,37 @@ td {
     filter: drop-shadow(0 0 0.75em rgba(36, 200, 219, 0.75));
 
 }
+
 .vue3:hover {
     filter: drop-shadow(0 0 0.75em rgba(65, 184, 131, 0.75));
 
 }
+
 .vite:hover {
     filter: drop-shadow(0 0 0.75em rgba(189, 52, 254, 0.75));
 
 }
+
 .ffmpeg:hover {
     filter: drop-shadow(0 0 0.75em rgba(17, 106, 32, 0.75));
 }
+
 .image-magick:hover {
     filter: drop-shadow(0 0 0.75em rgba(252, 252, 0, 0.75));
 }
+
 .seven-zip:hover {
     filter: drop-shadow(0 0 0.75em rgba(3, 3, 3, 0.75));
 }
+
 .rust:hover {
     filter: drop-shadow(0 0 0.75em rgba(255, 112, 67, 0.75));
 }
+
 .type-script:hover {
     filter: drop-shadow(0 0 0.75em rgba(0, 122, 204, 0.75));
 }
+
 .python:hover {
     filter: drop-shadow(0 0 0.75em rgba(0, 117, 170, 0.75));
 }

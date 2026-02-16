@@ -62,7 +62,7 @@ export class PathUtils {
    * @param path 要验证的路径
    * @returns 路径是否存在
    */
-  static async pathExists(path: string): Promise<boolean> {
+  static async pathExists(_path: string): Promise<boolean> {
     try {
       // 这里可以调用 Tauri 的文件系统 API 来检查路径
       // 暂时返回 true，实际使用时需要实现具体逻辑
