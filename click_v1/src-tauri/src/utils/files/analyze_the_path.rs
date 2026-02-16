@@ -199,7 +199,7 @@ pub fn list_dir_file(
 
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
-        let path = entry.path().to_string_lossy().replace("\\", "/");
+        let path = entry.path().to_string_lossy().replace("/", "\\");
         let path = PathBuf::from(path);
 
         if path.is_file() {
@@ -265,7 +265,7 @@ pub fn list_dir_folder(
 
     for entry in fs::read_dir(*dir_path)? {
         let entry = entry?;
-        let path = entry.path().to_string_lossy().replace("\\", "/");
+        let path = entry.path().to_string_lossy().replace("/", "\\");
         let path = PathBuf::from(path);
 
         if !path.is_file() {

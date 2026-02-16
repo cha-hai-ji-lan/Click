@@ -25,22 +25,22 @@ export const comVisibility = reactive({
           "router": "/make-shutdown",
           "props": true,
         },
-        {
-          "name": "实况GO图",
-          "index": 0,
-          "is-focus": false,
-          "icon": "LivePicture",
-          "router": "/live-picture",
-          "props": true,
-        },
-        {
-          "name": "屏幕录制",
-          "index": 0,
-          "is-focus": false,
-          "icon": "RecordScreen",
-          "router": "/record-screen",
-          "props": true,
-        }
+        // {
+        //   "name": "实况GO图",
+        //   "index": 0,
+        //   "is-focus": false,
+        //   "icon": "LivePicture",
+        //   "router": "/live-picture",
+        //   "props": true,
+        // },
+        // {
+        //   "name": "屏幕录制",
+        //   "index": 0,
+        //   "is-focus": false,
+        //   "icon": "RecordScreen",
+        //   "router": "/record-screen",
+        //   "props": true,
+        // }
       ]
     },
     "LeftContain-open": false,

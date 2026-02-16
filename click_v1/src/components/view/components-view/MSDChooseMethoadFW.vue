@@ -37,10 +37,10 @@
                 @click="() => { changeFeedbackMethod('0') }">
                 <span>定时关机</span>
             </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[1] }"
+            <!-- <div draggable="true" class="item" :class="{ 'active-item': focus[1] }"
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>潮汐锁定</span>
-            </div>
+            </div> -->
         </div>
 
         <div v-for="(type, index) in dragType" :key="index" class="drag-btn" :class="type"

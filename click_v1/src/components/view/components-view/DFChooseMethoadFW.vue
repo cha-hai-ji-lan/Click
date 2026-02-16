@@ -42,22 +42,22 @@
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>改名排序</span>
             </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[2] }"
+            <!-- <div draggable="true" class="item" :class="{ 'active-item': focus[2] }"
                 @click="() => { changeFeedbackMethod('2') }">
                 <span>搜集存放</span>
-            </div>
+            </div> -->
             <div draggable="true" class="item" :class="{ 'active-item': focus[3] }"
                 @click="() => { changeFeedbackMethod('3') }">
                 <span>格式转化</span>
             </div>
-            <div draggable="true" class="item" :class="{ 'active-item': focus[4] }"
+            <!-- <div draggable="true" class="item" :class="{ 'active-item': focus[4] }"
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>音视频处理</span>
             </div>
             <div draggable="true" class="item" :class="{ 'active-item': focus[5] }"
                 @click="() => { changeFeedbackMethod('1') }">
                 <span>文件解析</span>
-            </div>
+            </div> -->
         </div>
 
         <div v-for="(type, index) in dragType" :key="index" class="drag-btn" :class="type"

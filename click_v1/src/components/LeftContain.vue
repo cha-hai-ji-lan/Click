@@ -62,9 +62,6 @@ watch(
         segments.forEach((segment, index) => {
             routePath.value?.push([index.toString(), segment])
         })
-        console.log(route.path)
-        console.log(route.fullPath)
-        console.log(route.meta)
 
 
     },

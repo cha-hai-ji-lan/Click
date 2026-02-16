@@ -9,7 +9,7 @@ use std::path::Path;
 use std::process::Command;
 use std::thread;
 use std::time::Instant;
-use tauri::Manager;
+use tauri::{Emitter, Manager};
 // 引入 serde_json 库
 use utils::{
     files::{
@@ -59,20 +59,31 @@ fn change_file_name(
     old_to_new: bool,
     order_mode: i32,
 ) -> Result<String, String> {
-    let start = Instant::now();
-    match replace_name_by_modify_time(
-        rule,
-        Box::new(Path::new(path.as_str())),
-        mode,
-        old_to_new,
-        order_mode,
-    ) {
-        Ok(_) => {
-            let duration = start.elapsed();
-            Ok(format!("花费时间: {:?}", duration))
-        }
-        Err(e) => Err(format!("遍历目录失败: {}", e)),
-    }
+    let (sender, receiver) = std::sync::mpsc::channel();
+
+    thread::spawn(move || {
+        let start = Instant::now();
+        let result = match replace_name_by_modify_time(
+            rule,
+            Box::new(Path::new(path.as_str())),
+            mode,
+            old_to_new,
+            order_mode,
+        ) {
+            Ok(_) => {
+                let duration = start.elapsed();
+                Ok(format!("花费时间: {:?}", duration))
+            }
+            Err(e) => Err(format!("遍历目录失败: {}", e)),
+        };
+        // 发送结果
+        let _ = sender.send(result);
+    });
+
+    // 等待并返回结果
+    receiver
+        .recv()
+        .unwrap_or_else(|_| Err("线程通信失败".to_string()))
 }
 /// 批量替换路径池文件名
 #[tauri::command]
@@ -83,14 +94,27 @@ fn change_pool_file_name(
     old_to_new: bool,
     order_mode: i32,
 ) -> Result<String, String> {
-    let start = Instant::now();
-    match replace_name_by_modify_time_pool(rule, path, mode, old_to_new, order_mode) {
-        Ok(_) => {
-            let duration = start.elapsed();
-            Ok(format!("花费时间: {:?}", duration))
-        }
-        Err(e) => Err(format!("遍历目录失败: {}", e)),
-    }
+    let (sender, receiver) = std::sync::mpsc::channel();
+
+    thread::spawn(move || {
+        let start = Instant::now();
+        let result =
+            match replace_name_by_modify_time_pool(rule, path, mode, old_to_new, order_mode) {
+                Ok(_) => {
+                    let duration = start.elapsed();
+                    Ok(format!("花费时间: {:?}", duration))
+                }
+                Err(e) => Err(format!("遍历目录失败: {}", e)),
+            };
+
+        // 发送结果
+        let _ = sender.send(result);
+    });
+
+    // 等待并返回结果
+    receiver
+        .recv()
+        .unwrap_or_else(|_| Err("线程通信失败".to_string()))
 }
 /// 运行 EXE 文件或 PowerShell 脚本
 #[tauri::command]
@@ -162,52 +186,85 @@ fn active_explorer_path() -> Vec<(String, String)> {
 
 /// 替换所有文件名字段
 #[tauri::command]
-fn replace_all_name(
+async fn replace_all_name(
     dir_path: String,
     old_name_sign: String,
     new_name_sign: String,
+    app_handle: tauri::AppHandle,
 ) -> Result<String, String> {
-    let start = Instant::now();
-    // 调用 traverse_directory_all 获取目录下所有路径
-    match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
-        Ok(mut all_paths) => {
-            all_paths.reverse(); // 倒序 保证不先修改父级目录的名称
-            for path in all_paths {
-                match replace_name(
-                    Box::new(Path::new(path.as_str())),
-                    &old_name_sign,
-                    &new_name_sign,
-                ) {
-                    Ok(_) => {}
-                    Err(e) => {
-                        eprintln!("Error: {}", e);
+    // 立即返回，不阻塞
+    let handle = tokio::task::spawn_blocking(move || {
+        let start = Instant::now();
+        // 调用 traverse_directory_all 获取目录下所有路径
+        match traverse_directory_all(Box::new(Path::new(dir_path.as_str()))) {
+            Ok(mut all_paths) => {
+                all_paths.reverse(); // 倒序 保证不先修改父级目录的名称
+                for path in all_paths {
+                    match replace_name(
+                        Box::new(Path::new(path.as_str())),
+                        &old_name_sign,
+                        &new_name_sign,
+                    ) {
+                        Ok(_) => {}
+                        Err(e) => {
+                            eprintln!("Error: {}", e);
+                        }
                     }
                 }
+                let duration = start.elapsed();
+                Ok(format!("花费时间: {:?}", duration))
             }
-            let duration = start.elapsed();
-            Ok(format!("花费时间: {:?}", duration))
+            Err(e) => Err(format!("遍历目录失败: {}", e)),
         }
-        Err(e) => Err(format!("遍历目录失败: {}", e)),
-    }
+    });
+
+    // 在后台执行，完成后通过事件通知前端
+    tokio::spawn(async move {
+        match handle.await {
+            Ok(result) => {
+                // 通过 Tauri 事件系统通知前端
+                let _ = app_handle.emit("rename_complete", result);
+            }
+            Err(e) => {
+                let _ = app_handle.emit("rename_error", format!("执行失败: {}", e));
+            }
+        }
+    });
+
+    // 立即返回
+    Ok("操作已启动".to_string())
 }
+
 #[tauri::command]
 fn replace_pool_all_name(
     main_path: String,
     old_name_sign: String,
     new_name_sign: String,
 ) -> Result<String, String> {
-    let start = Instant::now();
-    match replace_name(
-        Box::new(Path::new(main_path.as_str())),
-        &old_name_sign,
-        &new_name_sign,
-    ) {
-        Ok(_) => {
-            let duration = start.elapsed();
-            Ok(format!("花费时间: {:?}", duration))
-        }
-        Err(e) => Err(format!("替换名称失败: {}", e)),
-    }
+    // 使用通道在线程间传递结果
+    let (sender, receiver) = std::sync::mpsc::channel();
+
+    thread::spawn(move || {
+        let start = Instant::now();
+        let result = match replace_name(
+            Box::new(Path::new(main_path.as_str())),
+            &old_name_sign,
+            &new_name_sign,
+        ) {
+            Ok(_) => {
+                let duration = start.elapsed();
+                Ok(format!("花费时间: {:?}", duration))
+            }
+            Err(e) => Err(format!("替换名称失败: {}", e)),
+        };
+        // 发送结果
+        let _ = sender.send(result);
+    });
+
+    // 等待并返回结果
+    receiver
+        .recv()
+        .unwrap_or_else(|_| Err("线程通信失败".to_string()))
 }
 #[tauri::command]
 async fn format_conversion(
