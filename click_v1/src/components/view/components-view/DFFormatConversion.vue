@@ -547,7 +547,8 @@ const args2Unpack = (args: any[]) => {
                 }
                 break;
             default:
-                const subList = group.slice(1, -1);
+                const subList = group.slice(1);
+                console.log(group, subList)
                 if (!subList.every((str: string) => str === "")) {
                     args_g2.push(...group)
                 }

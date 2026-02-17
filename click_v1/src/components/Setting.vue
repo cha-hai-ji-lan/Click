@@ -30,10 +30,10 @@
         </div>
         <div class="setting-contain">
             <div class="left-setting-contain">
-                123
+                施工ing🔨
             </div>
             <div class="right-setting-contain">
-                123
+                施工ing🔨
             </div>
         </div>
 

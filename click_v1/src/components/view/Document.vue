@@ -216,7 +216,7 @@ import { invoke } from "@tauri-apps/api/core";
 import IconFile from '../../icon/IconFile.vue';
 import MeIcon from '../../icon/MeIcon.vue';
 import SaftyIcon from '../../icon/SaftyIcon.vue';
-import FunctionIcon from '../../icon/FunctionIcon.vue';
+// import FunctionIcon from '../../icon/FunctionIcon.vue';
 import IconShutDown from '../../icon/IconShutDown.vue';
 import LivePicture from '../../icon/LivePicture.vue';
 import RecordScreen from '../../icon/RecordScreen.vue';
