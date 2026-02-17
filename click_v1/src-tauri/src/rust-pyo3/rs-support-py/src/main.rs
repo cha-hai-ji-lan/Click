@@ -1,148 +1,104 @@
-use std::io::Error;
-use std::process::Command;
+use std::io::{BufRead, BufReader, Write};
+use std::process::{Command, Stdio};
 use std::time::Duration;
-use nvml_wrapper::Nvml;
-use sysinfo::{ProcessesToUpdate, System};
-use winapi::um::processthreadsapi::{OpenProcess, TerminateProcess};
-use winapi::um::handleapi::CloseHandle;
-use winapi::um::winnt::PROCESS_TERMINATE;
 
-#[derive(Debug)]
-struct CpuInfo {
-    cpu_pid: u32,
-    cpu_name: String,
-    cpu_usage: f32,
-    cpu_memory_usage: u64,
-}
-fn gpu_info() -> Result<(String, String, String, String), Error> {
-    let output = Command::new("nvidia-smi")
-        .arg("--query-gpu=index,name,utilization.gpu,utilization.memory")
-        .arg("--format=csv")
-        .output()
-        .expect("Failed to execute command");
-
-    if output.status.success() {
-        let result = String::from_utf8_lossy(&output.stdout);
-        let result = result.to_string();
-        let nvidia_gpu_info = result.split("\r\n").collect::<Vec<_>>();
-        let nvidia_gpu_info = &nvidia_gpu_info[1].split(",").collect::<Vec<_>>();
-        Ok(
-            (nvidia_gpu_info[0].to_string(),  //  GPU索引
-             nvidia_gpu_info[1][16..nvidia_gpu_info[1].len()].to_string(),  // GPU名称
-             nvidia_gpu_info[2][1..nvidia_gpu_info[2].len() - 2].to_string(),  // GPU使用率
-             nvidia_gpu_info[3][1..nvidia_gpu_info[3].len() - 2].to_string())  // GPU内存使用率
-        )
-    } else {
-        Ok((String::from("0"), String::from(""),
-            String::from("0.0"), String::from("0.0")))
-    }
-}
-
-
-/// CPU进程数获取
-/// 返回当前全部进程数
-fn get_cpu_handle() ->Result<usize,  Error> {
-    // 创建一个系统句柄
-    let mut handle = System::new_all();
-    // 刷新一次所有信息
-    handle.refresh_all();
-    Ok(handle.processes().len())
-}
-
-///  CPU资源占用量获取
+/// 处理一系列文档，每个文档由 `-start` 和 `-end` 分隔。
 ///
-fn cpu_info() -> Result<Vec<(String, String, String, String)>, Error> {
-    // 手动释放 GIL 锁
-    // 保证 线程运行时不会影响Python主线程GUI
-    let mut system = System::new_all();
-    system.refresh_all();
-    std::thread::sleep(Duration::from_secs(1)); // 等待1秒以获取使用率变化
-    system.refresh_all(); // 第二次刷新
-    let mut cpu_data_tup: Vec<(String, String, String, String)> = vec![];
+/// # 参数
+/// * `doc_paths` - 要处理的文档路径列表
+fn process_documents(doc_paths: &[&str]) -> Result<(), Box<dyn std::error::Error>> {
+    // 启动 doc.exe
+    let mut child = Command::new(r"D:\Object_\APP\Tauri\work\Click\click_v1\src-py\dist\main.exe")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()?;
 
-    for (pid, process) in system.processes() {
-        cpu_data_tup.push((
-            pid.to_string(),
-            process.name().to_str().unwrap().to_string(),
-            process.cpu_usage().to_string(),
-            (process.memory() as f32 / 1024.0).to_string(),
-        ));
-    }
-    cpu_data_tup.sort_by(|a, b| b
-        .2
-        .partial_cmp(&a.2)
-        .unwrap_or(std::cmp::Ordering::Equal));
+    let mut stdin = child.stdin.take().unwrap();
+    let stdout = child.stdout.take().unwrap();
 
-    Ok(cpu_data_tup)
-}
+    // 使用字节流而不是 UTF-8 字符串
+    let mut reader = BufReader::new(stdout);
+    let mut buffer = Vec::new();
 
-fn cpu_memory_info() -> Result<Vec<(String, String, String, String)>,  Error> {
-    let mut system = System::new_all();
-    system.refresh_all();
-    std::thread::sleep(Duration::from_secs(1)); // 等待1秒以获取使用率变化
-    system.refresh_all(); // 第二次刷新
-    let mut cpu_data: Vec<CpuInfo> = vec![];
-    let mut cpu_data_tup: Vec<(String, String, String, String)> = vec![];
+    // 创建超时机制的线程
+    let timeout_handle = std::thread::spawn(move || {
+        std::thread::sleep(Duration::from_secs(10));
+        // 超时后可以考虑终止进程
+    });
 
-    for (pid, process) in system.processes() {
-        cpu_data_tup.push((
-            pid.to_string(),
-            process.name().to_str().unwrap().to_string(),
-            process.cpu_usage().to_string(),
-            process.memory().to_string(),
-        ));
-    }
-    cpu_data_tup.sort_by(|a, b| b
-        .3
-        .partial_cmp(&a.3)
-        .unwrap_or(std::cmp::Ordering::Equal));
+    for path in doc_paths {
+        println!("正在处理文档：{}", path);
 
-    Ok(cpu_data_tup)
-}
+        // 等待 "-start" 输出
+        let mut found_start = false;
+        loop {
+            buffer.clear();
+            let bytes_read = reader.read_until(b'\n', &mut buffer)?;
+            if bytes_read == 0 {
+                break; // EOF
+            }
 
-fn nvidia_gpu_info() -> () {
-    let nvml = Nvml::init().unwrap();
-    let device = nvml.device_by_index(0).unwrap(); // 首张 GPU
-    let processes = device.running_graphics_processes().unwrap();
-    for proc in processes {
-        println!("PID: {},进程名称:{}, GPU实例ID: {:?} 计算实例ID: {:?}  显存: {:?}",
-                 proc.pid, get_process_name(proc.pid), proc.gpu_instance_id,
-                 proc.compute_instance_id, proc.used_gpu_memory);
-    };
-}
-
-fn get_process_name(pid: u32) -> String {
-    let mut sys = System::new();
-    sys.refresh_processes(ProcessesToUpdate::All, false); // 刷新进程信息
-
-    // 将 PID 转换为 sysinfo 的 Pid 类型
-    let sysinfo_pid = sysinfo::Pid::from(pid as usize);
-
-
-    sys.process(sysinfo_pid)
-        .map(|process| process
-            .name()
-            .to_str()
-            .unwrap()
-            .to_string())
-        .unwrap_or_else(|| String::from("未知进程"))
-}
-
-fn kill_process(pid: u32) -> Result<String, Error> {
-    unsafe {
-        let handle = OpenProcess(PROCESS_TERMINATE, 0, pid);
-        if handle.is_null() {
-            return Ok("无法打开进程".to_string());
+            // 尝试转换为字符串，忽略无效UTF-8
+            if let Ok(line) = String::from_utf8(buffer.clone()) {
+                if line.trim() == "-start" {
+                    found_start = true;
+                    break;
+                }
+            }
         }
 
-        if TerminateProcess(handle, 1) == 0 {
-            return Ok("无法终止进程".to_string());
+        if !found_start {
+            return Err("未收到 -start 信号".into());
         }
 
-        CloseHandle(handle);
-        Ok(String::from(pid.to_string() + "进程已终止"))
+        // 发送文档路径
+        writeln!(stdin, "{}", path)?;
+
+        // 等待 "-end" 输出
+        let mut found_end = false;
+        loop {
+            buffer.clear();
+            let bytes_read = reader.read_until(b'\n', &mut buffer)?;
+            if bytes_read == 0 {
+                break; // EOF
+            }
+
+            // 尝试转换为字符串，忽略无效UTF-8
+            if let Ok(line) = String::from_utf8(buffer.clone()) {
+                if line.trim() == "-end" {
+                    found_end = true;
+                    break;
+                }
+            }
+        }
+
+        if !found_end {
+            return Err("未收到 -end 信号".into());
+        }
     }
+
+    // 发送退出命令
+    println!("所有文档处理完毕，正在退出程序...");
+    writeln!(stdin, "exit")?;
+
+    // 等待进程结束
+    let _ = child.wait();
+
+    Ok(())
 }
-fn main() {
-    println!("{:?}", gpu_info());
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 定义要处理的文档列表（请根据实际情况修改路径）
+    let documents = vec![
+        r"C:\docs\report1.txt",
+        r"C:\docs\report2.txt",
+        r"C:\docs\report3.txt",
+    ];
+
+    // 执行自动化交互
+    process_documents(&documents)?;
+
+    println!("所有文档已处理完毕。");
+    Ok(())
 }

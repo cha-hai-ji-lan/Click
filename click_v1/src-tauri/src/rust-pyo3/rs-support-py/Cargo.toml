@@ -4,14 +4,16 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-docx-rs = "0.4.19"          # DOCX 处理
-calamine = "0.33.0"        # Excel 处理
-pptx-rs = "0.1.0"          # PPTX 处理
-
-# 如果需要更多格式支持
-zip = "8.0.0"              # ZIP 格式处理（Office 文件本质是ZIP）
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-sysinfo = "0.38.2"
-winapi = { version = "0.3.9", features = ["processthreadsapi", "handleapi", "winnt"] }
-nvml-wrapper = "0.12.0"
+#docx-rs = "0.4.19"          # DOCX 处理
+#calamine = "0.33.0"        # Excel 处理
+#pptx-rs = "0.1.0"          # PPTX 处理
+#
+## 如果需要更多格式支持
+#zip = "8.0.0"              # ZIP 格式处理（Office 文件本质是ZIP）
+#serde = { version = "1.0", features = ["derive"] }
+#serde_json = "1.0"
+#sysinfo = "0.38.2"
+#winapi = { version = "0.3.9", features = ["processthreadsapi", "handleapi", "winnt"] }
+##nvml-wrapper = "0.12.0"
+#rexpect = "0.5.0"  # 指定一个与 reexpect 兼容的 nix 版本
+#nix = "0.31.1"   # 强制使用这个版本

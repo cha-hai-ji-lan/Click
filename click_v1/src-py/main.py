@@ -144,10 +144,7 @@ def main():
         cli_handler.process_command(initial_command)
 
     # 进入持续运行模式
-    print("程序已启动，等待命令输入...")
-    print("输入 '-exit' 退出程序")
-    print("输入 'help' 查看可用命令")
-    print("-" * 40)
+    print("-start")
 
     try:
         while cli_handler.running:
@@ -157,7 +154,13 @@ def main():
 
                 # 处理用户命令
                 if user_input:
-                    cli_handler.process_command(user_input)
+                    print(f"处理用户命令: {user_input}")
+                    print("-end")
+                    if user_input == '-exit':
+                        cli_handler.running = False
+                    # else:
+                    #     cli_handler.process_command(user_input)
+                    # cli_handler.process_command(user_input)
 
             except KeyboardInterrupt:
                 print("\n\n检测到Ctrl+C，程序即将退出...")
