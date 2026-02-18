@@ -134,7 +134,7 @@
                 <div v-else-if="cov_type === 'vid-format-conversion'" class="items-list">
                     <span>施工中</span>
                     <ul>
-                        <li class="choose-item bubble" data-bubtip="直接书写magick指令参数" :class="{}"
+                        <li class="choose-item bubble" data-bubtip="直接书写ffmpeg指令参数" :class="{}"
                             @click="addVidComponent('__bash__')">命令行</li>
                         <!-- <li class="choose-item bubble" data-bubtip="调整分辨率（缩放）" :class="{}" @click="addVidComponent('-vf')">
                             调分辨率
@@ -162,8 +162,8 @@
                 <div v-else-if="cov_type === 'office-format-conversion'" class="items-list">
                     <span>施工中</span>
                     <ul>
-                        <li class="choose-item bubble" data-bubtip="直接书写magick指令参数" :class="{}"
-                            @click="addOfficeComponent('__bash__')">命令行</li>
+                        <!-- <li class="choose-item bubble" data-bubtip="直接书写指令参数" :class="{}"
+                            @click="addOfficeComponent('__bash__')">命令行</li> -->
                         <!-- <li class="choose-item bubble" data-bubtip="调整分辨率（缩放）" :class="{}" @click="addAudComponent('-vf')">
                             调分辨率
                         </li>

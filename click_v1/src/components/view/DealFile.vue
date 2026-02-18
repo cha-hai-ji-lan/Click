@@ -286,6 +286,7 @@ const openFolderDialog = async () => {
      let default_path = 'C:\\'  // 设置默认打开路径，可以根据需要修改
      if (selectedPaths.value && selectedPaths.value.length > 0) {
           default_path = selectedPaths.value[0][0]
+          selectedPaths.value.shift()
      }
      try {
           userSelectedPath.value = await open({
@@ -319,6 +320,7 @@ const openFileDialog = async () => {
      let default_path = 'C:\\'  // 设置默认打开路径，可以根据需要修改
      if (selectedPaths.value && selectedPaths.value.length > 0) {
           default_path = selectedPaths.value[0][0]
+          selectedPaths.value.shift()
      }
      try {
           userSelectedPath.value = await open({
