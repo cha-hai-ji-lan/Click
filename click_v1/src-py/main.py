@@ -2,6 +2,7 @@
 import argparse
 import os
 from typing import Callable
+from utils.doc import OfficeConverter
 
 
 class CLIHandler:
@@ -11,14 +12,15 @@ class CLIHandler:
         self.commands = {}
         self.running = True
         self.register_default_commands()
+        self.converter = OfficeConverter()
 
     def register_default_commands(self):
         """注册默认命令"""
-        self.register_command('help', self.help_command, "显示帮助信息")
-        self.register_command('echo', self.echo_command, "回显输入内容")
-        self.register_command('status', self.status_command, "显示程序状态")
-        self.register_command('calc', self.calc_command, "简单计算器")
-        self.register_command('calc', self.calc_command, "简单计算器")
+        self.register_command('help', self.help_command, "显示帮助信息--测试使用")
+        self.register_command('echo', self.echo_command, "回显输入内容--测试使用")
+        self.register_command('status', self.status_command, "显示程序状态--测试使用")
+        self.register_command('calc', self.calc_command, "简单计算器--测试使用")
+        self.register_command('-docx2xlsx', self.docx2xlsx, "docx格式转xlsx格式")
 
     def register_command(self, name: str, func: Callable, description: str = ""):
         """注册新命令"""
@@ -38,6 +40,7 @@ class CLIHandler:
 
         # 检查是否为退出命令
         if cmd_name in ['-exit', 'exit', 'quit']:
+            self.converter.__exit__()
             self.running = False
             return False
 
@@ -54,7 +57,7 @@ class CLIHandler:
             print("输入 'help' 查看可用命令")
             return True
 
-    def help_command(self, args):
+    def help_command(self):
         """帮助命令"""
         print("可用命令:")
         print("-" * 30)
@@ -115,7 +118,14 @@ class CLIHandler:
         except ValueError:
             print("错误: 请输入有效的数字")
 
-    def cleanup(self):
+    def docx2xlsx(self, args: list):
+        source_path = os.path.abspath(args[0])
+        target_path = os.path.abspath(args[1])
+        print(source_path, target_path)
+        self.converter.docx_to_xlsx(source_path, target_path)
+
+    @staticmethod
+    def cleanup():
         """清理资源"""
         print("正在清理资源...")
 
@@ -143,7 +153,7 @@ def main():
         print(f"处理初始命令: {initial_command}")
         cli_handler.process_command(initial_command)
 
-    # 进入持续运行模式
+    # 进入持续运行模式 向rust发送初始化完成目录
     print("-start")
 
     try:
@@ -154,13 +164,8 @@ def main():
 
                 # 处理用户命令
                 if user_input:
-                    print(f"处理用户命令: {user_input}")
+                    cli_handler.process_command(user_input)
                     print("-end")
-                    if user_input == '-exit':
-                        cli_handler.running = False
-                    # else:
-                    #     cli_handler.process_command(user_input)
-                    # cli_handler.process_command(user_input)
 
             except KeyboardInterrupt:
                 print("\n\n检测到Ctrl+C，程序即将退出...")

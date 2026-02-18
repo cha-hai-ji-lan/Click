@@ -1,59 +1,61 @@
-use std::io::{BufRead, BufReader, Write};
+use std::{fs, io};
+use std::io::{BufRead, BufReader,Error, Write};
+use std::path::PathBuf;
 use std::process::{Command, Stdio};
-use std::time::Duration;
 
 /// 处理一系列文档，每个文档由 `-start` 和 `-end` 分隔。
 ///
 /// # 参数
 /// * `doc_paths` - 要处理的文档路径列表
-fn process_documents(doc_paths: &[&str]) -> Result<(), Box<dyn std::error::Error>> {
+fn process_documents(exe_path: String, command: String, doc_paths: &Vec<String>, new_ext: String) -> Result<(), Error> {
     // 启动 doc.exe
-    let mut child = Command::new(r"D:\Object_\APP\Tauri\work\Click\click_v1\src-py\dist\main.exe")
+    let mut child = Command::new(exe_path)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .spawn()?;
 
-    let mut stdin = child.stdin.take().unwrap();
-    let stdout = child.stdout.take().unwrap();
+    let mut stdin = child.stdin.take().unwrap();  // 获取 stdin
+    let stdout = child.stdout.take().unwrap();  // 获取 stdout
 
     // 使用字节流而不是 UTF-8 字符串
     let mut reader = BufReader::new(stdout);
     let mut buffer = Vec::new();
 
-    // 创建超时机制的线程
-    let timeout_handle = std::thread::spawn(move || {
-        std::thread::sleep(Duration::from_secs(10));
-        // 超时后可以考虑终止进程
-    });
+    // 等待 "-start" 输出
+    let mut found_start = false;
+    loop {
+        buffer.clear();
+        let bytes_read = reader.read_until(b'\n', &mut buffer)?;
+        if bytes_read == 0 {
+            break; // EOF
+        }
+
+        // 尝试转换为字符串，忽略无效UTF-8
+        if let Ok(line) = String::from_utf8(buffer.clone()) {
+            println!("{}", line);
+            if line.trim() == "-start" {
+                found_start = true;
+                break;
+            }
+        }
+    }
+
+    if !found_start {
+        return Err(Error::new(
+            io::ErrorKind::NotFound,
+            "无法找到 -start 起始标志".to_string(),
+        ));
+    }
 
     for path in doc_paths {
-        println!("正在处理文档：{}", path);
+        let mut new_path = PathBuf::from(&path);
+        new_path.set_extension(&new_ext);
 
-        // 等待 "-start" 输出
-        let mut found_start = false;
-        loop {
-            buffer.clear();
-            let bytes_read = reader.read_until(b'\n', &mut buffer)?;
-            if bytes_read == 0 {
-                break; // EOF
-            }
-
-            // 尝试转换为字符串，忽略无效UTF-8
-            if let Ok(line) = String::from_utf8(buffer.clone()) {
-                if line.trim() == "-start" {
-                    found_start = true;
-                    break;
-                }
-            }
-        }
-
-        if !found_start {
-            return Err("未收到 -start 信号".into());
-        }
-
+        println!("正在处理文档：{:?}", path);
+        println!("新文档路径：{:?}", new_path);
         // 发送文档路径
-        writeln!(stdin, "{}", path)?;
+        writeln!(stdin, "{} {}", command, path)?;
 
         // 等待 "-end" 输出
         let mut found_end = false;
@@ -66,21 +68,24 @@ fn process_documents(doc_paths: &[&str]) -> Result<(), Box<dyn std::error::Error
 
             // 尝试转换为字符串，忽略无效UTF-8
             if let Ok(line) = String::from_utf8(buffer.clone()) {
+                println!("{}", line);
                 if line.trim() == "-end" {
                     found_end = true;
                     break;
                 }
             }
         }
-
         if !found_end {
-            return Err("未收到 -end 信号".into());
+            return Err(Error::new(
+                io::ErrorKind::NotFound,
+                "未收到 -end 信号".to_string(),
+            ));
         }
     }
 
     // 发送退出命令
     println!("所有文档处理完毕，正在退出程序...");
-    writeln!(stdin, "exit")?;
+    writeln!(stdin, "-exit")?;
 
     // 等待进程结束
     let _ = child.wait();
@@ -91,13 +96,13 @@ fn process_documents(doc_paths: &[&str]) -> Result<(), Box<dyn std::error::Error
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 定义要处理的文档列表（请根据实际情况修改路径）
     let documents = vec![
-        r"C:\docs\report1.txt",
-        r"C:\docs\report2.txt",
-        r"C:\docs\report3.txt",
+        r"C:\docs\report1.docx".to_string(),
+        r"C:\docs\report2.docx".to_string(),
+        r"C:\docs\report3.docx".to_string(),
     ];
 
     // 执行自动化交互
-    process_documents(&documents)?;
+    process_documents(r"D:\Object_\APP\Tauri\work\Click\click_v1\src-py\dist\main.exe".to_string(),"-docx2doc".to_string(), &documents, "xlsx".to_string())?;
 
     println!("所有文档已处理完毕。");
     Ok(())

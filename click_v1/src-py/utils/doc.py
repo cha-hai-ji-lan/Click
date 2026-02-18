@@ -1,4 +1,6 @@
 # converter.py
+import shutil
+
 import win32com.client
 import os
 import pythoncom
@@ -16,7 +18,7 @@ class OfficeConverter:
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self):
         self.close()
 
     def close(self):
@@ -44,11 +46,12 @@ class OfficeConverter:
                 self.word_app.Visible = False
 
             # 打开docx文档
-            doc = self.word_app.Documents.Open(os.path.abspath(docx_path))
+            doc = self.word_app.Documents.Open(docx_path)
 
             # 先保存为HTML格式作为中间步骤
             html_path = xlsx_path.replace('.xlsx', '.html')
-            doc.SaveAs2(os.path.abspath(html_path), FileFormat=8)  # 8 = HTML格式
+            html_file_path = xlsx_path.replace('.xlsx', '.files')
+            doc.SaveAs2(html_path, FileFormat=8)  # 8 = HTML格式
             doc.Close()
 
             # 使用Excel打开HTML并保存为xlsx
@@ -56,13 +59,15 @@ class OfficeConverter:
                 self.excel_app = win32com.client.Dispatch("Excel.Application")
                 self.excel_app.Visible = False
 
-            workbook = self.excel_app.Workbooks.Open(os.path.abspath(html_path))
-            workbook.SaveAs(os.path.abspath(xlsx_path), FileFormat=51)  # 51 = xlsx格式
+            workbook = self.excel_app.Workbooks.Open(html_path)
+            workbook.SaveAs(xlsx_path, FileFormat=51)  # 51 = xlsx格式
             workbook.Close()
 
             # 删除临时HTML文件
             if os.path.exists(html_path):
                 os.remove(html_path)
+            if os.path.exists(html_file_path):
+                shutil.rmtree(html_file_path)
 
             print(f"成功将 {docx_path} 转换为 {xlsx_path}")
             return True

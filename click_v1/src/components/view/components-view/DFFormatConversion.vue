@@ -47,6 +47,17 @@
                         p-id="8792"></path>
                 </svg>
             </div>
+            <div class="item-title tooltip" data-tooltip="办公格式" @click="() => { chooseMode('office') }">
+                <svg t="1771418868907" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="5334" width="200" height="200">
+                    <path
+                        d="M288 320h448a32 32 0 0 0 0-64H288a32 32 0 0 0 0 64zM288 544h448a32 32 0 0 0 0-64H288a32 32 0 0 0 0 64zM544 704H288a32 32 0 0 0 0 64h256a32 32 0 0 0 0-64z"
+                        p-id="5335"></path>
+                    <path
+                        d="M896 132.928C896 77.28 851.552 32 796.928 32H227.04C172.448 32 128 77.28 128 132.928v758.144C128 946.72 172.448 992 227.04 992h435.008c1.568 0 2.912-0.672 4.416-0.896 8.96 1.6 18.464-0.256 25.984-6.528l192-160a31.424 31.424 0 0 0 10.816-27.2c0.16-1.184 0.736-2.208 0.736-3.424V132.928zM192 891.072V132.928C192 112.576 207.712 96 227.04 96h569.888C816.288 96 832 112.576 832 132.928V736h-96a96 96 0 0 0-96 96v96H227.04C207.712 928 192 911.424 192 891.072zM814.016 800L704 891.68V832a32 32 0 0 1 32-32h78.016z"
+                        p-id="5336"></path>
+                </svg>
+            </div>
             <div class="占位符"></div>
             <div class="submit-replace-name" @click="() => { subCov() }">转化
             </div>
@@ -79,6 +90,15 @@
                 </SelectorBar>
                 <div class="text">转成</div>
                 <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="aud_aimOption"
+                    placeholder="目标格式">
+                </SelectorBar>
+            </div>
+            <div v-else-if="formatMode === 'office'" class="conversion-item">
+                <SelectorBar class="select-bar" v-model="selectedValueSon[0]" :options="office_sourceOption"
+                    placeholder="原始格式">
+                </SelectorBar>
+                <div class="text">转成</div>
+                <SelectorBar class="select-bar" v-model="selectedValueSon[1]" :options="office_aimOption"
                     placeholder="目标格式">
                 </SelectorBar>
             </div>
@@ -129,8 +149,21 @@
                 <div v-else-if="cov_type === 'aud-format-conversion'" class="items-list">
                     <span>施工中</span>
                     <ul>
-                        <li class="choose-item bubble" data-bubtip="直接书写magick指令参数" :class="{}"
+                        <li class="choose-item bubble" data-bubtip="直接书写ffmpeg指令参数" :class="{}"
                             @click="addAudComponent('__bash__')">命令行</li>
+                        <!-- <li class="choose-item bubble" data-bubtip="调整分辨率（缩放）" :class="{}" @click="addAudComponent('-vf')">
+                            调分辨率
+                        </li>
+                        <li class="choose-item bubble" data-bubtip="调整输出帧率" :class="{}" @click="addAudComponent('-r')">
+                            改变帧率</li> -->
+                        <li class="claen-oper" @click="clearComponents()">清空操作</li>
+                    </ul>
+                </div>
+                <div v-else-if="cov_type === 'office-format-conversion'" class="items-list">
+                    <span>施工中</span>
+                    <ul>
+                        <li class="choose-item bubble" data-bubtip="直接书写magick指令参数" :class="{}"
+                            @click="addOfficeComponent('__bash__')">命令行</li>
                         <!-- <li class="choose-item bubble" data-bubtip="调整分辨率（缩放）" :class="{}" @click="addAudComponent('-vf')">
                             调分辨率
                         </li>
@@ -372,10 +405,10 @@
                             </div>
                         </div>
                         <div class="w-box" v-else-if="cov_type === 'vid-format-conversion'">
-
                         </div>
                         <div class="w-box" v-else-if="cov_type === 'aud-format-conversion'">
-
+                        </div>
+                        <div class="w-box" v-else-if="cov_type === 'office-format-conversion'">
                         </div>
 
                     </div>
@@ -390,7 +423,7 @@ import SelectorBar from '../../components/SelectorBar.vue'
 import IconInfo from '../../../icon/icons/IconInfo.vue'
 import CloseIcon from '../../../icon/icons/CloseIcon.vue'
 import { imgExpendArgs1, imgExpendArgs2, vidExpendArgs1, vidExpendArgs2, audExpendArgs1, audExpendArgs2, cleanArgs, getAt, magick_args } from '../../../util/FormatCov'
-import { img_sourceOption, img_aimOption, vid_sourceOption, vid_aimOption, aud_aimOption, aud_sourceOption } from '../../../util/PluginObjects'
+import { img_sourceOption, img_aimOption, vid_sourceOption, vid_aimOption, aud_aimOption, aud_sourceOption, office_sourceOption, office_aimOption} from '../../../util/PluginObjects'
 import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
     active_path: PathItem[] | null,
@@ -462,6 +495,10 @@ const subCov = () => {
         audExpendArgs1(args_g1);
         audExpendArgs2(args_g2);
 
+    } else if (cov_type.value === "office-format-conversion") {
+        audExpendArgs1(args_g1);
+        audExpendArgs2(args_g2);
+
     }
     args_g1 = []  // 用一次清理一次防止内存泄露
     args_g2 = []
@@ -478,6 +515,9 @@ const chooseMode = (input_formate: string) => {
             break;
         case "aud":
             cov_type.value = "aud-format-conversion";
+            break;
+        case "office":
+            cov_type.value = "office-format-conversion";
             break;
         default:
             break;
@@ -780,6 +820,60 @@ const addAudComponent = (type: string) => {
     };
     componentList.value.push(newComponent);
 }
+const addOfficeComponent = (type: string) => {
+    switch (type) {
+        case "__bash__":
+            args_item_title.value.push("命令行")
+            args_mode.value.push("__bash__")
+            args_g2_nest.value.push(["__bash__", ""])
+            break;
+        case "-resize":
+            args_item_title.value.push("(横纵比🔒)调整图像尺寸(像素)")
+            args_mode.value.push("nor-resize")
+            args_g2_nest.value.push(["-resize", "", ""])
+            break;
+        case "-scale":
+            args_item_title.value.push("(横纵比🔒)缩放图像(像素)")
+            args_mode.value.push("nor-scale")
+            args_g2_nest.value.push(["-scale", "", ""])
+            break;
+        case "-gravity":
+            anchor_point.value = true
+            args_item_title.value.push("设置基准锚点(左上角)")
+            args_mode.value.push("lt-gravity")
+            args_g2_nest.value.push(["-gravity", ""])
+            break;
+        case "-rotate":
+            args_item_title.value.push("旋转图片(顺时针|-逆时针)")
+            args_mode.value.push("-rotate")
+            args_g2_nest.value.push(["-rotate", ""])
+            break;
+        case "-crop":
+            if (componentList.value.length > 0 && getAt(componentList.value, -1).type === "-gravity") {
+                args_item_title.value.push("裁剪图像")
+            }
+            else {
+                args_item_title.value.push("裁剪图像(无锚点:默认左上角)")
+            }
+            args_mode.value.push("lt-crop")
+            args_g2_nest.value.push(["-crop", "", "", "", ""])
+            break;
+        case "-flip":
+            args_item_title.value.push("翻转图片(上下翻转)")
+            args_mode.value.push("-flip")
+            args_g2_nest.value.push(["-flip"])
+            break;
+        default:
+            break;
+    }
+
+    // 创建组件对象并添加到列表
+    const newComponent = {
+        type: type,
+        id: Date.now() // 使用时间戳作为唯一 ID
+    };
+    componentList.value.push(newComponent);
+}
 
 const closeItem = (index: number) => {
     if (getAt(componentList.value, -1).type === "-gravity") {
@@ -861,7 +955,7 @@ const updateGravity = (index: number, value: string) => {
     display: grid;
     width: 100%;
     height: 4vmin;
-    grid-template-columns: 5% 5% 5% 5% 5% 60% 15%;
+    grid-template-columns: 5% 5% 5% 5% 5% 5% 55% 15%;
     border-bottom: 1px dashed var(--unite-but-color);
 }
 

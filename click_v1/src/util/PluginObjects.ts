@@ -288,3 +288,11 @@ export const aud_aimOption = [
   { value: "oga", label: "oga" },
 
 ]
+export const office_sourceOption = [
+  { value: "docx", label: "docx" },
+  { value: "xlsx", label: "xlsx" },
+]
+export const office_aimOption = [
+  { value: "docx", label: "docx" },
+  { value: "xlsx", label: "xlsx" },
+]
