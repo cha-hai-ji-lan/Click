@@ -278,6 +278,7 @@ const stopMove = () => {
 };
 
 const changeFeedbackMethod = (methoad: string) => {
+    collapse()  // 选完功能自动关闭选项栏
     props.changeMethod(methoad);
     focus.value.fill(false);
     switch (methoad) {

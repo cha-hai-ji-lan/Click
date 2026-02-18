@@ -296,6 +296,7 @@ const stopMove = () => {
 
 const changeFeedbackMethod = (methoad: string) => {
     props.changeMethod(methoad);
+    collapse()
     focus.value.fill(false);
     switch (methoad) {
         case '0':

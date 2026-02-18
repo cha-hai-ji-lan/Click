@@ -271,6 +271,16 @@ export const aud_sourceOption = [
   { value: "AUTO", label: "自行推导" },
   { value: "mp3", label: "mp3" },
   { value: "wav", label: "wav" },
+  { value: "m4a", label: "m4a" },
+  { value: "mka", label: "mka" },
+       
+  { value: "aiff", label: "aiff" },
+  { value: "au", label: "au" },
+  { value: "opus", label: "opus" },
+  { value: "ac3", label: "ac3" },
+  { value: "ra", label: "ra" },
+  // { value: "amr", label: "amr" },  // -ar 8000 只支持8000采样率
+
   { value: "wma", label: "wma" },
   { value: "ape", label: "ape" },
   { value: "flac", label: "flac" },
@@ -281,6 +291,16 @@ export const aud_sourceOption = [
 export const aud_aimOption = [
   { value: "mp3", label: "mp3" },
   { value: "wav", label: "wav" },
+  { value: "m4a", label: "m4a" },
+  { value: "mka", label: "mka" },
+
+  { value: "aiff", label: "aiff" },
+  { value: "au", label: "au" },
+  { value: "opus", label: "opus" },
+  { value: "ac3", label: "ac3" },
+  { value: "ra", label: "ra" },
+  // { value: "amr", label: "amr" },
+
   { value: "wma", label: "wma" },
   { value: "flac", label: "flac" },
   { value: "ogg", label: "ogg" },
