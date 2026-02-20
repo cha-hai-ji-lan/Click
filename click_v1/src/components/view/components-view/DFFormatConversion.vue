@@ -422,7 +422,7 @@ import { ref, watch, computed } from 'vue';
 import SelectorBar from '../../components/SelectorBar.vue'
 import IconInfo from '../../../icon/icons/IconInfo.vue'
 import CloseIcon from '../../../icon/icons/CloseIcon.vue'
-import { imgExpendArgs1, imgExpendArgs2, vidExpendArgs1, vidExpendArgs2, audExpendArgs1, audExpendArgs2, cleanArgs, getAt, magick_args } from '../../../util/FormatCov'
+import { imgExpendArgs1, imgExpendArgs2, vidExpendArgs1, vidExpendArgs2, audExpendArgs1, officeExpendArgs1, officeExpendArgs2, audExpendArgs2, cleanArgs, getAt, magick_args } from '../../../util/FormatCov'
 import { img_sourceOption, img_aimOption, vid_sourceOption, vid_aimOption, aud_aimOption, aud_sourceOption, office_sourceOption, office_aimOption} from '../../../util/PluginObjects'
 import { type PathItem } from '@/class/PathIndex'
 const props = defineProps<{
@@ -496,8 +496,9 @@ const subCov = () => {
         audExpendArgs2(args_g2);
 
     } else if (cov_type.value === "office-format-conversion") {
-        audExpendArgs1(args_g1);
-        audExpendArgs2(args_g2);
+        args_g1.push(`-${selectedValueSon.value[0]}2${selectedValueSon.value[1]}`)
+        officeExpendArgs1(args_g1);
+        officeExpendArgs2(args_g2);
 
     }
     args_g1 = []  // 用一次清理一次防止内存泄露

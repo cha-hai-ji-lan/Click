@@ -13,10 +13,10 @@
                             <SaftyIcon></SaftyIcon>
                             <span  class="item-text">安全&更新</span>
                         </div>
-                        <!-- <div class="index-item" @click="rollTo('doc-h1-1')">
+                        <div class="index-item" @click="rollTo('doc-h1-1')">
                             <FunctionIcon></FunctionIcon>
                             <span  class="item-text">功能概览</span>
-                        </div> -->
+                        </div>
 
                     </li>
                 </ul>
@@ -24,8 +24,15 @@
         </div>
         <div class="doc-text explorer-act-path">
             <h1 id="doc-h1-0"># 我?</h1>
+            <h2 id="doc-h2-0"># 我是谁?我要做什么?</h2>
             <p class="click-say">
                 <span>咔嗒目前致力于学习更多的东西,目前其实并没有明确的专攻方向😶‍🌫️,我还需要不断地学习充实自己.</span>
+            </p>
+            <p class="click-say">
+                <span>但是咔嗒有一个学习的终极方向,那就是致力于帮助你完成那些有规律可循简单的大量重复任务,
+                    我希望能帮到你,让你能有更多精力用于有价值的创造,而不是伤脑筋的流水式的无意义重复劳动.
+                    咔嗒的目的就是在此,让你能更长时间的处于自己的心流之中,这种无意义的活就交给咔嗒来做,
+                    并且咔嗒会一直学习,去胜任更多这样的重复性劳动,以解放你的时间,还给你思想创作的时间.</span>
             </p>
             <p class="click-say"><span>我目前会做什么呢?</span></p>
             <p class="click-say"><span>我目前会:</span></p>
@@ -189,8 +196,18 @@
             </table>
             <!-- <p class="click-say"><span>辅助工具:</span></p> -->
             <h1 id="doc-h1-1" ># 安全</h1>
+            <p class="click-say"><span>
+                    有时候,我想极力避免一些问题发生,
+                    但是事实往往不尽如人意,
+                    有些方面来自于我自己能力不足,
+                    有些方面去来自于环境的限制.
+                </span></p>
             <h2>## 潜在BUG</h2>
-            <h2>### OGG文件改名时可能导致软件进程崩溃</h2>
+            <p class="click-say"><span>
+                    我需要为你的操作安全先声明一下可能会有的安全红线,目前在Pre-Alpha版本下因为整体码量才在12000行左右并且我只有一个维护的作者,
+                    所以一切还在控制中,但是我也不能排除有我未察觉到的风险存在.当然我这里也会向你强调当前环境下也有一些风险需要注意.
+                </span></p>
+            <h3>### OGG文件改名时可能导致软件进程崩溃</h3>
             <p class="click-say"><span>
                     ogg文件和ogv文件在Windows系统中删除、修改、移动时可能会遇到困难，尤其是在Windows 10更
                     新后，ogg文件在重命名、删除、剪切等操作时可能会有严重延迟，甚至删除时间长达
@@ -203,6 +220,12 @@
                 @click="opeanLinkling('https://learn.microsoft.com/zh-cn/answers/questions/3252150/win10-ogg')">
                 <Link></Link><span>Win10更新后OGG文件在重命名，删除，剪切等更改操作有严重延迟</span>
             </p>
+            <h1 id="doc-h1-2" ># 功能概览</h1>
+            <h2 id="doc-2h2-0">## 文件处理功能</h2>
+            <h2 id="doc-2h2-1">## 关机问询功能</h2>
+            <h2 id="doc-2h2-2">## 实况GO图功能</h2>
+            <h2 id="doc-2h2-3">## 屏幕录制功能</h2>
+            <h2>### OGG文件改名时可能导致软件进程崩溃</h2>
 
 
 
@@ -216,7 +239,7 @@ import { invoke } from "@tauri-apps/api/core";
 import IconFile from '../../icon/IconFile.vue';
 import MeIcon from '../../icon/MeIcon.vue';
 import SaftyIcon from '../../icon/SaftyIcon.vue';
-// import FunctionIcon from '../../icon/FunctionIcon.vue';
+import FunctionIcon from '../../icon/FunctionIcon.vue';
 import IconShutDown from '../../icon/IconShutDown.vue';
 import LivePicture from '../../icon/LivePicture.vue';
 import RecordScreen from '../../icon/RecordScreen.vue';

@@ -85,15 +85,19 @@ export class PathUtils {
 // 导出常用的路径常量
 export const PATH_CONSTANTS = {
   RESOURCES_DIR: 'resources',
+  BIN_DIR: 'bin',
   IMAGE_MAGICK_DIR: 'imageMagick',
   FFMPEG_DIR: 'ffmpeg',
   SEVEN_ZIP_DIR: '7zip',
+  PANDOC_DIR: 'pandoc',
   TEMP_DIR: 'temp',
   LANG_DIR: 'i18n',
   CONFIG_FILE: 'config.json',
   MAGICK_EXE: 'magick.exe',
   FFMPEG_EXE: 'ffmpeg.exe',
   SEVEN_ZIP_EXE: '7zr.exe',
+  PANDOC_EXE: 'pandoc.exe',
+  OFFICE_CC_EXE: 'officeCC.exe',
 
 
   

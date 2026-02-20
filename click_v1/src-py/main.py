@@ -165,7 +165,7 @@ def main():
                 # 处理用户命令
                 if user_input:
                     cli_handler.process_command(user_input)
-                    print("-end")
+
 
             except KeyboardInterrupt:
                 print("\n\n检测到Ctrl+C，程序即将退出...")

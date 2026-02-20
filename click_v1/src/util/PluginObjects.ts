@@ -85,30 +85,38 @@ import { PathUtils, PATH_CONSTANTS } from './PathUtils';
 
 export let appPath = ""
 export let appResourcesPath = ""
+export let appBinPath = ""
 export let appImageMagickPath = ""
 export let appFFmpegPath = ""
 export let app7ZipPath = ""
+export let appPandocPath = ""
 export let appTempPath = ""
 export let appI18nPath = ""
 export let appConfigPathF = ""
 export let appMagickPathF = ""
 export let appFFmpegPathF = ""
 export let app7ZipPathF = ""
+export let appPandocPathF = ""
+export let appOfficeCCPathF = ""
 
 
 export const init_get_app_path = async () => {
   appPath = await invoke("get_app_paths")
   // 使用规范的路径拼接方式
   appResourcesPath = await PathUtils.buildResourcePath(appPath, PATH_CONSTANTS.RESOURCES_DIR)
+  appBinPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.BIN_DIR)
   appImageMagickPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.IMAGE_MAGICK_DIR);
   appFFmpegPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.FFMPEG_DIR);
   app7ZipPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.SEVEN_ZIP_DIR);
+  appPandocPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.PANDOC_DIR);
   appTempPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
   appI18nPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
   appConfigPathF = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
   appMagickPathF = await PathUtils.buildResourcePath(appImageMagickPath, PATH_CONSTANTS.MAGICK_EXE);
   appFFmpegPathF = await PathUtils.buildResourcePath(appFFmpegPath, PATH_CONSTANTS.FFMPEG_EXE);
   app7ZipPathF = await PathUtils.buildResourcePath(app7ZipPath, PATH_CONSTANTS.SEVEN_ZIP_EXE);
+  appPandocPathF = await PathUtils.buildResourcePath(appPandocPath, PATH_CONSTANTS.PANDOC_EXE);
+  appOfficeCCPathF = await PathUtils.buildResourcePath(appBinPath, PATH_CONSTANTS.OFFICE_CC_EXE);
 
 }
 

@@ -1,4 +1,4 @@
-use std::{fs, io};
+use std::{io};
 use std::io::{BufRead, BufReader,Error, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
@@ -7,9 +7,17 @@ use std::process::{Command, Stdio};
 ///
 /// # 参数
 /// * `doc_paths` - 要处理的文档路径列表
-fn process_documents(exe_path: String, command: String, doc_paths: &Vec<String>, new_ext: String) -> Result<(), Error> {
+fn process_documents(
+    conversion_tool_path: String,
+    args_g1: Option<Vec<String>>,
+    input_file_path: Vec<String>,
+    args_g2: Option<Vec<String>>,
+    #[allow(dead_code)]
+    old_format: String,
+    new_format: String,
+) -> Result<(), Error> {
     // 启动 doc.exe
-    let mut child = Command::new(exe_path)
+    let mut child = Command::new(conversion_tool_path)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -17,6 +25,8 @@ fn process_documents(exe_path: String, command: String, doc_paths: &Vec<String>,
 
     let mut stdin = child.stdin.take().unwrap();  // 获取 stdin
     let stdout = child.stdout.take().unwrap();  // 获取 stdout
+    let mut command1 = String::new();
+    let mut command2 = String::new();
 
     // 使用字节流而不是 UTF-8 字符串
     let mut reader = BufReader::new(stdout);
@@ -48,14 +58,31 @@ fn process_documents(exe_path: String, command: String, doc_paths: &Vec<String>,
         ));
     }
 
-    for path in doc_paths {
+    for path in input_file_path {
         let mut new_path = PathBuf::from(&path);
-        new_path.set_extension(&new_ext);
+        new_path.set_extension(&new_format);
+
+        if let Some(ref args) = args_g1 {
+            for i in args {
+                command1 += &format!("{} ", i);
+            }
+        }
+        if let Some(ref args) = args_g2 {
+            for i in args {
+                command2 += &format!("{} ", i);
+            }
+        }
 
         println!("正在处理文档：{:?}", path);
         println!("新文档路径：{:?}", new_path);
         // 发送文档路径
-        writeln!(stdin, "{} {}", command, path)?;
+        if command2 == "".to_string(){
+            writeln!(stdin, "{}{} {}", command1, path, new_path.display())?;
+
+        } else{
+            writeln!(stdin, "{}{} {}{} ", command1, path, command2, new_path.display())?;
+
+        }
 
         // 等待 "-end" 输出
         let mut found_end = false;
@@ -102,7 +129,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ];
 
     // 执行自动化交互
-    process_documents(r"D:\Object_\APP\Tauri\work\Click\click_v1\src-py\dist\main.exe".to_string(),"-docx2doc".to_string(), &documents, "xlsx".to_string())?;
+    // process_documents(r"D:\Object_\APP\Tauri\work\Click\click_v1\src-py\dist\main.exe".to_string(),"-docx2doc".to_string(), &documents, "xlsx".to_string())?;
 
     println!("所有文档已处理完毕。");
     Ok(())

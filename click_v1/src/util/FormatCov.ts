@@ -240,6 +240,21 @@ export class FCArgs {
         })
     }
 
+    public office_expend_args2(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g1.push(arg)
+            }
+        })
+    }
+    public office_expend_args1(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g1.push(arg)
+            }
+        })
+    }
+
     public aud_expend_args2(args: string[]): void {
         args.forEach(arg => {
             if (arg !== "") {
@@ -305,6 +320,14 @@ export function audExpendArgs1(args: string[]): Promise<void> {
 export function audExpendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.aud_expend_args2(args));
+}
+export function officeExpendArgs1(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.office_expend_args1(args));
+}
+export function officeExpendArgs2(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.office_expend_args2(args));
 }
 export function getArgs1(): string[] {
     const manager = FCArgs.getInstance();

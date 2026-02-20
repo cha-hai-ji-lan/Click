@@ -153,7 +153,7 @@ import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
 import { parseStringToArray } from '../../util/DataTool'
 import { getArgs1, getArgs2, cleanArgs, securityReview } from '../../util/FormatCov'
-import { alertMsg, appMagickPathF, appFFmpegPathF } from '../../util/PluginObjects'
+import { alertMsg, appMagickPathF, appFFmpegPathF, appOfficeCCPathF } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
@@ -697,6 +697,57 @@ const SubmitRepluceName = (tag: string) => {
                     console.log(getArgs2())
                     invoke("pool_format_conversion", {
                          conversionToolPath: appFFmpegPathF,
+                         argsG1: getArgs1(),
+                         inputFilePath: userSelectedPath.value,
+                         argsG2: getArgs2(),
+                         oldFormat: formatSelectedValue.value[0],
+                         newFormat: formatSelectedValue.value[1]
+                    })
+                         .then((ok) => {
+                              alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                         })
+                         .catch((err) => {
+                              alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
+                         });
+                    userSelectedPath.value = []  // 进行了名称修改会消耗掉用户选择的文件，所以需要重新获取
+                    userSelectedShortPath.value = []
+                    cleanArgs() // 清理参数
+
+               } else {
+                    alertMsg(errorMsg, closeerrorMsg, `当前无注视路径无我法进行操作，我可不会越界随便控制😖`, errorLevel, 2);
+
+               }
+               // alertMsg(errorMsg, closeerrorMsg, `开始转换格式${formatSelectedValue.value[0]} 到 ${formatSelectedValue.value[1]}`, errorLevel, 1);
+               break;
+          case 'office-format-conversion':
+               console.log("准备转换")
+               if (selectedPaths.value.length !== 0) {
+                    if (formatSelectedValue.value[0] === "AUTO") {
+                         alertMsg(errorMsg, closeerrorMsg, `请注意亲,自行推导只适用于路径池下的文件转换格式,对于直接操作文件夹内文件是不可以用路径推导的哦!`, errorLevel, 2);
+                         return;
+                    }
+                    securityReview(formatSelectedValue.value)
+                    selectedPaths.value.forEach((item, _) => {
+                         invoke("office_format_conversion", {
+                              conversionToolPath: appOfficeCCPathF,
+                              argsG1: getArgs1(),
+                              inputDirPath: item[0],
+                              argsG2: getArgs2(),
+                              oldFormat: formatSelectedValue.value[0],
+                              newFormat: formatSelectedValue.value[1]
+                         })
+                              .then((ok) => {
+                                   alertMsg(errorMsg, closeerrorMsg, `已完成格式转化\t${ok}`, errorLevel, 0);
+                              })
+                              .catch((err) => {
+                                   alertMsg(errorMsg, closeerrorMsg, `无法完成格式转化${err}`, errorLevel, 3);
+                              });
+                    });
+                    cleanArgs()  // 清理参数
+               } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
+                    securityReview(formatSelectedValue.value)
+                    invoke("office_pool_format_conversion", {
+                         conversionToolPath: appOfficeCCPathF,
                          argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
                          argsG2: getArgs2(),

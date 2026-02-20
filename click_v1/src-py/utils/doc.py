@@ -70,6 +70,7 @@ class OfficeConverter:
                 shutil.rmtree(html_file_path)
 
             print(f"成功将 {docx_path} 转换为 {xlsx_path}")
+            print("-end")
             return True
 
         except Exception as e:
@@ -118,6 +119,7 @@ class OfficeConverter:
             print(f"xlsx转docx失败: {str(e)}")
             return False
 
+
 # 使用示例
 def example_usage():
     converter = OfficeConverter()
@@ -131,6 +133,7 @@ def example_usage():
 
     finally:
         converter.close()
+
 
 if __name__ == "__main__":
     example_usage()
