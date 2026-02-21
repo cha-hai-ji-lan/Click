@@ -2,6 +2,9 @@
 import argparse
 import os
 from typing import Callable
+
+import win32com.client
+
 from utils.doc import OfficeConverter
 
 
@@ -119,9 +122,22 @@ class CLIHandler:
             print("错误: 请输入有效的数字")
 
     def docx2xlsx(self, args: list):
+        print("1")
+        # 创建Word应用程序对象
+        if not self.converter.word_app:
+            self.converter.word_app = win32com.client.Dispatch("Word.Application")
+            self.converter.word_app.Visible = False
+        print("2")
+        # 使用Excel打开HTML并保存为xlsx
+        if not self.converter.excel_app:
+            self.converter.excel_app = win32com.client.Dispatch("Excel.Application")
+            self.converter.excel_app.Visible = False
+        print("3")
+
         source_path = os.path.abspath(args[0])
         target_path = os.path.abspath(args[1])
-        print(source_path, target_path)
+        print("4")
+        print(source_path, "\n", target_path)
         self.converter.docx_to_xlsx(source_path, target_path)
 
     @staticmethod
@@ -160,12 +176,11 @@ def main():
         while cli_handler.running:
             try:
                 # 获取用户输入
-                user_input = input(">>> ").strip()
+                user_input = input(">>>").strip()
 
                 # 处理用户命令
                 if user_input:
                     cli_handler.process_command(user_input)
-
 
             except KeyboardInterrupt:
                 print("\n\n检测到Ctrl+C，程序即将退出...")
