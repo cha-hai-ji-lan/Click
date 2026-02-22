@@ -1,6 +1,5 @@
 # converter.py
 import os
-import stat
 import shutil
 import win32com.client
 import pythoncom
@@ -39,20 +38,15 @@ class OfficeConverter:
         """
         print("5.0")
         try:
-            current_mode = os.stat(docx_path).st_mode
-
             # 添加写权限（保留原有权限）
-            new_mode = current_mode | stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH
-            os.chmod(docx_path, new_mode)
-            os.chmod(xlsx_path, new_mode)
             print("5.1")
             print(docx_path)  # 检查是否是挂载点
             print(repr(docx_path))  # 检查是否是挂载点
             print(os.access(docx_path, os.R_OK))
             print("5.2")
-            print(os.path.exists(repr(docx_path)))
+            print(os.path.exists(docx_path))
             print("5.3")
-            if not os.path.exists(repr(docx_path)):
+            if not os.path.exists(docx_path):
                 print("源文件不存在")
                 raise FileNotFoundError(f"源文件不存在: {docx_path}")
             print("5")
@@ -62,9 +56,7 @@ class OfficeConverter:
 
             # 先保存为HTML格式作为中间步骤
             html_path = xlsx_path.replace('.xlsx', '.html')
-            os.chmod(html_path, new_mode)
             html_file_path = xlsx_path.replace('.xlsx', '.files')
-            os.chmod(html_file_path, new_mode)
             print("7")
             doc.SaveAs2(html_path, FileFormat=8)  # 8 = HTML格式
             doc.Close()

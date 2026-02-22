@@ -7,15 +7,15 @@
                     <li>
                         <div class="index-item" @click="rollTo('doc-h1-0')">
                             <MeIcon></MeIcon>
-                            <span  class="item-text">关于我</span>
+                            <span class="item-text">关于我</span>
                         </div>
                         <div class="index-item" @click="rollTo('doc-h1-1')">
                             <SaftyIcon></SaftyIcon>
-                            <span  class="item-text">安全&更新</span>
+                            <span class="item-text">安全&更新</span>
                         </div>
                         <div class="index-item" @click="rollTo('doc-h1-1')">
                             <FunctionIcon></FunctionIcon>
-                            <span  class="item-text">功能概览</span>
+                            <span class="item-text">功能概览</span>
                         </div>
 
                     </li>
@@ -118,12 +118,18 @@
                         <td class="positive-dia">
                             <div class="composition">骨架</div>
                         </td>
-                        <td><img class="show-img tauri" src="../../assets/tauri.svg" alt=""
-                                @click="() => { opeanLinkling('https://tauri.app/') }"></td>
-                        <td><img class="show-img vue3" src="../../assets/vue.svg" alt=""
-                                @click="() => { opeanLinkling('https://cn.vuejs.org/') }"></td>
-                        <td><img class="show-img vite" src="../../assets/vite.svg" alt=""
-                                @click="() => { opeanLinkling('https://vite.org.cn/') }"></td>
+                        <td>
+                            <TauriIcon class="show-img tauri" @click="() => { opeanLinkling('https://tauri.app/') }">
+                            </TauriIcon>
+                        </td>
+                        <td>
+                            <VueIcon class="show-img vue3" @click="() => { opeanLinkling('https://cn.vuejs.org/') }">
+                            </VueIcon>
+                        </td>
+                        <td>
+                            <ViteIcon class="show-img vite" @click="() => { opeanLinkling('https://vite.org.cn/') }">
+                            </ViteIcon>
+                        </td>
                     </tr>
                     <tr>
                         <td class="positive-dia">
@@ -143,13 +149,20 @@
                         <td class="positive-dia">
                             <div class="composition">血肉</div>
                         </td>
-                        <td><img class="show-img ffmpeg" src="../../assets/ffmpeg.svg
-                            " alt="" @click="() => { opeanLinkling('https://ffmpeg.org/') }"></td>
-                        <td><img class="show-img image-magick" src="../../assets/ImageMagick.svg" alt=""
-                                @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
+                        <td>
+                            <FFmpegIcon class="show-img ffmpeg" @click="() => { opeanLinkling('https://ffmpeg.org/') }">
+                            </FFmpegIcon>
                         </td>
-                        <td><img class="show-img seven-zip" src="../../assets/7zip.svg" alt=""
-                                @click="() => { opeanLinkling('https://www.7-zip.org/') }">
+                        <td>
+                            <ImageMagickIcon class="show-img image-magick"
+                                @click="() => { opeanLinkling('https://imagemagick.org/script/download.php#windows') }">
+                            </ImageMagickIcon>
+
+                        </td>
+                        <td>
+                            <SevenZipIcon @click="() => { opeanLinkling('https://www.7-zip.org/') }"
+                                class="show-img seven-zip"></SevenZipIcon>
+                            <!-- <img  src="../../assets/7zip.svg" alt=""> -->
                         </td>
 
                     </tr>
@@ -171,12 +184,18 @@
                         <td class="positive-dia">
                             <div class="composition">灵魂</div>
                         </td>
-                        <td><img class="show-img rust" src="../../assets/rust.svg" alt=""
-                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
-                        <td><img class="show-img type-script" src="../../assets/typescript.svg" alt=""
-                                @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"></td>
-                        <td><img class="show-img python" src="../../assets/Python.svg" alt=""
-                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></td>
+                        <td>
+                            <RustIcon class="show-img rust"
+                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></RustIcon>
+                        </td>
+                        <td>
+                            <TypeScriptIcon class="show-img type-script"
+                                @click="() => { opeanLinkling('https://www.typescriptlang.org/') }"></TypeScriptIcon>
+                        </td>
+                        <td>
+                            <PythonIcon class="show-img python"
+                                @click="() => { opeanLinkling('https://rust-lang.org/zh-CN/') }"></PythonIcon>
+                        </td>
                     </tr>
                     <tr>
                         <td class="positive-dia">
@@ -195,7 +214,7 @@
                 </tbody>
             </table>
             <!-- <p class="click-say"><span>辅助工具:</span></p> -->
-            <h1 id="doc-h1-1" ># 安全</h1>
+            <h1 id="doc-h1-1"># 安全</h1>
             <p class="click-say"><span>
                     有时候,我想极力避免一些问题发生,
                     但是事实往往不尽如人意,
@@ -220,7 +239,7 @@
                 @click="opeanLinkling('https://learn.microsoft.com/zh-cn/answers/questions/3252150/win10-ogg')">
                 <Link></Link><span>Win10更新后OGG文件在重命名，删除，剪切等更改操作有严重延迟</span>
             </p>
-            <h1 id="doc-h1-2" ># 功能概览</h1>
+            <h1 id="doc-h1-2"># 功能概览</h1>
             <h2 id="doc-2h2-0">## 文件处理功能</h2>
             <h2 id="doc-2h2-1">## 关机问询功能</h2>
             <h2 id="doc-2h2-2">## 实况GO图功能</h2>
@@ -244,6 +263,17 @@ import IconShutDown from '../../icon/IconShutDown.vue';
 import LivePicture from '../../icon/LivePicture.vue';
 import RecordScreen from '../../icon/RecordScreen.vue';
 import Link from '../../icon/icons/Link.vue';
+
+import SevenZipIcon from "../../icon/doc-icons/SevenZipIcon.vue";
+import FFmpegIcon from "../../icon/doc-icons/FFmpegIcon.vue";
+import ImageMagickIcon from "../../icon/doc-icons/ImageMagickIcon.vue";
+import PythonIcon from "../../icon/doc-icons/PythonIcon.vue";
+import RustIcon from "../../icon/doc-icons/RustIcon.vue";
+import TauriIcon from "../../icon/doc-icons/TauriIcon.vue";
+import TypeScriptIcon from "../../icon/doc-icons/TypeScriptIcon.vue";
+import ViteIcon from "../../icon/doc-icons/ViteIcon.vue";
+import VscodeIcon from "../../icon/doc-icons/VscodeIcon.vue";
+import VueIcon from "../../icon/doc-icons/VueIcon.vue";
 
 const opeanLinkling = async (url: String) => {
     try {
@@ -271,7 +301,7 @@ h3,
 h4,
 h5,
 h6 {
-    background:linear-gradient( to right, var(--title-min-icon-active-shadow), var(--title-min-icon-hover-shadow), var(--title-min-icon-shadow), var(--title-bar-lg-1));
+    background: linear-gradient(to right, var(--title-min-icon-active-shadow), var(--title-min-icon-hover-shadow), var(--title-min-icon-shadow), var(--title-bar-lg-1));
     border-radius: 1vmin;
     padding-left: 2vmin;
     color: var(--title-bar-lg-2);
@@ -408,6 +438,7 @@ td {
     max-height: 85vmin;
     overflow-y: auto;
 }
+
 .click-say span {
     color: var(--normal-attention-color);
     background: linear-gradient(to right, var(--normal-attention-color), var(--active-attention-color)) no-repeat left bottom;

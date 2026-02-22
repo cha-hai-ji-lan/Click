@@ -31,7 +31,7 @@
     "windows": {
       "allowDowngrades": true,
       "certificateThumbprint": null,
-      "digestAlgorithm": null,
+      "digestAlgorithm": "sha256",
       "nsis": {
         "installerIcon": "icons/setupClick.ico",
         "headerImage": "icons/setupHead.bmp",           

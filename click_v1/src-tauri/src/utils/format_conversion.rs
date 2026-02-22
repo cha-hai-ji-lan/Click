@@ -68,7 +68,8 @@ pub fn office_fm_cov(
 ) -> Result<(), Error> {
     println!("正在处理文档...");
     // 启动 doc.exe
-    let mut child = Command::new(conversion_tool_path)
+    let mut child = Command::new("cmd")
+        .args(&["/c", "start", &conversion_tool_path])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

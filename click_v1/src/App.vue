@@ -399,7 +399,7 @@ const stopResize = () => {
 }
 
 .mid-version h3 {
-  font: bold 1.5vh Arial, sans-serif;
+  font: bold 1.5vmin Arial, sans-serif;
 
   user-select: none;
   /* 用户无法选择 */

@@ -127,11 +127,13 @@ class CLIHandler:
         if not self.converter.word_app:
             self.converter.word_app = win32com.client.Dispatch("Word.Application")
             self.converter.word_app.Visible = False
+            self.converter.word_app.DisplayAlerts = False
         print("2")
         # 使用Excel打开HTML并保存为xlsx
         if not self.converter.excel_app:
             self.converter.excel_app = win32com.client.Dispatch("Excel.Application")
             self.converter.excel_app.Visible = False
+            self.converter.excel_app.DisplayAlerts = False
         print("3")
 
         source_path = os.path.abspath(args[0])
