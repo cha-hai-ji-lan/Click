@@ -89,14 +89,14 @@ export let appBinPath = ""
 export let appImageMagickPath = ""
 export let appFFmpegPath = ""
 export let app7ZipPath = ""
-export let appPandocPath = ""
+export let appDocToPath = ""
 export let appTempPath = ""
 export let appI18nPath = ""
 export let appConfigPathF = ""
 export let appMagickPathF = ""
 export let appFFmpegPathF = ""
 export let app7ZipPathF = ""
-export let appPandocPathF = ""
+export let appDocToPathF = ""
 export let appOfficeCCPathF = ""
 
 
@@ -108,14 +108,14 @@ export const init_get_app_path = async () => {
   appImageMagickPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.IMAGE_MAGICK_DIR);
   appFFmpegPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.FFMPEG_DIR);
   app7ZipPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.SEVEN_ZIP_DIR);
-  appPandocPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.PANDOC_DIR);
+  appDocToPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.DOCTO_DIR);
   appTempPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.TEMP_DIR);
   appI18nPath = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.LANG_DIR);
   appConfigPathF = await PathUtils.buildResourcePath(appResourcesPath, PATH_CONSTANTS.CONFIG_FILE);
   appMagickPathF = await PathUtils.buildResourcePath(appImageMagickPath, PATH_CONSTANTS.MAGICK_EXE);
   appFFmpegPathF = await PathUtils.buildResourcePath(appFFmpegPath, PATH_CONSTANTS.FFMPEG_EXE);
   app7ZipPathF = await PathUtils.buildResourcePath(app7ZipPath, PATH_CONSTANTS.SEVEN_ZIP_EXE);
-  appPandocPathF = await PathUtils.buildResourcePath(appPandocPath, PATH_CONSTANTS.PANDOC_EXE);
+  appDocToPathF = await PathUtils.buildResourcePath(appDocToPath, PATH_CONSTANTS.DOCTO_EXE);
   appOfficeCCPathF = await PathUtils.buildResourcePath(appBinPath, PATH_CONSTANTS.OFFICE_CC_EXE);
 
 }
@@ -318,9 +318,9 @@ export const aud_aimOption = [
 ]
 export const office_sourceOption = [
   { value: "docx", label: "docx" },
-  { value: "xlsx", label: "xlsx" },
+  { value: "pdf", label: "pdf" },
 ]
 export const office_aimOption = [
   { value: "docx", label: "docx" },
-  { value: "xlsx", label: "xlsx" },
+  { value: "pdf", label: "pdf" },
 ]

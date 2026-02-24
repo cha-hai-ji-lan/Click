@@ -5,7 +5,7 @@ from typing import Callable
 
 import win32com.client
 
-from utils.doc import OfficeConverter
+from utils.doc import OfficeCheck
 
 
 class CLIHandler:
@@ -15,7 +15,7 @@ class CLIHandler:
         self.commands = {}
         self.running = True
         self.register_default_commands()
-        self.converter = OfficeConverter()
+        self.converter = OfficeCheck()
 
     def register_default_commands(self):
         """注册默认命令"""
@@ -23,7 +23,7 @@ class CLIHandler:
         self.register_command('echo', self.echo_command, "回显输入内容--测试使用")
         self.register_command('status', self.status_command, "显示程序状态--测试使用")
         self.register_command('calc', self.calc_command, "简单计算器--测试使用")
-        self.register_command('-docx2xlsx', self.docx2xlsx, "docx格式转xlsx格式")
+        self.register_command('-check', self.check, "检查电脑是否可使用docto")
 
     def register_command(self, name: str, func: Callable, description: str = ""):
         """注册新命令"""
@@ -121,26 +121,27 @@ class CLIHandler:
         except ValueError:
             print("错误: 请输入有效的数字")
 
-    def docx2xlsx(self, args: list):
-        print("1")
+    @staticmethod
+    def check():
         # 创建Word应用程序对象
-        if not self.converter.word_app:
-            self.converter.word_app = win32com.client.Dispatch("Word.Application")
-            self.converter.word_app.Visible = False
-            self.converter.word_app.DisplayAlerts = False
-        print("2")
-        # 使用Excel打开HTML并保存为xlsx
-        if not self.converter.excel_app:
-            self.converter.excel_app = win32com.client.Dispatch("Excel.Application")
-            self.converter.excel_app.Visible = False
-            self.converter.excel_app.DisplayAlerts = False
-        print("3")
+        """检查Office组件的可用性"""
 
-        source_path = os.path.abspath(args[0])
-        target_path = os.path.abspath(args[1])
-        print("4")
-        print(source_path, "\n", target_path)
-        self.converter.docx_to_xlsx(source_path, target_path)
+        try:
+            # 检查Word
+            word_test = win32com.client.Dispatch("Word.Application")
+            word_test.Quit()
+
+            # 检查Excel
+            excel_test = win32com.client.Dispatch("Excel.Application")
+            excel_test.Quit()
+
+            # 检查PowerPoint
+            ppt_test = win32com.client.Dispatch("PowerPoint.Application")
+            ppt_test.Quit()
+        except Exception:
+            print("-false")
+        else:
+            print("-true")
 
     @staticmethod
     def cleanup():

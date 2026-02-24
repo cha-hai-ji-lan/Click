@@ -1,3 +1,6 @@
+export const office_format = {
+    "word":["doc", "docx", "rtf"]
+}
 export const magick_args = {
     "need-args": ["-resize", "-crop",],
     "before-need-gravity": ["-crop",],
@@ -8,6 +11,7 @@ export class FCArgs {
     private static instance: FCArgs;
     public args_g1: string[] = []
     public args_g2: string[] = []
+    public args_g3: string[] = []
     public combiner: string = ""
     public additional_parameters: number = 0  // 关键参数后的附加传参数目
     public pre_args: string = ""  // 上一个关键参数
@@ -47,9 +51,13 @@ export class FCArgs {
     public clean_args2(): void {
         this.args_g2 = []
     }
+    public clean_args3(): void {
+        this.args_g2 = []
+    }
     public clean_args(): void {
         this.args_g1 = []
         this.args_g2 = []
+        this.args_g3 = []
     }
 
     public push_args1(arg: string): void {
@@ -57,6 +65,9 @@ export class FCArgs {
     }
     public push_args2(arg: string): void {
         this.args_g2.push(arg)
+    }
+    public push_args3(arg: string): void {
+        this.args_g3.push(arg)
     }
     public expend_args1(args: string[]): void {
         args.forEach(arg => {
@@ -69,6 +80,14 @@ export class FCArgs {
         args.forEach(arg => {
             if (arg !== "") {
                 this.args_g2.push(arg)
+
+            }
+        })
+    }
+    public expend_args3(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g3.push(arg)
 
             }
         })
@@ -217,6 +236,13 @@ export class FCArgs {
         }
     }
 
+    public img_expend_args3(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g3.push(arg)
+            }
+        })
+    }
     public vid_expend_args1(args: string[]): void {
         args.forEach(arg => {
             if (arg !== "") {
@@ -228,7 +254,14 @@ export class FCArgs {
     public vid_expend_args2(args: string[]): void {
         args.forEach(arg => {
             if (arg !== "") {
-                this.args_g1.push(arg)
+                this.args_g2.push(arg)
+            }
+        })
+    }
+    public vid_expend_args3(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g3.push(arg)
             }
         })
     }
@@ -239,11 +272,17 @@ export class FCArgs {
             }
         })
     }
-
-    public office_expend_args2(args: string[]): void {
+    public aud_expend_args2(args: string[]): void {
         args.forEach(arg => {
             if (arg !== "") {
-                this.args_g1.push(arg)
+                this.args_g2.push(arg)
+            }
+        })
+    }
+    public aud_expend_args3(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g3.push(arg)
             }
         })
     }
@@ -254,14 +293,23 @@ export class FCArgs {
             }
         })
     }
-
-    public aud_expend_args2(args: string[]): void {
+    public office_expend_args2(args: string[]): void {
         args.forEach(arg => {
             if (arg !== "") {
-                this.args_g1.push(arg)
+                this.args_g2.push(arg)
             }
         })
     }
+    public office_expend_args3(args: string[]): void {
+        args.forEach(arg => {
+            if (arg !== "") {
+                this.args_g3.push(arg)
+            }
+        })
+    }
+
+
+
 }
 
 export const FCArgsManager = FCArgs.getInstance();
@@ -281,6 +329,10 @@ export function cleanArgs2(): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.clean_args2());
 }
+export function cleanArgs3(): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.clean_args3());
+}
 export function pushArgs1(arg: string): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.push_args1(arg));
@@ -288,6 +340,10 @@ export function pushArgs1(arg: string): Promise<void> {
 export function pushArgs2(arg: string): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.push_args2(arg));
+}
+export function pushArgs3(arg: string): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.push_args3(arg));
 }
 export function expendArgs1(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
@@ -297,6 +353,10 @@ export function expendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.expend_args2(args));
 }
+export function expendArgs3(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.expend_args3(args));
+}
 export function imgExpendArgs1(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.img_expend_args1(args));
@@ -304,6 +364,10 @@ export function imgExpendArgs1(args: string[]): Promise<void> {
 export function imgExpendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.img_expend_args2(args));
+}
+export function imgExpendArgs3(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.img_expend_args3(args));
 }
 export function vidExpendArgs1(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
@@ -313,6 +377,10 @@ export function vidExpendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.vid_expend_args2(args));
 }
+export function vidExpendArgs3(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.vid_expend_args3(args));
+}
 export function audExpendArgs1(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.aud_expend_args1(args));
@@ -320,6 +388,10 @@ export function audExpendArgs1(args: string[]): Promise<void> {
 export function audExpendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.aud_expend_args2(args));
+}
+export function audExpendArgs3(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.aud_expend_args3(args));
 }
 export function officeExpendArgs1(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
@@ -329,6 +401,10 @@ export function officeExpendArgs2(args: string[]): Promise<void> {
     const manager = FCArgs.getInstance();
     return Promise.resolve(manager.office_expend_args2(args));
 }
+export function officeExpendArgs3(args: string[]): Promise<void> {
+    const manager = FCArgs.getInstance();
+    return Promise.resolve(manager.office_expend_args3(args));
+}
 export function getArgs1(): string[] {
     const manager = FCArgs.getInstance();
     return manager.args_g1;
@@ -336,6 +412,10 @@ export function getArgs1(): string[] {
 export function getArgs2(): string[] {
     const manager = FCArgs.getInstance();
     return manager.args_g2;
+}
+export function getArgs3(): string[] {
+    const manager = FCArgs.getInstance();
+    return manager.args_g3;
 }
 export function getAt(arr: any[], index: number): any {
     const manager = FCArgs.getInstance();

@@ -89,14 +89,14 @@ export const PATH_CONSTANTS = {
   IMAGE_MAGICK_DIR: 'imageMagick',
   FFMPEG_DIR: 'ffmpeg',
   SEVEN_ZIP_DIR: '7zip',
-  PANDOC_DIR: 'pandoc',
+  DOCTO_DIR: 'docto',
   TEMP_DIR: 'temp',
   LANG_DIR: 'i18n',
   CONFIG_FILE: 'config.json',
   MAGICK_EXE: 'magick.exe',
   FFMPEG_EXE: 'ffmpeg.exe',
   SEVEN_ZIP_EXE: '7zr.exe',
-  PANDOC_EXE: 'pandoc.exe',
+  DOCTO_EXE: 'docto.exe',
   OFFICE_CC_EXE: 'officeCC.exe',
 
 
