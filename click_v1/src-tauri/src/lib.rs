@@ -266,6 +266,7 @@ async fn format_conversion(
     args_g1: Option<Vec<String>>,
     input_dir_path: String,
     args_g2: Option<Vec<String>>,
+    args_g3: Option<Vec<String>>,
     old_format: String,
     new_format: String,
 ) -> Result<String, String> {
@@ -303,6 +304,7 @@ async fn format_conversion(
             args_g1,
             input_file_path,
             args_g2,
+            args_g3,
             old_format,
             new_format,
         ) {
@@ -325,6 +327,7 @@ async fn pool_format_conversion(
     args_g1: Option<Vec<String>>,
     input_file_path: Vec<String>,
     args_g2: Option<Vec<String>>,
+    args_g3: Option<Vec<String>>,
     old_format: String,
     new_format: String,
 ) -> Result<String, String> {
@@ -336,6 +339,7 @@ async fn pool_format_conversion(
             args_g1,
             input_file_path,
             args_g2,
+            args_g3,
             old_format,
             new_format,
         ) {

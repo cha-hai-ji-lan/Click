@@ -8,6 +8,7 @@ pub fn fm_cov(
     args_g1: Option<Vec<String>>,
     input_file_path: Vec<String>,
     args_g2: Option<Vec<String>>,
+    args_g3: Option<Vec<String>>,
     #[allow(unused_variables)] old_format: String,
     new_format: String,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -36,6 +37,11 @@ pub fn fm_cov(
 
         // 添加输出文件路径
         cmd.arg(output_path.to_string_lossy().as_ref());
+        
+        // 添加 args_g3 参数（如果存在）
+        if let Some(ref args) = args_g3 {
+            cmd.args(args);
+        }
         println!("{:?}", cmd);
         // 执行命令
         let output = cmd.output()?;

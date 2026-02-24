@@ -152,8 +152,8 @@ import { ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
 import { type PathItem } from "../../class/PathIndex"
 import { type FloatingWindowState } from '../../class/PathIndex';
 import { parseStringToArray } from '../../util/DataTool'
-import { getArgs1, getArgs2, cleanArgs, securityReview } from '../../util/FormatCov'
-import { alertMsg, appMagickPathF, appFFmpegPathF, appOfficeCCPathF } from '../../util/PluginObjects'
+import { getArgs1, getArgs2, getArgs3, cleanArgs, securityReview } from '../../util/FormatCov'
+import { alertMsg, appMagickPathF, appFFmpegPathF, appDocToPathF } from '../../util/PluginObjects'
 import DFChooseMethoadFW from "./components-view/DFChooseMethoadFW.vue";
 import DFPathPoolFW from "./components-view/DFPathPoolFW.vue";
 import DFWorkbenchFW from "./components-view/DFWorkbenchFW.vue";
@@ -576,6 +576,7 @@ const SubmitRepluceName = (tag: string) => {
                               argsG1: getArgs1(),
                               inputDirPath: item[0],
                               argsG2: getArgs2(),
+                              argsG3: getArgs3(),
                               oldFormat: formatSelectedValue.value[0],
                               newFormat: formatSelectedValue.value[1]
                          })
@@ -595,6 +596,7 @@ const SubmitRepluceName = (tag: string) => {
                          argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
                          argsG2: getArgs2(),
+                         argsG3: getArgs3(),
                          oldFormat: formatSelectedValue.value[0],
                          newFormat: formatSelectedValue.value[1]
                     })
@@ -628,6 +630,7 @@ const SubmitRepluceName = (tag: string) => {
                               argsG1: getArgs1(),
                               inputDirPath: item[0],
                               argsG2: getArgs2(),
+                              argsG3: getArgs3(),
                               oldFormat: formatSelectedValue.value[0],
                               newFormat: formatSelectedValue.value[1]
                          })
@@ -647,6 +650,7 @@ const SubmitRepluceName = (tag: string) => {
                          argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
                          argsG2: getArgs2(),
+                         argsG3: getArgs3(),
                          oldFormat: formatSelectedValue.value[0],
                          newFormat: formatSelectedValue.value[1]
                     })
@@ -681,6 +685,7 @@ const SubmitRepluceName = (tag: string) => {
                               argsG1: getArgs1(),
                               inputDirPath: item[0],
                               argsG2: getArgs2(),
+                              argsG3: getArgs3(),
                               oldFormat: formatSelectedValue.value[0],
                               newFormat: formatSelectedValue.value[1]
                          })
@@ -700,6 +705,7 @@ const SubmitRepluceName = (tag: string) => {
                          argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
                          argsG2: getArgs2(),
+                         argsG3: getArgs3(),
                          oldFormat: formatSelectedValue.value[0],
                          newFormat: formatSelectedValue.value[1]
                     })
@@ -728,11 +734,12 @@ const SubmitRepluceName = (tag: string) => {
                     }
                     securityReview(formatSelectedValue.value)
                     selectedPaths.value.forEach((item, _) => {
-                         invoke("office_format_conversion", {
-                              conversionToolPath: appOfficeCCPathF,
+                         invoke("format_conversion", {
+                              conversionToolPath: appDocToPathF,
                               argsG1: getArgs1(),
                               inputDirPath: item[0],
                               argsG2: getArgs2(),
+                              argsG3: getArgs3(),
                               oldFormat: formatSelectedValue.value[0],
                               newFormat: formatSelectedValue.value[1]
                          })
@@ -746,11 +753,12 @@ const SubmitRepluceName = (tag: string) => {
                     cleanArgs()  // 清理参数
                } else if (userSelectedPath.value?.length !== 0 && typeof userSelectedPath.value?.length !== 'undefined') {  // 添加对跳跃文件夹下的文件进行重命名
                     securityReview(formatSelectedValue.value)
-                    invoke("office_pool_format_conversion", {
-                         conversionToolPath: appOfficeCCPathF,
+                    invoke("pool_format_conversion", {
+                         conversionToolPath: appDocToPathF,
                          argsG1: getArgs1(),
                          inputFilePath: userSelectedPath.value,
                          argsG2: getArgs2(),
+                         argsG3: getArgs3(),
                          oldFormat: formatSelectedValue.value[0],
                          newFormat: formatSelectedValue.value[1]
                     })
