@@ -1,23 +1,502 @@
 {
-"app":{
-    "version":"0.1.3"
-},
-"theme":{
-    "currentTheme": "light",
-    "light":{
-
+    "app": {
+        "version": "0.1.3"
     },
-    "dark":{
-
+    "theme": {
+        "currentTheme": "light",
+        "light": {},
+        "dark": {},
+        "universal": {
+            "ErrorWarn": "249, 3, 3",
+            "SeriousWarn": "250, 177, 4",
+            "normalWarn": "0, 183, 255",
+            "transparent": 1,
+            "level1tp": 0.5,
+            "level2tp": 0.25
+        }
     },
-    "universal":{
-        "ErrorWarn":"249, 3, 3",
-        "SeriousWarn":"250, 177, 4",
-        "normalWarn":"0, 183, 255",
-        "transparent":1,
-        "level1tp":0.5,
-        "level2tp":0.25
+    "core": {
+        "staticParam": {
+            "imgSourceOption": [
+                {
+                    "value": "AUTO",
+                    "label": "自行推导"
+                },
+                {
+                    "value": "jpg",
+                    "label": "jpg|jpe|jpeg"
+                },
+                {
+                    "value": "png",
+                    "label": "png"
+                },
+                {
+                    "value": "helf",
+                    "label": "helf"
+                },
+                {
+                    "value": "heic",
+                    "label": "heic"
+                },
+                {
+                    "value": "ico",
+                    "label": "ico"
+                },
+                {
+                    "value": "webp",
+                    "label": "webp"
+                },
+                {
+                    "value": "gif",
+                    "label": "gif"
+                },
+                {
+                    "value": "webm",
+                    "label": "webm"
+                },
+                {
+                    "value": "avif",
+                    "label": "avif"
+                },
+                {
+                    "value": "apng",
+                    "label": "apng"
+                },
+                {
+                    "value": "bmp",
+                    "label": "bmp"
+                },
+                {
+                    "value": "tif",
+                    "label": "tif"
+                },
+                {
+                    "value": "tiff",
+                    "label": "tiff"
+                },
+                {
+                    "value": "svg",
+                    "label": "svg"
+                },
+                {
+                    "value": "pdf",
+                    "label": "pdf"
+                },
+                {
+                    "value": "psd",
+                    "label": "psd"
+                },
+                {
+                    "value": "ai",
+                    "label": "ai"
+                },
+                {
+                    "value": "pbm",
+                    "label": "pbm"
+                },
+                {
+                    "value": "ppm",
+                    "label": "ppm"
+                },
+                {
+                    "value": "pgm",
+                    "label": "pgm"
+                },
+                {
+                    "value": "pnm",
+                    "label": "pnm"
+                },
+                {
+                    "value": "tag",
+                    "label": "tag"
+                },
+                {
+                    "value": "arw",
+                    "label": "arw(摄影)"
+                },
+                {
+                    "value": "nef",
+                    "label": "nef(摄影)"
+                },
+                {
+                    "value": "cr2",
+                    "label": "cr2(摄影)"
+                },
+                {
+                    "value": "eps",
+                    "label": "eps"
+                },
+                {
+                    "value": "ps",
+                    "label": "ps"
+                }
+            ],
+            "imgAimOption": [
+                {
+                    "value": "jpg",
+                    "label": "jpg|jpe|jpeg"
+                },
+                {
+                    "value": "png",
+                    "label": "png"
+                },
+                {
+                    "value": "helf",
+                    "label": "helf"
+                },
+                {
+                    "value": "ico",
+                    "label": "ico"
+                },
+                {
+                    "value": "webp",
+                    "label": "webp"
+                },
+                {
+                    "value": "gif",
+                    "label": "gif"
+                },
+                {
+                    "value": "webm",
+                    "label": "webm"
+                },
+                {
+                    "value": "avif",
+                    "label": "avif"
+                },
+                {
+                    "value": "apng",
+                    "label": "apng"
+                },
+                {
+                    "value": "bmp",
+                    "label": "bmp"
+                },
+                {
+                    "value": "tif",
+                    "label": "tif"
+                },
+                {
+                    "value": "tiff",
+                    "label": "tiff"
+                },
+                {
+                    "value": "svg",
+                    "label": "svg"
+                },
+                {
+                    "value": "pdf",
+                    "label": "pdf"
+                },
+                {
+                    "value": "psd",
+                    "label": "psd"
+                },
+                {
+                    "value": "ai",
+                    "label": "ai"
+                },
+                {
+                    "value": "pbm",
+                    "label": "pbm"
+                },
+                {
+                    "value": "ppm",
+                    "label": "ppm"
+                },
+                {
+                    "value": "pgm",
+                    "label": "pgm"
+                },
+                {
+                    "value": "pnm",
+                    "label": "pnm"
+                },
+                {
+                    "value": "tag",
+                    "label": "tag"
+                },
+                {
+                    "value": "eps",
+                    "label": "eps"
+                },
+                {
+                    "value": "ps",
+                    "label": "ps"
+                }
+            ],
+            "vidSourceOption": [
+                {
+                    "value": "AUTO",
+                    "label": "自行推导"
+                },
+                {
+                    "value": "avi",
+                    "label": "avi"
+                },
+                {
+                    "value": "mp4",
+                    "label": "mp4"
+                },
+                {
+                    "value": "mov",
+                    "label": "mov"
+                },
+                {
+                    "value": "flv",
+                    "label": "flv"
+                },
+                {
+                    "value": "mkv",
+                    "label": "mkv"
+                },
+                {
+                    "value": "wmv",
+                    "label": "wmv"
+                },
+                {
+                    "value": "webm",
+                    "label": "webm"
+                },
+                {
+                    "value": "ts",
+                    "label": "ts"
+                },
+                {
+                    "value": "m2ts",
+                    "label": "m2ts"
+                },
+                {
+                    "value": "mpg",
+                    "label": "mpg"
+                },
+                {
+                    "value": "mpeg",
+                    "label": "mpeg"
+                },
+                {
+                    "value": "asf",
+                    "label": "asf"
+                },
+                {
+                    "value": "ogg",
+                    "label": "ogg"
+                },
+                {
+                    "value": "ogv",
+                    "label": "ogv"
+                },
+                {
+                    "value": "rm",
+                    "label": "rm"
+                }
+            ],
+            "vidAimOption": [
+                {
+                    "value": "avi",
+                    "label": "avi"
+                },
+                {
+                    "value": "mp4",
+                    "label": "mp4"
+                },
+                {
+                    "value": "mov",
+                    "label": "mov"
+                },
+                {
+                    "value": "flv",
+                    "label": "flv"
+                },
+                {
+                    "value": "mkv",
+                    "label": "mkv"
+                },
+                {
+                    "value": "wmv",
+                    "label": "wmv"
+                },
+                {
+                    "value": "webm",
+                    "label": "webm"
+                },
+                {
+                    "value": "ts",
+                    "label": "ts"
+                },
+                {
+                    "value": "m2ts",
+                    "label": "m2ts"
+                },
+                {
+                    "value": "mpg",
+                    "label": "mpg"
+                },
+                {
+                    "value": "mpeg",
+                    "label": "mpeg"
+                },
+                {
+                    "value": "asf",
+                    "label": "asf"
+                },
+                {
+                    "value": "ogg",
+                    "label": "ogg"
+                },
+                {
+                    "value": "ogv",
+                    "label": "ogv"
+                },
+                {
+                    "value": "rm",
+                    "label": "rm"
+                }
+            ],
+            "audSourceOption": [
+                {
+                    "value": "AUTO",
+                    "label": "自行推导"
+                },
+                {
+                    "value": "mp3",
+                    "label": "mp3"
+                },
+                {
+                    "value": "wav",
+                    "label": "wav"
+                },
+                {
+                    "value": "m4a",
+                    "label": "m4a"
+                },
+                {
+                    "value": "mka",
+                    "label": "mka"
+                },
+                {
+                    "value": "aiff",
+                    "label": "aiff"
+                },
+                {
+                    "value": "au",
+                    "label": "au"
+                },
+                {
+                    "value": "opus",
+                    "label": "opus"
+                },
+                {
+                    "value": "ac3",
+                    "label": "ac3"
+                },
+                {
+                    "value": "ra",
+                    "label": "ra"
+                },
+                {
+                    "value": "wma",
+                    "label": "wma"
+                },
+                {
+                    "value": "ape",
+                    "label": "ape"
+                },
+                {
+                    "value": "flac",
+                    "label": "flac"
+                },
+                {
+                    "value": "ogg",
+                    "label": "ogg"
+                },
+                {
+                    "value": "aac",
+                    "label": "aac"
+                },
+                {
+                    "value": "oga",
+                    "label": "oga"
+                }
+            ],
+            "audAimOption": [
+                {
+                    "value": "mp3",
+                    "label": "mp3"
+                },
+                {
+                    "value": "wav",
+                    "label": "wav"
+                },
+                {
+                    "value": "m4a",
+                    "label": "m4a"
+                },
+                {
+                    "value": "mka",
+                    "label": "mka"
+                },
+                {
+                    "value": "aiff",
+                    "label": "aiff"
+                },
+                {
+                    "value": "au",
+                    "label": "au"
+                },
+                {
+                    "value": "opus",
+                    "label": "opus"
+                },
+                {
+                    "value": "ac3",
+                    "label": "ac3"
+                },
+                {
+                    "value": "ra",
+                    "label": "ra"
+                },
+                {
+                    "value": "wma",
+                    "label": "wma"
+                },
+                {
+                    "value": "flac",
+                    "label": "flac"
+                },
+                {
+                    "value": "ogg",
+                    "label": "ogg"
+                },
+                {
+                    "value": "aac",
+                    "label": "aac"
+                },
+                {
+                    "value": "oga",
+                    "label": "oga"
+                }
+            ],
+            "officeSourceOption": [
+                {
+                    "value": "docx",
+                    "label": "docx"
+                },
+                {
+                    "value": "pdf",
+                    "label": "pdf"
+                }
+            ],
+            "officeAimOption": [
+                {
+                    "value": "docx",
+                    "label": "docx"
+                },
+                {
+                    "value": "pdf",
+                    "label": "pdf"
+                }
+            ]
+        }
     }
-
-}
 }
