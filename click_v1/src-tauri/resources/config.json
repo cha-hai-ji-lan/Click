@@ -1,7 +1,23 @@
 {
-    "format-conversion": {
-        "office-text": {
-            "has-check": false
-        }
+"app":{
+    "version":"0.1.3"
+},
+"theme":{
+    "currentTheme": "light",
+    "light":{
+
+    },
+    "dark":{
+
+    },
+    "universal":{
+        "ErrorWarn":"249, 3, 3",
+        "SeriousWarn":"250, 177, 4",
+        "normalWarn":"0, 183, 255",
+        "transparent":1,
+        "level1tp":0.5,
+        "level2tp":0.25
     }
+
+}
 }
